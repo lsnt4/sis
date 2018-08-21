@@ -1,6 +1,11 @@
 <?php
 	include_once 'common_functions.php';
 	include_once 'ClassStaff.php';
+
+	$AuthHandler = new AuthHandler();
+	if (!$AuthHandler->auth_status()) {
+		header('Location: login.php');
+	}
 ?>
 <!doctype html>
 <html lang="en">
@@ -13,7 +18,7 @@
 	</head>
 	<body>
 		<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
-			<a class="navbar-brand" href="index.php"><strong class="ml-3">Success International School</strong></a>
+			<a class="navbar-brand" href="dashboard.php"><strong class="ml-3">Success International School</strong></a>
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
 			</button>
@@ -22,7 +27,7 @@
 				<ul class="navbar-nav">
 					<li class="nav-item <?php $active_state = (is_on_page("profile")) ? 'active' : '' ; echo $active_state; ?>"><a class="nav-link" href="profile.php">Profile</a></li>
 					<li class="nav-item <?php $active_state = (is_on_page("dashboard")) ? 'active' : '' ; echo $active_state; ?>"><a class="nav-link" href="dashboard.php">Dashboard</a></li>
-					<li class="nav-item"><a class="nav-link" href="login.php">Logout</a></li>
+					<li class="nav-item"><a class="nav-link" href="logout.php">Logout</a></li>
 				</ul>
 			</div>
 		</nav>

@@ -2,16 +2,22 @@
 	include_once 'common_functions.php';
 	include_once 'ClassStaff.php';
 
-	if (isset($_POST['empid']) && isset($_POST['password'])) {
-		$empid = $_POST['empid'];
+	$AuthHandler = new AuthHandler();
+	if ($AuthHandler->auth_status()) {
+		header('Location: dashboard.php');
+	}
+
+	if (isset($_POST['email']) && isset($_POST['password'])) {
+		$email = $_POST['email'];
 		$password = $_POST['password'];
 
-		$login_state = $Helpers->login($empid, $password);
+		$login_state = $AuthHandler->login($email, $password);
 
 		if ($login_state) {
 			header('Location: dashboard.php');
 		} else {
 			set_error_msg("<strong>Login Failed!</strong> Employee ID or Password is incorrect");
+			header('Location: login.php');
 		}
 	}
 ?>
@@ -48,9 +54,8 @@
 						<div class="card-body">
 							<form action="login.php" method="post">
 								<div class="form-group">
-									<label for="empid">Employee ID</label>
-									<input type="hidden" class="form-control" id="tmp" name="tmp" pattern="[A-Za-z0-9]{6}" required>
-									<input type="text" class="form-control" id="empid" name="empid" required>
+									<label for="email">Email</label>
+									<input type="text" class="form-control" id="email" name="email" required>
 								</div>
 								<div class="form-group">
 									<label for="password">Password</label>

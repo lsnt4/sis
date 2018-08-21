@@ -15,7 +15,9 @@ function has_error_msg() {
 }
 
 function get_error_msg() {
-	return $_COOKIE[ERROR_MSG];
+	$error = $_COOKIE[ERROR_MSG];
+	reset_error_msg();
+	return $error;
 }
 
 function set_error_msg($message)	{
@@ -33,7 +35,9 @@ function has_success_msg() {
 }
 
 function get_success_msg() {
-	return $_COOKIE[SUCCESS_MSG];
+	$success = $_COOKIE[SUCCESS_MSG];
+	reset_success_msg();
+	return $success;
 }
 
 function set_success_msg($message)	{

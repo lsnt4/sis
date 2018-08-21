@@ -4,8 +4,11 @@
 						<div class="col-md-12">
 							<div class="card mb-4 p-2">
 								<div class="row">
-									<div class="col-1"><span class="dashboard-avatar">J</span></div>
-									<div class="col-11"><div class="dashboard-username">John Doe</div><div class="dashboard-department">Staff Management</div></div>
+									<?php $session = new SessionManager(); ?>
+									<div class="col-1"><span class="dashboard-avatar"><?php echo substr($session->get_session('fname'), 0,1); ?></span></div>
+									<div class="col-11">
+										<div class="dashboard-username"><?php echo $session->get_session('fname') . " " . $session->get_session('lname'); ?></div>
+										<div class="dashboard-department">Admin, Staff Management</div></div>
 								</div>
 							</div>
 						</div>
