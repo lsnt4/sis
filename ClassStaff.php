@@ -45,7 +45,7 @@ class AuthHandler extends Database {
 
 	public function login($email, $password) {
 		$password = md5($password);
-		$result = $this->DB_CONN->query("SELECT userid, fname, lname, email, mobile_no, address, dob, nic, gender, reg_date, salary, password
+		$result = Database::$DB_CONN->query("SELECT userid, fname, lname, email, mobile_no, address, dob, nic, gender, reg_date, salary, password
 								FROM users
 								WHERE email = '$email'
 								AND password = '$password'");
@@ -109,7 +109,7 @@ class AuthHandler extends Database {
 */
 class Database {
 
-	public $DB_CONN;
+	public static $DB_CONN;
 	private $DB_USER = 'root';
 	private $DB_PASS = '';
 	private $DB_NAME = 'itpprojectdb';
@@ -118,12 +118,13 @@ class Database {
 	private $DB_CONN_STATUS = false;
 
 	public function __construct() {
-
-		$this->DB_CONN = new mysqli($this->DB_HOST, $this->DB_USER, $this->DB_PASS, $this->DB_NAME, $this->DB_PORT);
-
-		if($this->DB_CONN->connect_error) {
-			die("Database connection error: " . $this->DB_CONN->connect_error);
-		} else {
+		if(!isset(self::$DB_CONN)) {
+			self::$DB_CONN = new mysqli($this->DB_HOST, $this->DB_USER, $this->DB_PASS, $this->DB_NAME, $this->DB_PORT);
+			if(self::$DB_CONN->connect_error) {
+				die("Database connection error: " . self::$DB_CONN->connect_error);
+			} else {
+				$this->DB_CONN_STATUS = true;
+			}
 			$this->DB_CONN_STATUS = true;
 		}
 	}
@@ -133,9 +134,7 @@ class Database {
 	}
 
 	function __destruct() {
-		if(!empty($this->DB_CONN) || !isset($this->DB_CONN) || !is_null($this->DB_CONN)) {
-			$this->DB_CONN->close();
-		}
+
 	}
 }
 ?>
