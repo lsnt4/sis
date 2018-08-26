@@ -76,17 +76,17 @@ class AuthHandler extends Database {
 		$password = md5($password);
 		$result = Database::$DB_CONN->query(
 					"SELECT userid,
-							fname,
-							lname,
-							email,
-							mobile_no,
-							address,
-							dob,
-							nic,
-							gender,
-							reg_date,
-							salary,
-							password
+						fname,
+						lname,
+						email,
+						mobile_no,
+						address,
+						dob,
+						nic,
+						gender,
+						reg_date,
+						salary,
+						password
 					FROM users
 					WHERE email = '$email'
 					AND password = '$password'"
