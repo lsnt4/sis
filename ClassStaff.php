@@ -1,5 +1,28 @@
 <?php
 
+define('USERID', 'userid');
+define('FNAME', 'fname');
+define('LNAME', 'lname');
+define('EMAIL', 'email');
+define('MOBILE_NO', 'mobile_no');
+define('ADDRESS', 'address');
+define('DOB', 'dob');
+define('GENDER', 'gender');
+define('NIC', 'nic');
+define('REG_DATE', 'reg_date');
+define('SALARY', 'salary');
+define('PASSWORD', 'password');
+
+define('PERMISSION_STAFF', 'permission_staff');
+define('PERMISSION_STUDENTS', 'permission_students');
+define('PERMISSION_PAYMENTS', 'permission_payments');
+define('PERMISSION_EXAMS', 'permission_exams');
+define('PERMISSION_COURSES', 'permission_courses');
+define('PERMISSION_FINANCE', 'permission_finance');
+define('PERMISSION_LIBRARY', 'permission_library');
+define('PERMISSION_RESOURCES', 'permission_resources');
+define('PERMISSION_EMPLOYEES', 'permission_employees');
+
 /**
 * Session Management Class
 */
@@ -46,37 +69,50 @@ class AuthHandler extends Database {
 	}
 
 	public function auth_status() {
-		return (!is_null($this->session->get_session('userid')));
+		return (!is_null($this->session->get_session(USERID)));
 	}
 
 	public function login($email, $password) {
 		$password = md5($password);
-		$result = Database::$DB_CONN->query("SELECT userid, fname, lname, email, mobile_no, address, dob, nic, gender, reg_date, salary, password
-								FROM users
-								WHERE email = '$email'
-								AND password = '$password'");
+		$result = Database::$DB_CONN->query(
+					"SELECT userid,
+							fname,
+							lname,
+							email,
+							mobile_no,
+							address,
+							dob,
+							nic,
+							gender,
+							reg_date,
+							salary,
+							password
+					FROM users
+					WHERE email = '$email'
+					AND password = '$password'"
+				);
 
 		if ($result->num_rows == 1) {
 			while($row = $result->fetch_assoc()) {
-				$this->session->set_session('userid', $row['userid']);
-				$this->session->set_session('fname', $row['fname']);
-				$this->session->set_session('lname', $row['lname']);
-				$this->session->set_session('email', $row['email']);
-				$this->session->set_session('mobile_no', $row['mobile_no']);
-				$this->session->set_session('dob', $row['dob']);
-				$this->session->set_session('reg_date', $row['reg_date']);
+				$this->session->set_session(USERID, $row['userid']);
+				$this->session->set_session(FNAME, $row['fname']);
+				$this->session->set_session(LNAME, $row['lname']);
+				$this->session->set_session(EMAIL, $row['email']);
+				$this->session->set_session(MOBILE_NO, $row['mobile_no']);
+				$this->session->set_session(DOB, $row['dob']);
+				$this->session->set_session(REG_DATE, $row['reg_date']);
 				break;
 			}
 
-			$this->session->set_session('permission_staff', '1');
-			$this->session->set_session('permission_students', '1');
-			$this->session->set_session('permission_payments', '1');
-			$this->session->set_session('permission_exams', '1');
-			$this->session->set_session('permission_courses', '1');
-			$this->session->set_session('permission_finance', '1');
-			$this->session->set_session('permission_library', '1');
-			$this->session->set_session('permission_resources', '1');
-			$this->session->set_session('permission_employees', '1');
+			$this->session->set_session(PERMISSION_STAFF, '1');
+			$this->session->set_session(PERMISSION_STUDENTS, '1');
+			$this->session->set_session(PERMISSION_PAYMENTS, '1');
+			$this->session->set_session(PERMISSION_EXAMS, '1');
+			$this->session->set_session(PERMISSION_COURSES, '1');
+			$this->session->set_session(PERMISSION_FINANCE, '1');
+			$this->session->set_session(PERMISSION_LIBRARY, '1');
+			$this->session->set_session(PERMISSION_RESOURCES, '1');
+			$this->session->set_session(PERMISSION_EMPLOYEES, '1');
 
 			return true;
 		} else {
@@ -87,24 +123,24 @@ class AuthHandler extends Database {
 
 	public function logout() {
 		// User session removal
-		$this->session->unset_session('userid');
-		$this->session->unset_session('fname');
-		$this->session->unset_session('lname');
-		$this->session->unset_session('email');
-		$this->session->unset_session('mobile_no');
-		$this->session->unset_session('dob');
-		$this->session->unset_session('reg_date');
+		$this->session->unset_session(USERID);
+		$this->session->unset_session(FNAME);
+		$this->session->unset_session(LNAME);
+		$this->session->unset_session(EMAIL);
+		$this->session->unset_session(MOBILE_NO);
+		$this->session->unset_session(DOB);
+		$this->session->unset_session(REG_DATE);
 
 		// User permission removal
-		$this->session->unset_session('permission_staff');
-		$this->session->unset_session('permission_students');
-		$this->session->unset_session('permission_payments');
-		$this->session->unset_session('permission_exams');
-		$this->session->unset_session('permission_courses');
-		$this->session->unset_session('permission_finance');
-		$this->session->unset_session('permission_library');
-		$this->session->unset_session('permission_resources');
-		$this->session->unset_session('permission_employees');
+		$this->session->unset_session(PERMISSION_STAFF);
+		$this->session->unset_session(PERMISSION_STUDENTS);
+		$this->session->unset_session(PERMISSION_PAYMENTS);
+		$this->session->unset_session(PERMISSION_EXAMS);
+		$this->session->unset_session(PERMISSION_COURSES);
+		$this->session->unset_session(PERMISSION_FINANCE);
+		$this->session->unset_session(PERMISSION_LIBRARY);
+		$this->session->unset_session(PERMISSION_RESOURCES);
+		$this->session->unset_session(PERMISSION_EMPLOYEES);
 
 		$this->session->destroy_session();
 	}
