@@ -5,17 +5,23 @@
 */
 class SessionManager {
 
+	function __construct() {
+		if (!isset($_SESSION)) {
+			session_start();
+		}
+	}
+
 	public function set_session($name, $value) {
-		setcookie($name, $value, time() + (86400 * 30), "/");
+		$_SESSION[$name] = $value;
 	}
 
 	public function unset_session($name) {
-		setcookie($name, '', time() - (86400 * 30), "/");
+		$_SESSION[$name] = null;
 	}
 
 	public function get_session($name) {
-		if(isset($_COOKIE[$name])) {
-			return $_COOKIE[$name];
+		if(isset($_SESSION[$name])) {
+			return $_SESSION[$name];
 		} else {
 			return null;
 		}
