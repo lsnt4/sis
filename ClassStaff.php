@@ -12,6 +12,7 @@ define('NIC', 'nic');
 define('REG_DATE', 'reg_date');
 define('SALARY', 'salary');
 define('PASSWORD', 'password');
+define('USER_ROLE', 'user_role');
 
 define('PERMISSION_STAFF', 'permission_staff');
 define('PERMISSION_STUDENTS', 'permission_students');
@@ -75,26 +76,22 @@ class AuthHandler extends Database {
 	public function login($email, $password) {
 		$password = md5($password);
 		$result = Database::$DB_CONN->query(
-					"SELECT userid,
-						fname,
-						lname,
-						email,
-						mobile_no,
-						address,
-						dob,
-						nic,
-						gender,
-						reg_date,
-						salary,
-						password
-					FROM users
+					"SELECT * FROM ( SELECT userid, null as sid, fname, lname, email, mobile_no, address, dob, nic, gender, reg_date, salary, password FROM users
+						UNION
+					SELECT null, sid, fname, lname, email, mobile_no, null, dob, null, gender, reg_date, null, password FROM students ) users
 					WHERE email = '$email'
 					AND password = '$password'"
 				);
 
 		if ($result->num_rows == 1) {
 			while($row = $result->fetch_assoc()) {
-				$this->session->set_session(USERID, $row['userid']);
+				if (isset($row['userid'])) {
+					$this->session->set_session(USERID, $row['userid']);
+					$this->session->set_session(USER_ROLE, 'staff');
+				} else {
+					$this->session->set_session(USERID, $row['sid']);
+					$this->session->set_session(USER_ROLE, 'student');
+				}
 				$this->session->set_session(FNAME, $row['fname']);
 				$this->session->set_session(LNAME, $row['lname']);
 				$this->session->set_session(EMAIL, $row['email']);
@@ -130,6 +127,7 @@ class AuthHandler extends Database {
 		$this->session->unset_session(MOBILE_NO);
 		$this->session->unset_session(DOB);
 		$this->session->unset_session(REG_DATE);
+		$this->session->unset_session(USER_ROLE);
 
 		// User permission removal
 		$this->session->unset_session(PERMISSION_STAFF);
