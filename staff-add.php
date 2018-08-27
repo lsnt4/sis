@@ -5,7 +5,7 @@
 							<a class="nav-item nav-link active">Add</a>
 							<a href="staff-search.php" class="nav-item nav-link disabled">Search</a>
 							<a href="staff-attendance.php" class="nav-item nav-link disabled">Attendance</a>
-							<a href="staff-permissions.php" class="nav-item nav-link disabled">Permissions</a>
+							<a href="staff-departments.php" class="nav-item nav-link disabled">Departments</a>
 							<a href="staff-overview.php" class="nav-item nav-link disabled">Overview</a>
 							<a href="staff-reports.php" class="nav-item nav-link disabled">Reports</a>
 						</div>
@@ -13,36 +13,6 @@
 					<div class="tab-content">
 						<div class="tab-pane mt-4 show active">
 							<form method="post" action="staff-add.php">
-								<div class="form-group row">
-									<label class="col-sm-2 col-form-label">Employee ID</label>
-									<div class="col-sm-10">
-										<div class="form-row">
-											<div class="col-md-6">
-												<input type="text" class="form-control" name="eid" value="EMP3928" readonly>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="form-group row">
-									<label class="col-sm-2 col-form-label">Deparment</label>
-									<div class="col-sm-10">
-										<div class="form-row">
-											<div class="col-md-6">
-												<select name="department" class="form-control">
-													<option value="Admin">Admin</option>
-													<option value="Resource">Resource</option>
-													<option value="Student">Student</option>
-													<option value="Course">Course</option>
-													<option value="Exam">Exam</option>
-													<option value="Finance">Finance</option>
-													<option value="Library">Library</option>
-													<option value="Payment">Payment</option>
-													<option value="Staff" selected>Staff</option>
-												</select>
-											</div>
-										</div>
-									</div>
-								</div>
 								<div class="form-group row">
 									<label class="col-sm-2 col-form-label">Name</label>
 									<div class="col-sm-10">
@@ -73,6 +43,16 @@
 									</div>
 								</div>
 								<div class="form-group row">
+									<label class="col-sm-2 col-form-label">Basic Salary</label>
+									<div class="col-sm-10">
+										<div class="form-row">
+											<div class="col-md-6">
+												<input type="text" class="form-control" name="salary" placeholder="LKR" required>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="form-group row">
 									<label class="col-sm-2 col-form-label">NIC</label>
 									<div class="col-sm-10">
 										<div class="form-row">
@@ -87,7 +67,7 @@
 									<div class="col-sm-10">
 										<div class="form-row">
 											<div class="col-md-6">
-												<input type="text" class="form-control" name="mobile" placeholder="Mobile" required>
+												<input type="text" class="form-control" name="mobile_no" placeholder="Mobile" required>
 											</div>
 										</div>
 									</div>
