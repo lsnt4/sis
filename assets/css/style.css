@@ -32,3 +32,38 @@ padding-top: 10px;
 border: 1px solid #e3e3e3;
 padding: 10px;
 }
+
+.sll {
+text-align: center;
+margin-top: 50px;
+margin-bottom: 10px;
+}
+.sllm {
+width: 30px;
+height: 5px;
+background: #90013a;
+display: inline-block;
+-ms-transform: skewX(-20deg);
+-webkit-transform: skewX(-20deg);
+transform: skewX(-30deg);
+border-radius: 10px 0px 0px 10px;
+}
+.sllo {
+width: 30px;
+height: 5px;
+background: #f1712a;
+display: inline-block;
+-ms-transform: skewX(-20deg);
+-webkit-transform: skewX(-20deg);
+transform: skewX(-30deg);
+}
+.sllg {
+width: 30px;
+height: 5px;
+background: #00544e;
+display: inline-block;
+-ms-transform: skewX(-20deg);
+-webkit-transform: skewX(-20deg);
+transform: skewX(-30deg);
+border-radius: 0px 10px 10px 0px;
+}
