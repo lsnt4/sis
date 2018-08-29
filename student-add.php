@@ -2,7 +2,7 @@
 				<div class="col-md-10">
 					<nav>
 						<div class="nav nav-tabs" id="nav-tab" role="tablist">
-							<a class="nav-item nav-link active">Add</a>
+							<a href="student-add.php" class="nav-item nav-link active">Add</a>
 							<a href="student-search.php" class="nav-item nav-link disabled">Search</a>
 							<a href="student-attendance.php" class="nav-item nav-link disabled">Attendance</a>
 							<a href="student-overview.php" class="nav-item nav-link disabled">Overview</a>

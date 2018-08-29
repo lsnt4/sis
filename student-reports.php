@@ -2,12 +2,11 @@
 				<div class="col-md-10">
 					<nav>
 						<div class="nav nav-tabs" id="nav-tab" role="tablist">
-							<a href="staff-add.php" class="nav-item nav-link disabled">Add</a>
-							<a href="staff-search.php" class="nav-item nav-link disabled">Search</a>
-							<a href="staff-attendance.php" class="nav-item nav-link disabled">Attendance</a>
-							<a href="staff-permissions.php" class="nav-item nav-link disabled">Permissions</a>
-							<a href="staff-overview.php" class="nav-item nav-link disabled">Overview</a>
-							<a class="nav-item nav-link active">Reports</a>
+							<a href="student-add.php" class="nav-item nav-link disabled">Add</a>
+							<a href="student-search.php" class="nav-item nav-link disabled">Search</a>
+							<a href="student-attendance.php" class="nav-item nav-link disabled">Attendance</a>
+							<a href="student-overview.php" class="nav-item nav-link disabled">Overview</a>
+							<a href="student-reports.php" class="nav-item nav-link active">Reports</a>
 						</div>
 					</nav>
 					<div class="tab-content">
@@ -27,7 +26,7 @@
 													<small class="form-text text-muted">End Date</small>
 													<input type="date" name="enddate" class="form-control">
 												</div>
-												<button class="btn btn-dark btn-block" type="submit">View Report</button>			
+												<button class="btn btn-dark btn-block" type="submit">View Report</button>
 											</form>
 										</div>
 									</div>
@@ -38,7 +37,7 @@
 										<div class="card-body">
 											<p class="card-text">View employees spread over departments.</p>
 											<form action="staff-reports-employeement-history.php" method="get">
-												<button class="btn btn-dark btn-block" type="submit">View Report</button>			
+												<button class="btn btn-dark btn-block" type="submit">View Report</button>
 											</form>
 										</div>
 									</div>

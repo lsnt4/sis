@@ -4,7 +4,7 @@
 						<div class="nav nav-tabs" id="nav-tab" role="tablist">
 							<a href="student-add.php" class="nav-item nav-link disabled">Add</a>
 							<a href="student-search.php" class="nav-item nav-link disabled">Search</a>
-							<a class="nav-item nav-link active">Attendance</a>
+							<a href="student-attendance.php" class="nav-item nav-link active">Attendance</a>
 							<a href="student-overview.php" class="nav-item nav-link disabled">Overview</a>
 							<a href="student-reports.php" class="nav-item nav-link disabled">Reports</a>
 						</div>
