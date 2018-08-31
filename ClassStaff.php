@@ -230,9 +230,11 @@ class AuthHandler extends Database {
 		if ($result->num_rows == 1) {
 			while($row = $result->fetch_assoc()) {
 				if (isset($row['userid'])) {
+					$userid = $row['userid'];
 					$this->session->set_session(USERID, $row['userid']);
 					$this->session->set_session(USER_ROLE, 'staff');
 				} else {
+					$userid = $row['sid'];
 					$this->session->set_session(USERID, $row['sid']);
 					$this->session->set_session(USER_ROLE, 'student');
 				}
@@ -245,15 +247,8 @@ class AuthHandler extends Database {
 				break;
 			}
 
-			$this->session->set_session(PERMISSION_STAFF, '1');
-			$this->session->set_session(PERMISSION_STUDENTS, '1');
-			$this->session->set_session(PERMISSION_PAYMENTS, '1');
-			$this->session->set_session(PERMISSION_EXAMS, '1');
-			$this->session->set_session(PERMISSION_COURSES, '1');
-			$this->session->set_session(PERMISSION_FINANCE, '1');
-			$this->session->set_session(PERMISSION_LIBRARY, '1');
-			$this->session->set_session(PERMISSION_RESOURCES, '1');
-			$this->session->set_session(PERMISSION_EMPLOYEES, '1');
+			$AdminManager = new AdminManager();
+			$AdminManager->set_permissions($userid);
 
 			return true;
 		} else {
