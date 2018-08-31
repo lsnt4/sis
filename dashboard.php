@@ -182,13 +182,13 @@
 								<div class="card-body">
 									<div class="row">
 										<div class="col-md-3 mb-3">
-											<a href="staff-add.php" class="btn btn-lg btn-dark btn-block">Add Employee</a>
+											<a href="course-add.php" class="btn btn-lg btn-dark btn-block">Add Course</a>
 										</div>
 										<div class="col-md-3 mb-3">
-											<a href="staff-search.php" class="btn btn-lg btn-dark btn-block">Search Employees</a>
+											<a href="course-search.php" class="btn btn-lg btn-dark btn-block">Search Courses</a>
 										</div>
 										<div class="col-md-3 mb-3">
-											<a href="staff-attendance.php" class="btn btn-lg btn-dark btn-block">Attendance</a>
+											<a href="course-schedule.php" class="btn btn-lg btn-dark btn-block">Schedule Courses</a>
 										</div>
 										<div class="col-md-3 mb-3">
 											<a href="staff-departments.php" class="btn btn-lg btn-dark btn-block">Departments</a>
