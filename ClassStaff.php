@@ -4,13 +4,13 @@
 * 	               CLASS STRUCTURE
 *	=============================================
 *
-*	StaffMember		- Hold data for an employee
+*	StaffMember	- Hold data for an employee
 *	StaffManager 	- Employee management tasks
 *	AdminManager	- Admin management tasks
 *	SessionManager	- Session management tasks
-*	AuthHandler		- User authentication handler
-*	Helpers			- Helper methods
-*	Database 		- Database connection
+*	AuthHandler	- User authentication handler
+*	Helpers		- Helper methods
+*	Database 	- Database connection
 */
 
 define('USERID', 'userid');
