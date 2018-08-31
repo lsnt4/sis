@@ -1,9 +1,5 @@
 <?php include_once 'staff-header.php'; ?>
-<?php
-
-
-
-?>
+<?php include 'course-crud.php'; ?>
     <div class="col-md-10">
         <nav>
             <div class="nav nav-tabs" id="nav-tab" role="tablist">
@@ -22,7 +18,7 @@
                         <div class="col-sm-10">
                             <div class="form-row">
                                 <div class="col-md-6">
-                                    <input type="text" class="form-control" name="cid" value="" placeholder="ENG001">
+                                    <input type="text"   class="form-control" name="cid" value="" placeholder="ENG001">
                                 </div>
                             </div>
                         </div>
@@ -32,7 +28,7 @@
                         <div class="col-sm-10">
                             <div class="form-row">
                                 <div class="col-md-6">
-                                    <input type="text" class="form-control" name="fname" placeholder="ENGLISH" required>
+                                    <input type="text" class="form-control" name="name" placeholder="ENGLISH" required>
                                 </div>
                             </div>
                         </div>
@@ -42,7 +38,7 @@
                         <div class="col-sm-10">
                             <div class="form-row">
                                 <div class="col-md-6">
-                                    <select name="Grade" class="form-control">
+                                    <select name="grade" class="form-control">
                                         <option value="1">Grade 01</option>
                                         <option value="2">Grade 02</option>
                                         <option value="3">Grade 03</option>
@@ -60,12 +56,52 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Day</label>
+                        <div class="col-sm-10">
+                            <div class="form-row">
+                                <div class="col-md-6">
+                                    <select name="day" class="form-control">
+                                        <option value="Monday">Monday</option>
+                                        <option value="Tuesday">Tuesday</option>
+                                        <option value="Wednesday">Wednesday</option>
+                                        <option value="Thursday">Thursday</option>
+                                        <option value="Friday">Friday</option>
+                                        <option value="Saturday ">Saturday</option>
+                                        <option value="Sunday">Sunday</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Start Time</label>
+                        <div class="col-sm-10">
+                            <div class="form-row">
+                                <div class="col-md-6">
+                                    <input type="time" class="form-control" name="stime" placeholder="" required>
+                                    <span class="hours">Class hours  8AM to 5PM</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">End time</label>
+                        <div class="col-sm-10">
+                            <div class="form-row">
+                                <div class="col-md-6">
+                                    <input type="time" class="form-control" name="etime" placeholder="" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Hall</label>
                         <div class="col-sm-10">
                             <div class="form-row">
                                 <div class="col-md-6">
-                                    <select name="Hall" class="form-control">
+                                    <select name="hall" class="form-control">
                                         <option value="01">H01</option>
                                         <option value="02">H03</option>
                                         <option value="03">H03</option>
@@ -84,57 +120,18 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Day</label>
-                        <div class="col-sm-10">
-                            <div class="form-row">
-                                <div class="col-md-6">
-                                    <select name="Day" class="form-control">
-                                        <option value="Monday">Monday</option>
-                                        <option value="Tuesday">Tuesday</option>
-                                        <option value="Wednesday">Wednesday</option>
-                                        <option value="Thursday">Thursday</option>
-                                        <option value="Friday">Friday</option>
-                                        <option value="Saturday ">Saturday</option>
-                                        <option value="Sunday">Sunday</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Start Time</label>
-                        <div class="col-sm-10">
-                            <div class="form-row">
-                                <div class="col-md-6">
-                                    <input type="time" class="form-control" name="fname" placeholder="" required>
-                                    <span class="hours">Class hours  8AM to 5PM</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">End time</label>
-                        <div class="col-sm-10">
-                            <div class="form-row">
-                                <div class="col-md-6">
-                                    <input type="time" class="form-control" name="fname" placeholder="" required>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Fee</label>
                         <div class="col-sm-10">
                             <div class="form-row">
                                 <div class="col-md-6">
-                                    <input type="text" class="form-control" name="doby" placeholder="1500" required>
+                                    <input type="text"  class="form-control" name="fee" placeholder="1500" required>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="form-group row">
                         <div class="col-sm-10">
-                            <button type="submit" class="btn btn-dark">Add Course</button>
+                            <button type="submit" name="addCourse" class="btn btn-dark">Add Course</button>
                         </div>
                     </div>
                 </form>
