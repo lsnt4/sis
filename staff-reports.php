@@ -5,7 +5,7 @@
 							<a href="staff-add.php" class="nav-item nav-link disabled">Add</a>
 							<a href="staff-search.php" class="nav-item nav-link disabled">Search</a>
 							<a href="staff-attendance.php" class="nav-item nav-link disabled">Attendance</a>
-							<a href="staff-permissions.php" class="nav-item nav-link disabled">Permissions</a>
+							<a href="staff-departments.php" class="nav-item nav-link disabled">Departments</a>
 							<a href="staff-overview.php" class="nav-item nav-link disabled">Overview</a>
 							<a class="nav-item nav-link active">Reports</a>
 						</div>
@@ -27,7 +27,7 @@
 													<small class="form-text text-muted">End Date</small>
 													<input type="date" name="enddate" class="form-control">
 												</div>
-												<button class="btn btn-dark btn-block" type="submit">View Report</button>			
+												<button class="btn btn-dark btn-block" type="submit">View Report</button>
 											</form>
 										</div>
 									</div>
@@ -38,7 +38,7 @@
 										<div class="card-body">
 											<p class="card-text">View employees spread over departments.</p>
 											<form action="staff-reports-employeement-history.php" method="get">
-												<button class="btn btn-dark btn-block" type="submit">View Report</button>			
+												<button class="btn btn-dark btn-block" type="submit">View Report</button>
 											</form>
 										</div>
 									</div>
