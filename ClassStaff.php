@@ -167,6 +167,27 @@ class StaffMember {
 		return (isset($this->userid) && isset($this->fname) && isset($this->lname) && isset($this->email) && isset($this->mobile_no) && isset($this->address) && isset($this->dob) && isset($this->gender) && isset($this->nic) && isset($this->salary) );
 	}
 }
+/**
+* Helpers Class
+*/
+class Helpers {
+
+	function __construct() {
+
+	}
+
+	public function generate_userid() {
+		return substr(number_format(time() * rand(),0,'',''),0,6);
+	}
+
+	public function get_header() {
+
+	}
+
+	public function get_footer() {
+
+	}
+}
 
 /**
 * Session Management Class
