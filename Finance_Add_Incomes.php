@@ -1,5 +1,5 @@
 <?php 
-	include_once 'Finance_Header.php';
+	include_once 'staff-header.php';
 	include_once 'DB_Connection.php';
 	  	      
     $income_max= mysqli_query($conn,"SELECT MAX(id) AS maximum FROM incomes");
@@ -215,4 +215,4 @@
 						</div>
 					</div>
 				</div>
-<?php include_once 'Finance_Footer.php'; ?>
+<?php include_once 'staff-footer.php'; ?>
