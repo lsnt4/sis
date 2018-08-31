@@ -167,6 +167,174 @@ class StaffMember {
 		return (isset($this->userid) && isset($this->fname) && isset($this->lname) && isset($this->email) && isset($this->mobile_no) && isset($this->address) && isset($this->dob) && isset($this->gender) && isset($this->nic) && isset($this->salary) );
 	}
 }
+
+/**
+* Admin Management Class
+*/
+class AdminManager extends Database {
+
+	public $session;
+
+	function __construct() {
+		parent::__construct();
+		$this->session = new SessionManager();
+	}
+
+	public function set_permissions($userid) {
+		// Reset permissions
+		$this->session->set_session(PERMISSION_STAFF, '0');
+		$this->session->set_session(PERMISSION_STUDENTS, '0');
+		$this->session->set_session(PERMISSION_PAYMENTS, '0');
+		$this->session->set_session(PERMISSION_EXAMS, '0');
+		$this->session->set_session(PERMISSION_COURSES, '0');
+		$this->session->set_session(PERMISSION_FINANCE, '0');
+		$this->session->set_session(PERMISSION_LIBRARY, '0');
+		$this->session->set_session(PERMISSION_RESOURCES, '0');
+		$this->session->set_session(PERMISSION_EMPLOYEES, '0');
+
+		$dept_res = Database::$DB_CONN->query("
+			SELECT userid, employee, resource, student, course, exam, finance, library, payment, staff
+			FROM user_departments
+			LEFT JOIN departments
+			ON departments.did=user_departments.department_id
+			WHERE userid=$userid
+		");
+		while($row = $dept_res->fetch_assoc()) {
+			($row['staff']) ? $this->session->set_session(PERMISSION_STAFF, '1') : null;
+			($row['student']) ? $this->session->set_session(PERMISSION_STUDENTS, '1') : null;
+			($row['payment']) ? $this->session->set_session(PERMISSION_PAYMENTS, '1') : null;
+			($row['exam']) ? $this->session->set_session(PERMISSION_EXAMS, '1') : null;
+			($row['course']) ? $this->session->set_session(PERMISSION_COURSES, '1') : null;
+			($row['finance']) ? $this->session->set_session(PERMISSION_FINANCE, '1') : null;
+			($row['library']) ? $this->session->set_session(PERMISSION_LIBRARY, '1') : null;
+			($row['resource']) ? $this->session->set_session(PERMISSION_RESOURCES, '1') : null;
+			($row['employee']) ? $this->session->set_session(PERMISSION_EMPLOYEES, '1') : null;
+		}
+	}
+
+	public function get_departments_list() {
+		$departments = array();
+		$result = Database::$DB_CONN->query("
+			SELECT did, name, employee, resource, student, course, exam, finance, library, payment, staff
+			FROM departments
+		");
+		if ($result->num_rows > 0) {
+			while($row = $result->fetch_assoc()) {
+				if($row['name'] == 'Admin') { continue; }
+				array_push($departments, array(
+					'did' => $row['did'],
+					'name' => $row['name'],
+					'employee' => $row['employee'],
+					'resource' => $row['resource'],
+					'student' => $row['student'],
+					'course' => $row['course'],
+					'exam' => $row['exam'],
+					'finance' => $row['finance'],
+					'library' => $row['library'],
+					'payment' => $row['payment'],
+					'staff' => $row['staff'],
+				));
+			}
+		} else {
+			return null;
+		}
+		return $departments;
+	}
+
+	// Returns true if an user has access to a department
+	public function get_department_bools_for_user($userid) {
+		$departments = array();
+		$result = Database::$DB_CONN->query("
+			SELECT did, name, userid
+			FROM departments
+			LEFT JOIN user_departments ON departments.did=user_departments.department_id
+		");
+		if ($result->num_rows != 0) {
+			while($row = $result->fetch_assoc()) {
+				array_push($departments, array(
+					'did' => $row['did'],
+					'name' => $row['name'],
+					'status' => ($row['userid'] == $userid)
+				));
+			}
+			return $departments;
+		} else {
+			return null;
+		}
+	}
+
+	public function get_departments($keyword) {
+		$departments = array();
+		$result = Database::$DB_CONN->query("
+			SELECT did, name, employee, resource, student, course, exam, finance, library, payment, staff
+			FROM departments
+			WHERE name LIKE '%$keyword%'
+		");
+		if ($result->num_rows > 0) {
+			while($row = $result->fetch_assoc()) {
+				if($row['name'] == 'Admin') { continue; }
+				array_push($departments, array(
+					'did' => $row['did'],
+					'name' => $row['name'],
+					'employee' => $row['employee'],
+					'resource' => $row['resource'],
+					'student' => $row['student'],
+					'course' => $row['course'],
+					'exam' => $row['exam'],
+					'finance' => $row['finance'],
+					'library' => $row['library'],
+					'payment' => $row['payment'],
+					'staff' => $row['staff'],
+				));
+			}
+		} else {
+			return null;
+		}
+		return $departments;
+	}
+
+	public function create_department($name) {
+		$sql_user = "
+			INSERT INTO departments (name, employee, resource, student, course, exam, finance, library, payment, staff)
+			VALUES ('$name', '0', '0', '0', '0', '0', '0', '0', '0', '0')";
+		if (Database::$DB_CONN->query($sql_user)) {
+		    return true;
+		} else {
+		    echo "Error: " . Database::$DB_CONN->error;
+			return false;
+		}
+	}
+
+	public function update_department($uid, $emp, $res, $stu, $cou, $exa, $fin, $lib, $pay, $sta) {
+		$sql = "UPDATE departments SET employee=$emp, resource=$res, student=$stu, course=$cou, exam=$exa, finance=$fin, library=$lib, payment=$pay, staff=$sta WHERE did=$uid";
+		if (Database::$DB_CONN->query($sql)) {
+
+			$AdminManager = new AdminManager();
+			$userid = $this->session->get_session('userid');
+			$AdminManager->set_permissions($userid);
+
+			return true;
+		} else {
+			echo "Error updating record: " . Database::$DB_CONN->error;
+			return false;
+		}
+	}
+
+	public function delete_department($did) {
+		$sql = "DELETE FROM departments WHERE did=$did";
+		if (Database::$DB_CONN->query($sql)) {
+			return true;
+		} else {
+			echo "Error deleting record: " . Database::$DB_CONN->error;
+			return false;
+		}
+	}
+
+	public function get_dashboard_list() {
+
+	}
+}
+
 /**
 * Helpers Class
 */
