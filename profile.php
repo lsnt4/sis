@@ -1,29 +1,39 @@
 <?php include_once 'staff-header.php'; ?>
+<?php
+	$session = new SessionManager();
+	$userid = $session->get_session('userid');
+	$sm = new StaffManager();
+	$user = $sm->get_single_employee($userid)[0];
+?>
 				<div class="col-md-10">
 					<nav>
 						<div class="nav nav-tabs" id="nav-tab" role="tablist">
-							<a class="nav-item nav-link active">Profile</a>
+							<a href="profile.php" class="nav-item nav-link active">Profile</a>
 						</div>
 					</nav>
 					<div class="tab-content">
 						<div class="tab-pane mt-4 show active">
 							<form action="profile.php" method="post">
 								<div class="form-group row">
-									<label class="col-sm-2 col-form-label">Employee ID</label>
+									<label class="col-sm-2 col-form-label">User ID</label>
 									<div class="col-sm-10">
 										<div class="form-row">
 											<div class="col-md-6">
-												<input type="text" class="form-control" value="EMP3928" disabled>
+												<input type="text" class="form-control" value="<?php echo $user['userid']; ?>" disabled>
 											</div>
 										</div>
 									</div>
 								</div>
 								<div class="form-group row">
-									<label class="col-sm-2 col-form-label">Deparment</label>
+									<label class="col-sm-2 col-form-label">Departments</label>
 									<div class="col-sm-10">
 										<div class="form-row">
 											<div class="col-md-6">
-												<input type="text" class="form-control" value="Finance" disabled>
+                                                <select size="5" class="form-control" multiple disabled>
+                                                    <?php foreach($user['departments'] as $department) { ?>
+                                                    <option value="<?php echo $department['did']; ?>" <?php echo ($department['status']) ? 'selected' : '' ; ?>><?php echo $department['name']; ?></option>
+                                                    <?php } ?>
+                                                </select>
 											</div>
 										</div>
 									</div>
@@ -33,10 +43,12 @@
 									<div class="col-sm-10">
 										<div class="form-row">
 											<div class="col-md-3">
-												<input type="text" class="form-control" value="John" disabled>
+												<input type="text" class="form-control" value="<?php echo $user['fname']; ?>" disabled>
+												<small class="form-text text-muted">First Name</small>
 											</div>
 											<div class="col-md-3">
-												<input type="text" class="form-control" value="Doe" disabled>
+												<input type="text" class="form-control" value="<?php echo $user['lname']; ?>" disabled>
+												<small class="form-text text-muted">Last Name</small>
 											</div>
 										</div>
 									</div>
@@ -46,13 +58,16 @@
 									<div class="col-sm-10">
 										<div class="form-row">
 											<div class="col-md-2">
-												<input type="text" class="form-control" value="1997" disabled>
+												<input type="text" class="form-control" value="<?php echo substr($user['dob'], 0, 4); ?>" disabled>
+												<small class="form-text text-muted">Year</small>
 											</div>
 											<div class="col-md-2">
-												<input type="text" class="form-control" value="12" disabled>
+												<input type="text" class="form-control" value="<?php echo substr($user['dob'], 5, 2); ?>" disabled>
+												<small class="form-text text-muted">Month</small>
 											</div>
 											<div class="col-md-2">
-												<input type="text" class="form-control" value="28" disabled>
+												<input type="text" class="form-control" value="<?php echo substr($user['dob'], 8, 2); ?>" disabled>
+												<small class="form-text text-muted">Date</small>
 											</div>
 										</div>
 									</div>
@@ -62,7 +77,7 @@
 									<div class="col-sm-10">
 										<div class="form-row">
 											<div class="col-md-6">
-												<input type="text" class="form-control" value="123456789V" disabled>
+												<input type="text" class="form-control" value="<?php echo $user['nic']; ?>" disabled>
 											</div>
 										</div>
 									</div>
@@ -73,6 +88,7 @@
 										<div class="form-row">
 											<div class="col-md-6">
 												<input type="text" class="form-control" name="mobile" value="077123456">
+												<small class="form-text text-muted">Mobile</small>
 											</div>
 										</div>
 									</div>
@@ -82,7 +98,8 @@
 									<div class="col-sm-10">
 										<div class="form-row">
 											<div class="col-md-6">
-												<input type="text" class="form-control" name="address" value="No 221B, Baker Street, London">
+												<textarea type="text" class="form-control" name="address" rows="3"><?php echo $user['address']; ?></textarea>
+												<small class="form-text text-muted">Address</small>
 											</div>
 										</div>
 									</div>
@@ -92,7 +109,8 @@
 									<div class="col-sm-10">
 										<div class="form-row">
 											<div class="col-md-6">
-												<input type="email" class="form-control" name="email" value="conandoyle@nsa.gov">
+												<input type="email" class="form-control" name="email" value="<?php echo $user['email']; ?>">
+												<small class="form-text text-muted">Address</small>
 											</div>
 										</div>
 									</div>
@@ -102,7 +120,7 @@
 									<div class="col-sm-10 col-md-2">
 										<div class="form-row">
 											<div class="col-md-6">
-												<input type="text" class="form-control" value="Male" disabled>
+												<input type="text" class="form-control" value="<?php echo ($user['gender']) ? 'Male' : 'Female' ; ?>" disabled>
 											</div>
 										</div>
 									</div>
@@ -112,7 +130,8 @@
 									<div class="col-sm-10">
 										<div class="form-row">
 											<div class="col-md-6">
-												<input type="password" class="form-control" placeholder="Leave blank if no password change required">
+												<input type="password" class="form-control">
+												<small class="form-text text-muted">Leave blank if no password change required</small>
 											</div>
 										</div>
 									</div>
