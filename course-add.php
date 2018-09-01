@@ -1,5 +1,22 @@
 <?php include_once 'staff-header.php'; ?>
-<?php include 'course-crud.php'; ?>
+<?php
+
+    $data = mysqli_connect('localhost','root','','itpprojectdb');
+        if (mysqli_connect_errno())
+            {
+                     echo "Failed to connect to MySQL: " . mysqli_connect_error();
+            }
+        $name = "";
+        $grade = 0;
+        $day   = "";
+        $sTime =  0;
+        $eTime =  0;
+        $hall  = 0;
+        $fee   = 0.0;
+
+?>
+
+
     <div class="col-md-10">
         <nav>
             <div class="nav nav-tabs" id="nav-tab" role="tablist">
@@ -12,23 +29,14 @@
         </nav>
         <div class="tab-content">
             <div class="tab-pane mt-4 show active">
-                <form method="post" action="">
+                <form method="post" action="course-add.php">
                     <div class="form-group row">
-                        <label class="col-sm-2 col-form-label">Course ID</label>
-                        <div class="col-sm-10">
-                            <div class="form-row">
-                                <div class="col-md-6">
-                                    <input type="text"   class="form-control" name="cid" value="" placeholder="ENG001">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group row">
+                        <form method="post" action="course-add.php">
                         <label class="col-sm-2 col-form-label">Name</label>
                         <div class="col-sm-10">
                             <div class="form-row">
                                 <div class="col-md-6">
-                                    <input type="text" class="form-control" name="name" placeholder="ENGLISH" required>
+                                    <input type="text" class="form-control" name="name" placeholder="Course Name" required>
                                 </div>
                             </div>
                         </div>
@@ -80,7 +88,7 @@
                         <div class="col-sm-10">
                             <div class="form-row">
                                 <div class="col-md-6">
-                                    <input type="time" class="form-control" name="stime" placeholder="" required>
+                                    <input type="time" class="form-control" name="stime"  required>
                                     <span class="hours">Class hours  8AM to 5PM</span>
                                 </div>
                             </div>
@@ -91,7 +99,7 @@
                         <div class="col-sm-10">
                             <div class="form-row">
                                 <div class="col-md-6">
-                                    <input type="time" class="form-control" name="etime" placeholder="" required>
+                                    <input type="time" class="form-control" name="etime" required>
                                 </div>
                             </div>
                         </div>
@@ -124,7 +132,7 @@
                         <div class="col-sm-10">
                             <div class="form-row">
                                 <div class="col-md-6">
-                                    <input type="text"  class="form-control" name="fee" placeholder="1500" required>
+                                    <input type="text"  class="form-control" name="fee" placeholder="LKR" required>
                                 </div>
                             </div>
                         </div>
@@ -139,3 +147,20 @@
         </div>
     </div>
 <?php include_once 'staff-footer.php'; ?>
+
+<?php
+if(isset($_POST['addCourse'])){
+$name = $_POST['name'];
+$grade = $_POST['grade'];
+$day = $_POST['day'];
+$time = $_POST['stime'];
+$etime = $_POST['etime'];
+$hall = $_POST['hall'];
+$fee = $_POST['fee'];
+
+
+var_dump(mysqli_query($data,"INSERT INTO courses (name,grade,day,time_start,time_end,hall_no,fee) VALUES ('$name','$grade','$day','$time','$etime','$hall','$fee')"));
+}
+
+
+?>
