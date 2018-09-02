@@ -1,4 +1,33 @@
-<?php include_once 'staff-header.php'; ?>
+<?php include_once 'staff-header.php';
+$dbconn = new mysqli('localhost', 'root', '', 'itpprojectdb');
+if($dbconn->connect_error) {
+    die("Database connection error: " . $dbconn->connect_error);
+}
+
+$sql= "select MAX(id) as maximum from exams";
+$result = $dbconn->query($sql);
+$row = $result->fetch_assoc();
+$max = $row["maximum"]+1;
+
+
+if(isset($_POST["add"])){
+    $examid=$_POST["exam_id"];
+    $name = $_POST["exam_name"];
+    $cid=$_POST["courseid"];
+    $date=$_POST["date"];
+    $stime=$_POST["stime"];
+    $etime=$_POST["etime"];
+    $fee=$_POST["fee"];
+    $sql = "insert into exams values('$examid','$name','$cid','$date','$stime','$etime','$fee')";
+    if ($dbconn->query($sql)) {
+
+    } else {
+        echo "Error updating record: " . $dbconn->error;
+
+    }
+}
+
+?>
 				<div class="col-md-10">
 					<nav>
 						<div class="nav nav-tabs" id="nav-tab" role="tablist">
@@ -11,82 +40,91 @@
 					</nav>
 					<div class="tab-content">
 						<div class="tab-pane mt-4 show active">
-							<form method="post" action="staff-add.php">
-								<div class="form-group row">
-									<label class="col-sm-2 col-form-label">Exam ID</label>
-									<div class="col-sm-10">
-										<div class="form-row">
-											<div class="col-md-6">
-												<input type="text" class="form-control" name="eid" value="EXM223" readonly>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="form-group row">
-									<label class="col-sm-2 col-form-label">Name</label>
-									<div class="col-sm-10">
-										<div class="form-row">
-											<div class="col-md-6">
-												<input type="text" class="form-control" name="fname" placeholder="" required>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="form-group row">
-									<label class="col-sm-2 col-form-label">Course</label>
-									<div class="col-sm-10">
-										<div class="form-row">
-											<div class="col-md-6">
-												<select name="department" class="form-control">
-													<option value="Admin">Admin</option>
-													<option value="Resource">Resource</option>
-													<option value="Student">Student</option>
-													<option value="Course">Course</option>
-													<option value="Exam">Exam</option>
-													<option value="Finance">Finance</option>
-													<option value="Library">Library</option>
-													<option value="Payment">Payment</option>
-													<option value="Staff" selected>Mathematics</option>
-												</select>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="form-group row">
-									<label class="col-sm-2 col-form-label">Date</label>
-									<div class="col-sm-10">
-										<div class="form-row">
-											<div class="col-md-6">
-												<input type="date" class="form-control" name="doby" placeholder="" required>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="form-group row">
-									<label class="col-sm-2 col-form-label">Time</label>
-									<div class="col-sm-10">
-										<div class="form-row">
-											<div class="col-md-6">
-												<input type="time" class="form-control" name="doby" placeholder="" required>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="form-group row">
-									<label class="col-sm-2 col-form-label">Fee</label>
-									<div class="col-sm-10">
-										<div class="form-row">
-											<div class="col-md-6">
-												<input type="text" class="form-control" name="doby" placeholder="" required>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="form-group row">
-									<div class="col-sm-10">
-										<button type="submit" class="btn btn-dark">Add Exam</button>
-									</div>
-								</div>
+							<form method="post" action="exam-add.php">
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">Exam ID</label>
+                                    <div class="col-sm-10">
+                                        <div class="form-row">
+                                            <div class="col-md-6">
+                                                <input type="text" class="form-control" name="exam_id" value="<?php echo $max; ?>" readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">Exam Name</label>
+                                    <div class="col-sm-10">
+                                        <div class="form-row">
+                                            <div class="col-md-6">
+                                                <input type="text" class="form-control"  name="exam_name" placeholder="Exam Name" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">Exam Name</label>
+                                    <div class="col-sm-10">
+                                        <div class="form-row">
+                                            <div class="col-md-6">
+                                                <select name="courseid" class="form-control">
+                                                    <option value="selected" selected>Please select</option>
+                                                    <?php
+                                                        $sql_course = "select * from courses";
+                                                        $result_course = $dbconn->query($sql_course);
+                                                        while($row_course = $result_course->fetch_assoc()){
+                                                            echo "<option value='".$row_course["cid"]."'> ".$row_course["cid"]." ".$row_course["name"]." </option>";
+                                                        }
+                                                    ?>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label"> Exam Date </label>
+                                    <div class="col-sm-10">
+                                        <div class="form-row">
+                                            <div class="col-md-6">
+                                                <input type="date" class="form-control"  name="date" placeholder="Exam Date" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">Exam Start Time</label>
+                                    <div class="col-sm-10">
+                                        <div class="form-row">
+                                            <div class="col-md-6">
+                                                <input type="time" class="form-control"  name="stime" placeholder="Exam Start Time" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">Exam End Time</label>
+                                    <div class="col-sm-10">
+                                        <div class="form-row">
+                                            <div class="col-md-6">
+                                                <input type="time" class="form-control"  name="etime" placeholder="Exam End Time" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">Exam Fees</label>
+                                    <div class="col-sm-10">
+                                        <div class="form-row">
+                                            <div class="col-md-6">
+                                                <input type="number" class="form-control"  name="fee" placeholder="Exam Fees" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-sm-10">
+                                        <input type="submit" name="add" value=" Add Exam " class="btn btn-dark">
+                                    </div>
+                                </div>
 							</form>
 						</div>
 					</div>
