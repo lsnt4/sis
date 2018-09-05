@@ -1,13 +1,9 @@
 <?php
 	include_once 'common_functions.php';
-	include_once 'ClassStaff.php';
 
-	$AuthHandler = new AuthHandler();
-	if (!$AuthHandler->auth_status()) {
+	if(is_null(get_session('userid'))) {
 		header('Location: login.php');
 	}
-
-	$session = new SessionManager();
 ?>
 <!doctype html>
 <html lang="en">
@@ -43,33 +39,30 @@
 			<div class="row">
 				<div class="col-md-2">
 					<div class="list-group mb-5">
-						<?php if($session->get_session('permission_students')) { ?>
+						<?php if(get_session('permission_students')) { ?>
 							<a href="students.php" class="list-group-item list-group-item-action list-group-item-secondary <?php $active_state = (is_on_page("students")) ? 'active' : '' ; echo $active_state; ?>">Students</a>
 						<?php } ?>
-						<?php if($session->get_session('permission_staff')) { ?>
+						<?php if(get_session('permission_staff')) { ?>
 							<a href="staff.php" class="list-group-item list-group-item-action list-group-item-secondary <?php $active_state = (is_on_page("staff")) ? 'active' : '' ; echo $active_state; ?>">Staff</a>
 						<?php } ?>
-						<?php if($session->get_session('permission_payments')) { ?>
+						<?php if(get_session('permission_payments')) { ?>
 							<a href="payments.php" class="list-group-item list-group-item-action list-group-item-secondary <?php $active_state = (is_on_page("payments")) ? 'active' : '' ; echo $active_state; ?>">Payments</a>
 						<?php } ?>
-						<?php if($session->get_session('permission_exams')) { ?>
+						<?php if(get_session('permission_exams')) { ?>
 							<a href="exams.php" class="list-group-item list-group-item-action list-group-item-secondary <?php $active_state = (is_on_page("exams")) ? 'active' : '' ; echo $active_state; ?>">Exams</a>
 						<?php } ?>
-						<?php if($session->get_session('permission_courses')) { ?>
+						<?php if(get_session('permission_courses')) { ?>
 							<a href="courses.php" class="list-group-item list-group-item-action list-group-item-secondary <?php $active_state = (is_on_page("courses")) ? 'active' : '' ; echo $active_state; ?>">Courses</a>
 						<?php } ?>
-						<?php if($session->get_session('permission_finance')) { ?>
+						<?php if(get_session('permission_finance')) { ?>
 							<a href="finance.php" class="list-group-item list-group-item-action list-group-item-secondary <?php $active_state = (is_on_page("finance")) ? 'active' : '' ; echo $active_state; ?>">Finance</a>
 						<?php } ?>
-						<?php if($session->get_session('permission_library')) { ?>
+						<?php if(get_session('permission_library')) { ?>
 							<a href="library.php" class="list-group-item list-group-item-action list-group-item-secondary <?php $active_state = (is_on_page("library")) ? 'active' : '' ; echo $active_state; ?>">Library</a>
 						<?php } ?>
-						<?php if($session->get_session('permission_resources')) { ?>
+						<?php if(get_session('permission_resources')) { ?>
 							<a href="resources.php" class="list-group-item list-group-item-action list-group-item-secondary <?php $active_state = (is_on_page("resources")) ? 'active' : '' ; echo $active_state; ?>">Resources</a>
 						<?php } ?>
-						<?php if(true /* $session->get_session('permission_employees') */ ) { ?>
 							<a href="profile.php" class="list-group-item list-group-item-action list-group-item-secondary <?php $active_state = (is_on_page("profile")) ? 'active' : '' ; echo $active_state; ?>">Profile</a>
-						<?php } ?>
-
 					</div>
 				</div>
