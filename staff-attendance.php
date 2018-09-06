@@ -2,17 +2,90 @@
 <?php
 	if (isset($_GET['s'])) {
 		$query = $_GET['s'];
-		$StaffManager = new StaffManager();
-		$users = $StaffManager->get_attendances($query);
+
+		$users = array();
+		$result = $db_conn->query("
+			SELECT users.userid, users.fname, users.lname, users.email, users.mobile_no, users.address, attendance.date, attendance.time, CURRENT_DATE as curr_date
+			FROM users
+			LEFT JOIN attendance
+			ON users.userid=attendance.userid
+			WHERE users.userid LIKE '%$query%'
+				OR users.fname LIKE '%$query%'
+				OR users.lname LIKE '%$query%'
+				OR users.email LIKE '%$query%'
+				OR users.mobile_no LIKE '%$query%'
+				OR users.address LIKE '%$query%'
+				OR attendance.date LIKE '%$query%'
+				OR attendance.time LIKE '%$query%'
+			ORDER BY attendance.date DESC");
+		if ($result->num_rows > 0) {
+			while($row = $result->fetch_assoc()) {
+				array_push($users, array(
+					'userid' => $row['userid'],
+					'fname' => $row['fname'],
+					'lname' => $row['lname'],
+					'email' => $row['email'],
+					'mobile_no' => $row['mobile_no'],
+					'address' => $row['address'],
+					'date' => $row['date'],
+					'time' => $row['time'],
+					'today' => $row['curr_date'],
+				));
+			}
+		} else {
+			$users = null;
+		}
+
 	} else {
-		$StaffManager = new StaffManager();
-		$users = $StaffManager->get_attendance_list();
+
+		$users = array();
+		$unique_users = array();
+		$result = $db_conn->query("
+			SELECT users.userid, users.fname, users.lname, users.email, users.mobile_no, users.address, attendance.date, attendance.time, CURRENT_DATE as curr_date
+				FROM users
+				LEFT JOIN attendance
+				ON users.userid=attendance.userid
+				ORDER BY attendance.date DESC");
+		if ($result->num_rows > 0) {
+			while($row = $result->fetch_assoc()) {
+				if (!is_numeric(array_search($row['userid'], $unique_users))) {
+					array_push($unique_users, $row['userid']);
+				} else {
+					continue;
+				}
+				array_push($users, array(
+					'userid' => $row['userid'],
+					'fname' => $row['fname'],
+					'lname' => $row['lname'],
+					'email' => $row['email'],
+					'mobile_no' => $row['mobile_no'],
+					'address' => $row['address'],
+					'date' => $row['date'],
+					'time' => $row['time'],
+					'today' => $row['curr_date'],
+				));
+			}
+			$users = array_reverse($users);
+		} else {
+			$users = null;
+		}
+
 	}
 
 	if (isset($_POST['a'])) {
 		$query = $_POST['a'];
-		$StaffManager = new StaffManager();
-		$attendance_mark_status = $StaffManager->mark_attendance($query);
+
+		$date = date("Y-m-d");
+		$time = date("H:i:s");
+
+		$sql = "INSERT INTO attendance (userid, date, time)
+				VALUES ('$query', '$date', '$time')";
+		if ($db_conn->query($sql)) {
+		    $attendance_mark_status = true;
+		} else {
+		    die( "Error: " . $db_conn->error);
+			$attendance_mark_status = false;
+		}
 
 		if($attendance_mark_status) {
 			set_success_msg("<strong>Success!</strong> Attendance has been successfully marked!");
