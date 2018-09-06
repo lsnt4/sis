@@ -1,16 +1,62 @@
 <?php include_once 'staff-header.php'; ?>
-<?php $StaffManager = new StaffManager(); ?>
 <?php
     // Get provided profile
     if(isset($_GET['uid'])) {
-        $user = $StaffManager->get_single_employee($_GET['uid'])[0];
+        $userid = $_GET['uid'];
+        $user = array();
+		$result = $db_conn->query("
+			SELECT userid, fname, lname, email, mobile_no, address, dob, reg_date, salary, nic, gender
+			FROM users
+			WHERE userid='$userid'
+		");
+		if ($result->num_rows != 0) {
+			while($row = $result->fetch_assoc()) {
+
+                $departments = array();
+        		$result_dept = $db_conn->query("
+        			SELECT did, name, userid
+        			FROM departments
+        			LEFT JOIN user_departments ON departments.did=user_departments.department_id
+        		");
+        		if ($result_dept->num_rows != 0) {
+        			while($row_dept = $result_dept->fetch_assoc()) {
+        				array_push($departments, array(
+        					'did' => $row_dept['did'],
+        					'name' => $row_dept['name'],
+        					'status' => ($row_dept['userid'] == $userid)
+        				));
+        			}
+        		} else {
+        			$departments = null;
+        		}
+
+				array_push($user, array(
+					'userid' => $row['userid'],
+					'fname' => $row['fname'],
+					'lname' => $row['lname'],
+					'email' => $row['email'],
+					'mobile_no' => $row['mobile_no'],
+					'address' => $row['address'],
+					'dob' => $row['dob'],
+					'reg_date' => $row['reg_date'],
+					'salary' => $row['salary'],
+					'nic' => $row['nic'],
+					'gender' => $row['gender'],
+					'departments' => $departments,
+				));
+				break;
+			}
+            $user = $user[0];
+		} else {
+			$user = null;
+		}
+
     } else {
         header('Location: staff-search.php');
     }
 ?>
 <?php
-	if (isset($_POST['userid']) && isset($_POST['fname']) && isset($_POST['lname']) && isset($_POST['doby']) && isset($_POST['dobm']) && isset($_POST['dobd']) && isset($_POST['salary']) && isset($_POST['nic']) && isset($_POST['mobile_no']) && isset($_POST['address']) && isset($_POST['email']) && isset($_POST['gender'])) {
-
+	if (isset($_POST['u'])) {
         $userid = $_POST['userid'];
         $fname = $_POST['fname'];
         $lname = $_POST['lname'];
@@ -23,9 +69,15 @@
         $email = $_POST['email'];
         $gender = $_POST['gender'];
 
-		$user_update_status = $StaffManager->update_employee($userid, $fname, $lname, $departments, $dob, $salary, $nic, $mobile_no, $address, $email, $gender);
+        $sql = "UPDATE users SET fname='$fname', lname='$lname', dob='$dob', salary='$salary', nic='$nic', mobile_no='$mobile_no', address='$address', email='$email', gender='$gender' WHERE userid='$userid'";
+		if ($db_conn->query($sql)) {
+			$status_progress = 1;
+		} else {
+			$status_progress = 0;
+			echo "Error updating record: " . $db_conn->error;
+		}
 
-		if($user_update_status) {
+		if($status_progress) {
 			set_success_msg("<strong>Success!</strong> User has been successfully updated!");
 		} else {
 			set_error_msg("<strong>Failed!</strong> Something strange happened while trying to update!");
@@ -33,6 +85,26 @@
 
 		header('Location: staff-profile.php?uid='.$userid);
 	}
+
+    if(isset($_POST['d'])) {
+        $email = $_POST['email'];
+
+        $sql = "DELETE FROM users WHERE email='$email'";
+		if ($db_conn->query($sql)) {
+			$status_progress = true;
+		} else {
+			echo "Error deleting record: " . $db_conn->error;
+			$status_progress = false;
+		}
+
+        if($status_progress) {
+			set_success_msg("<strong>Success!</strong> User has been successfully removed!");
+		} else {
+			set_error_msg("<strong>Failed!</strong> Something strange happened while trying to remove!");
+		}
+
+		header('Location: staff-search.php');
+    }
 ?>
 				<div class="col-md-10">
 					<nav>
@@ -169,10 +241,10 @@
 								<div class="form-group row mt-5">
                                     <div class="col-sm-2"></div>
                                     <div class="col-sm-2">
-                                        <button type="submit" class="btn btn-danger">Remove</button>
+                                        <button type="submit" name="u" value="1" class="btn btn-dark">Update Profile</button>
                                     </div>
 									<div class="col-sm-3" style="text-align: right;">
-										<button type="submit" class="btn btn-dark">Update Profile</button>
+                                        <button type="submit" name="d" value="1" class="btn btn-danger">Remove</button>
 									</div>
 								</div>
 							</form>
