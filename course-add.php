@@ -1,18 +1,29 @@
 <?php include_once 'staff-header.php'; ?>
 <?php
 
-    $data = mysqli_connect('localhost','root','','itpprojectdb');
-        if (mysqli_connect_errno())
+    $db =new mysqli('localhost','root','','itpprojectdb');
+        if ($db->connect_errno)
             {
-                     echo "Failed to connect to MySQL: " . mysqli_connect_error();
+              die("Failed to connect to MySQL: " .  $db->connect_error);
             }
-        $name = "";
-        $grade = 0;
-        $day   = "";
-        $sTime =  0;
-        $eTime =  0;
-        $hall  = 0;
-        $fee   = 0.0;
+
+        if(isset($_POST['addCourse']))
+        {
+            $name = $_POST['name'];
+            $grade = $_POST['grade'];
+            $day = $_POST['day'];
+            $time = $_POST['stime'];
+            $etime = $_POST['etime'];
+            $hall = $_POST['hall'];
+            $fee = $_POST['fee'];
+
+                $sql_in = "INSERT INTO courses (name,grade,day,time_start,time_end,hall_no,fee) VALUES ('$name','$grade','$day','$time','$etime','$hall','$fee')";
+                    if(!$db->query($sql_in)){
+                        echo "Error Inserting data  : " . $db->error;
+                      }
+        }
+
+
 
 ?>
 
@@ -147,20 +158,3 @@
         </div>
     </div>
 <?php include_once 'staff-footer.php'; ?>
-
-<?php
-if(isset($_POST['addCourse'])){
-$name = $_POST['name'];
-$grade = $_POST['grade'];
-$day = $_POST['day'];
-$time = $_POST['stime'];
-$etime = $_POST['etime'];
-$hall = $_POST['hall'];
-$fee = $_POST['fee'];
-
-
-var_dump(mysqli_query($data,"INSERT INTO courses (name,grade,day,time_start,time_end,hall_no,fee) VALUES ('$name','$grade','$day','$time','$etime','$hall','$fee')"));
-}
-
-
-?>
