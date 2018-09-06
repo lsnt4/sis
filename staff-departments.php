@@ -4,8 +4,16 @@
 	if ((isset($_POST['deptname']) && isset($_POST['s'])) || (isset($_POST['deptname']) && ($_POST['deptname'] != '') && isset($_POST['c']) )) {
 		// Department Create Section
 		if (isset($_POST['c'])) {
-			$AdminManager = new AdminManager();
-			$department_creation_status = $AdminManager->create_department($_POST['deptname']);
+			$deptname = $_POST['deptname'];
+			$sql_user = "
+				INSERT INTO departments (name, employee, resource, student, course, exam, finance, library, payment, staff)
+				VALUES ('$deptname', '0', '0', '0', '0', '0', '0', '0', '0', '0')";
+			if ($db_conn->query($sql_user)) {
+			    $department_creation_status = true;
+			} else {
+			    echo "Error: " . $db_conn->error;
+				$department_creation_status = false;
+			}
 			if($department_creation_status) {
 				set_success_msg("<strong>Success!</strong> New department has been successfully created!");
 			} else {
@@ -14,15 +22,64 @@
 			header('Location: staff-departments.php');
 		// Department Search Section
 		} else if (isset($_POST['s'])) {
-			$AdminManager = new AdminManager();
-			$department_list = $AdminManager->get_departments($_POST['deptname']);
+			$keyword = $_POST['deptname'];
+			$department_list = array();
+			$result = $db_conn->query("
+				SELECT did, name, employee, resource, student, course, exam, finance, library, payment, staff
+				FROM departments
+				WHERE name LIKE '%$keyword%'
+			");
+			if ($result->num_rows > 0) {
+				while($row = $result->fetch_assoc()) {
+					if($row['name'] == 'Admin') { continue; }
+					array_push($department_list, array(
+						'did' => $row['did'],
+						'name' => $row['name'],
+						'employee' => $row['employee'],
+						'resource' => $row['resource'],
+						'student' => $row['student'],
+						'course' => $row['course'],
+						'exam' => $row['exam'],
+						'finance' => $row['finance'],
+						'library' => $row['library'],
+						'payment' => $row['payment'],
+						'staff' => $row['staff'],
+					));
+				}
+			} else {
+				$department_list = null;
+			}
 		}
 	} else {
 		// Load the unfiltered list if there's no user input
-		$AdminManager = new AdminManager();
-		$department_list = $AdminManager->get_departments_list();
+		$department_list = array();
+		$result = $db_conn->query("
+			SELECT did, name, employee, resource, student, course, exam, finance, library, payment, staff
+			FROM departments
+		");
+		if ($result->num_rows > 0) {
+			while($row = $result->fetch_assoc()) {
+				if($row['name'] == 'Admin') { continue; }
+				array_push($department_list, array(
+					'did' => $row['did'],
+					'name' => $row['name'],
+					'employee' => $row['employee'],
+					'resource' => $row['resource'],
+					'student' => $row['student'],
+					'course' => $row['course'],
+					'exam' => $row['exam'],
+					'finance' => $row['finance'],
+					'library' => $row['library'],
+					'payment' => $row['payment'],
+					'staff' => $row['staff'],
+				));
+			}
+		} else {
+			$department_list = null;
+		}
 	}
 
+	// Department Update Section
 	if (isset($_POST['uid'])) {
 		$uid = $_POST['uid'];
 		$emp = (isset($_POST['emp'])) ? '1' : '0' ;
@@ -35,8 +92,46 @@
 		$pay = (isset($_POST['pay'])) ? '1' : '0' ;
 		$sta = (isset($_POST['sta'])) ? '1' : '0' ;
 
-		$AdminManager = new AdminManager();
-		$department_list_update = $AdminManager->update_department($uid, $emp, $res, $stu, $cou, $exa, $fin, $lib, $pay, $sta);
+		$sql = "UPDATE departments SET employee=$emp, resource=$res, student=$stu, course=$cou, exam=$exa, finance=$fin, library=$lib, payment=$pay, staff=$sta WHERE did=$uid";
+		if ($db_conn->query($sql)) {
+
+			$userid = get_session('userid');
+
+			// Reset permissions
+			set_session(PERMISSION_STAFF, '0');
+			set_session(PERMISSION_STUDENTS, '0');
+			set_session(PERMISSION_PAYMENTS, '0');
+			set_session(PERMISSION_EXAMS, '0');
+			set_session(PERMISSION_COURSES, '0');
+			set_session(PERMISSION_FINANCE, '0');
+			set_session(PERMISSION_LIBRARY, '0');
+			set_session(PERMISSION_RESOURCES, '0');
+			set_session(PERMISSION_EMPLOYEES, '0');
+
+			$dept_res = $db_conn->query("
+				SELECT userid, employee, resource, student, course, exam, finance, library, payment, staff
+				FROM user_departments
+				LEFT JOIN departments
+				ON departments.did=user_departments.department_id
+				WHERE userid=$userid
+			");
+			while($row = $dept_res->fetch_assoc()) {
+				($row['staff']) ? set_session(PERMISSION_STAFF, '1') : null;
+				($row['student']) ? set_session(PERMISSION_STUDENTS, '1') : null;
+				($row['payment']) ? set_session(PERMISSION_PAYMENTS, '1') : null;
+				($row['exam']) ? set_session(PERMISSION_EXAMS, '1') : null;
+				($row['course']) ? set_session(PERMISSION_COURSES, '1') : null;
+				($row['finance']) ? set_session(PERMISSION_FINANCE, '1') : null;
+				($row['library']) ? set_session(PERMISSION_LIBRARY, '1') : null;
+				($row['resource']) ? set_session(PERMISSION_RESOURCES, '1') : null;
+				($row['employee']) ? set_session(PERMISSION_EMPLOYEES, '1') : null;
+			}
+
+			$department_list_update = true;
+		} else {
+			echo "Error updating record: " . $db_conn->error;
+			$department_list_update = false;
+		}
 
 		if ($department_list_update) {
 			set_success_msg("<strong>Success!</strong> Department has been successfully updated!");
@@ -46,9 +141,16 @@
 		header('Location: staff-departments.php');
 	}
 
+	// Department Deletion Section
 	if (isset($_POST['did'])) {
-		$AdminManager = new AdminManager();
-		$department_delete_status = $AdminManager->delete_department($_POST['did']);
+		$did = $_POST['did'];
+		$sql = "DELETE FROM departments WHERE did=$did";
+		if ($db_conn->query($sql)) {
+			$department_delete_status = true;
+		} else {
+			echo "Error deleting record: " . $db_conn->error;
+			$department_delete_status = false;
+		}
 
 		if ($department_delete_status) {
 			set_success_msg("<strong>Success!</strong> Department has been successfully deleted!");
