@@ -1,4 +1,30 @@
 <?php include_once 'staff-header.php'; ?>
+<?php
+	if (isset($_POST['fname'])) {
+		$userid = substr(number_format(time() * rand(),0,'',''),0,6);
+		$fname = $_POST['fname'];
+		$lname = $_POST['lname'];
+		$salary = $_POST['salary'];
+		$nic = $_POST['nic'];
+		$dob = $_POST['doby'] . '-' . $_POST['dobm'] . '-' . $_POST['dobd'];
+		$mobile_no = $_POST['mobile_no'];
+		$address = $_POST['address'];
+		$email = $_POST['email'];
+		$gender = $_POST['gender'];
+		$password = md5($nic);
+
+		$sql_user = "INSERT INTO users (userid, fname, lname, email, mobile_no, address, dob, gender, nic, salary, password)
+				VALUES ('$userid', '$fname', '$lname', '$email', '$mobile_no', '$address', '$dob', '$gender', '$nic', '$salary', '$password')";
+		if ($db_conn->query($sql_user)) {
+			set_success_msg("<strong>Success!</strong> New user has been successfully added to the system!");
+		} else {
+		    echo "Error: " . $db_conn->error;
+			set_error_msg("<strong>Failed!</strong> Something strange happened while trying to add new employee!");
+		}
+
+		header('Location: staff-add.php');
+	}
+?>
 				<div class="col-md-10">
 					<nav>
 						<div class="nav nav-tabs" id="nav-tab" role="tablist">
