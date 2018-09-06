@@ -1,12 +1,62 @@
 <?php include_once 'staff-header.php'; ?>
 <?php
 	if (isset($_GET['s'])) {
-		$query = $_GET['s'];
-		$StaffManager = new StaffManager();
-		$users = $StaffManager->get_employees($query);
+		$keyword = $_GET['s'];
+
+		$users = array();
+		$result = $db_conn->query("
+			SELECT userid, fname, lname, email, mobile_no, address, dob, reg_date
+			FROM users
+			WHERE userid LIKE '%$keyword%'
+				OR fname LIKE '%$keyword%'
+				OR lname LIKE '%$keyword%'
+				OR email LIKE '%$keyword%'
+				OR mobile_no LIKE '%$keyword%'
+				OR address LIKE '%$keyword%'
+				OR dob LIKE '%$keyword%'
+				OR reg_date LIKE '%$keyword%'
+		");
+		if ($result->num_rows > 0) {
+			while($row = $result->fetch_assoc()) {
+				array_push($users, array(
+					'userid' => $row['userid'],
+					'fname' => $row['fname'],
+					'lname' => $row['lname'],
+					'email' => $row['email'],
+					'mobile_no' => $row['mobile_no'],
+					'address' => $row['address'],
+					'dob' => $row['dob'],
+					'reg_date' => $row['reg_date'],
+				));
+			}
+		} else {
+			$users = null;
+		}
+
 	} else {
-		$StaffManager = new StaffManager();
-		$users = $StaffManager->get_employee_list();
+
+		$users = array();
+		$result = $db_conn->query("
+			SELECT userid, fname, lname, email, mobile_no, address, dob, reg_date
+			FROM users
+		");
+		if ($result->num_rows > 0) {
+			while($row = $result->fetch_assoc()) {
+				array_push($users, array(
+					'userid' => $row['userid'],
+					'fname' => $row['fname'],
+					'lname' => $row['lname'],
+					'email' => $row['email'],
+					'mobile_no' => $row['mobile_no'],
+					'address' => $row['address'],
+					'dob' => $row['dob'],
+					'reg_date' => $row['reg_date'],
+				));
+			}
+		} else {
+			$users = null;
+		}
+
 	}
 ?>
 				<div class="col-md-10">
