@@ -9,11 +9,11 @@
 
 			if(isset($_POST["delete"]))
 				{
-					$courseid  = $_POST["courseid"];
+					$courseid  = $_POST['courseid'];
 					$sql = "DELETE from courses WHERE cid ='$courseid'";
 						if(!$db->query($sql))
 							{
-								echo "Error updating  record  " . $db->error;
+								echo "Error   " . $db->error;
 							}
 					}
  ?>
@@ -36,7 +36,7 @@
 								<div class="row">
 									<div class="col-md-12">
 										<div class="input-group mb-3">
-											<input type="text" class="form-control" name = "search" placeholder="Course name, id, grade">
+											<input type="text" class="form-control" name = "search"  placeholder="Course name, id,">
 											<div class="input-group-append">
 												<button class="btn btn-dark" type="button">Search</button>
 											</div>
@@ -67,18 +67,15 @@
 																$searchq = $_POST['search'];
 																$sql  = "select * from courses WHERE
 																												name LIKE '%$searchq%' OR
-																												cid LIKE '%$searchq%' OR ";	}
+																												cid LIKE '%$searchq%'";	}
 															else {
 																		$sql = "SELECT * FROM courses";
 															}
 
-												$result = $db->query($sql);
+																		$result = $db->query($sql);
 
 																		while($row = $result->fetch_assoc()){
-																	//		$cid = $row['course_id'];
-																		//	$sql_c = "select * from courses where cid='$cid'";
-																	//		$result_c=$db->query($sql_c);
-																	//		$row_c = $result_c->fetch_assoc();
+
 
 																	?>
 
@@ -96,14 +93,14 @@
 													<td>
 														<div class="btn-group" role="group" >
 
-															<form action="course-update.php" method= "post">
-																	<input type="hidden" value="<?php echo $row['cid']; ?>" name="$courseid">
+															<form action="course-updateing.php" method= "post">
+																	<input type="hidden" value="<?php echo $row['cid']; ?>" name="courseid">
 																	<input type="submit" value=" Update " class="btn btn-dark" name="update">
 															</form>
 
 															<form  action="course-search.php" method="post">
-																<input type="hidden" value="<?php echo $row['cid'];  ?>" name="$courseid">
-																<input type="submit" value="DELETE" class="btn btn-danger" name="delete">
+																<input type="hidden" value="<?php echo $row['cid'];  ?>" name="courseid">
+																<input type="submit" value="Delete" class="btn btn-danger" name="delete">
 															</form>
 															</div>
 													</td>
