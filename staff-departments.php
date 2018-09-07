@@ -75,7 +75,7 @@
 								<div class="row">
 									<div class="col-md-12">
 										<div class="input-group mb-3">
-											<input name="deptname" value="<?php echo (isset($_POST['deptname'])) ? $_POST['deptname'] : '' ; ?>" type="text" class="form-control" placeholder="Department name" aria-label="Recipient's username" aria-describedby="basic-addon2">
+											<input name="deptname" value="<?php echo (isset($_POST['deptname'])) ? $_POST['deptname'] : '' ; ?>" type="text" class="form-control" placeholder="Department name" aria-label="Recipient's username" aria-describedby="basic-addon2" pattern="[A-Za-z ]{3,50}" required>
 											<div class="input-group-append">
 													<button class="btn btn-secondary" type="submit" name="s" value="1">Search</button>
 													<button class="btn btn-dark" type="submit" name="c" value="1">Create</button>
