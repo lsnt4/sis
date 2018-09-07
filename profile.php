@@ -4,6 +4,16 @@
 	$userid = $session->get_session('userid');
 	$sm = new StaffManager();
 	$user = $sm->get_single_employee($userid)[0];
+
+	if (isset($_POST['mobile_no']) && isset($_POST['address']) && isset($_POST['email'])) {
+		echo "string";
+		$mobile_no = $_POST['mobile_no'];
+		$address = $_POST['address'];
+		$email = $_POST['email'];
+		$password = $_POST['password'];
+		$sm->update_employee_profile($userid, $mobile_no, $address, $email, $password);
+		header('Location: profile.php');
+	}
 ?>
 				<div class="col-md-10">
 					<nav>
@@ -87,7 +97,7 @@
 									<div class="col-sm-10">
 										<div class="form-row">
 											<div class="col-md-6">
-												<input type="text" class="form-control" name="mobile" value="077123456">
+												<input type="text" class="form-control" name="mobile_no" value="<?php echo $user['mobile_no']; ?>">
 												<small class="form-text text-muted">Mobile</small>
 											</div>
 										</div>
@@ -110,7 +120,7 @@
 										<div class="form-row">
 											<div class="col-md-6">
 												<input type="email" class="form-control" name="email" value="<?php echo $user['email']; ?>">
-												<small class="form-text text-muted">Address</small>
+												<small class="form-text text-muted">Email</small>
 											</div>
 										</div>
 									</div>
@@ -130,7 +140,7 @@
 									<div class="col-sm-10">
 										<div class="form-row">
 											<div class="col-md-6">
-												<input type="password" class="form-control">
+												<input type="password" name="password" class="form-control">
 												<small class="form-text text-muted">Leave blank if no password change required</small>
 											</div>
 										</div>
