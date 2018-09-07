@@ -47,7 +47,7 @@
 						<a href="payments.php" class="list-group-item list-group-item-action list-group-item-secondary <?php $active_state = (is_on_page("payments")) ? 'active' : '' ; echo $active_state; ?>">Payments</a>
 						<a href="exams.php" class="list-group-item list-group-item-action list-group-item-secondary <?php $active_state = (is_on_page("exams")) ? 'active' : '' ; echo $active_state; ?>">Exams</a>
 						<a href="courses.php" class="list-group-item list-group-item-action list-group-item-secondary <?php $active_state = (is_on_page("courses")) ? 'active' : '' ; echo $active_state; ?>">Courses</a>
-						<a href="finance.php" class="list-group-item list-group-item-action list-group-item-secondary <?php $active_state = (is_on_page("finance")) ? 'active' : '' ; echo $active_state; ?>">Finance</a>
+						<a href="Finance_Dashboard.php" class="list-group-item list-group-item-action list-group-item-secondary <?php $active_state = (is_on_page("finance")) ? 'active' : '' ; echo $active_state; ?>">Finance</a>
 						<a href="library.php" class="list-group-item list-group-item-action list-group-item-secondary <?php $active_state = (is_on_page("library")) ? 'active' : '' ; echo $active_state; ?>">Library</a>
 						<a href="resources.php" class="list-group-item list-group-item-action list-group-item-secondary <?php $active_state = (is_on_page("resources")) ? 'active' : '' ; echo $active_state; ?>">Resources</a>
 						<a href="profile.php" class="list-group-item list-group-item-action list-group-item-secondary <?php $active_state = (is_on_page("profile")) ? 'active' : '' ; echo $active_state; ?>">Profile</a>
