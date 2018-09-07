@@ -4,7 +4,6 @@
 * 	               CLASS STRUCTURE
 *	=============================================
 *
-*	StaffMember	- Hold data for an employee
 *	StaffManager 	- Employee management tasks
 *	AdminManager	- Admin management tasks
 *	SessionManager	- Session management tasks
@@ -36,6 +35,260 @@ define('PERMISSION_FINANCE', 'permission_finance');
 define('PERMISSION_LIBRARY', 'permission_library');
 define('PERMISSION_RESOURCES', 'permission_resources');
 define('PERMISSION_EMPLOYEES', 'permission_employees');
+
+/**
+* Staff Management Class
+*/
+class StaffManager extends Database {
+
+	function __construct() {
+		parent::__construct();
+	}
+
+	public function get_single_employee($userid) {
+		$user = array();
+		$result = Database::$DB_CONN->query("
+			SELECT userid, fname, lname, email, mobile_no, address, dob, reg_date, salary, nic, gender
+			FROM users
+			WHERE userid='$userid'
+		");
+		if ($result->num_rows != 0) {
+			while($row = $result->fetch_assoc()) {
+
+				$AdminManager = new AdminManager();
+				$departments = $AdminManager->get_department_bools_for_user($userid);
+
+				array_push($user, array(
+					'userid' => $row['userid'],
+					'fname' => $row['fname'],
+					'lname' => $row['lname'],
+					'email' => $row['email'],
+					'mobile_no' => $row['mobile_no'],
+					'address' => $row['address'],
+					'dob' => $row['dob'],
+					'reg_date' => $row['reg_date'],
+					'salary' => $row['salary'],
+					'nic' => $row['nic'],
+					'gender' => $row['gender'],
+					'departments' => $departments,
+				));
+				break;
+			}
+
+		} else {
+			return null;
+		}
+		return $user;
+	}
+
+	public function get_employees($keyword)	{
+		$users = array();
+		$result = Database::$DB_CONN->query("
+			SELECT userid, fname, lname, email, mobile_no, address, dob, reg_date
+			FROM users
+			WHERE userid LIKE '%$keyword%'
+				OR fname LIKE '%$keyword%'
+				OR lname LIKE '%$keyword%'
+				OR email LIKE '%$keyword%'
+				OR mobile_no LIKE '%$keyword%'
+				OR address LIKE '%$keyword%'
+				OR dob LIKE '%$keyword%'
+				OR reg_date LIKE '%$keyword%'
+		");
+		if ($result->num_rows > 0) {
+			while($row = $result->fetch_assoc()) {
+				array_push($users, array(
+					'userid' => $row['userid'],
+					'fname' => $row['fname'],
+					'lname' => $row['lname'],
+					'email' => $row['email'],
+					'mobile_no' => $row['mobile_no'],
+					'address' => $row['address'],
+					'dob' => $row['dob'],
+					'reg_date' => $row['reg_date'],
+				));
+			}
+		} else {
+			return null;
+		}
+		return $users;
+	}
+
+	public function get_employee_list()	{
+		$users = array();
+		$result = Database::$DB_CONN->query("
+			SELECT userid, fname, lname, email, mobile_no, address, dob, reg_date
+			FROM users
+		");
+		if ($result->num_rows > 0) {
+			while($row = $result->fetch_assoc()) {
+				array_push($users, array(
+					'userid' => $row['userid'],
+					'fname' => $row['fname'],
+					'lname' => $row['lname'],
+					'email' => $row['email'],
+					'mobile_no' => $row['mobile_no'],
+					'address' => $row['address'],
+					'dob' => $row['dob'],
+					'reg_date' => $row['reg_date'],
+				));
+			}
+		} else {
+			return null;
+		}
+		return $users;
+	}
+
+	public function add_employee($fname, $lname, $salary, $nic, $dob, $mobile_no, $address, $email, $gender) {
+
+		$Helpers = new Helpers();
+		$userid = $Helpers->generate_userid();
+		$reg_date = date('Y-m-d');
+		$password = md5($nic);
+
+		$sql_user = "INSERT INTO users (userid, fname, lname, email, mobile_no, address, dob, reg_date, gender, nic, salary, password)
+				VALUES ('$userid', '$fname', '$lname', '$email', '$mobile_no', '$address', '$dob', '$reg_date', '$gender', '$nic', '$salary', '$password')";
+		if (Database::$DB_CONN->query($sql_user)) {
+		    return true;
+		} else {
+		    echo "Error: " . Database::$DB_CONN->error;
+			return false;
+		}
+	}
+
+	public function update_employee($userid, $fname, $lname, $departments, $dob, $salary, $nic, $mobile_no, $address, $email, $gender) {
+
+		$sql = "UPDATE users SET fname='$fname', lname='$lname', dob='$dob', salary='$salary', nic='$nic', mobile_no='$mobile_no', address='$address', email='$email', gender='$gender' WHERE userid='$userid'";
+		if (Database::$DB_CONN->query($sql)) {
+			$status_progress = 1;
+		} else {
+			$status_progress = 0;
+			echo "Error updating record: " . Database::$DB_CONN->error;
+		}
+
+		return $status_progress;
+	}
+
+	public function update_employee_profile($userid, $mobile_no, $address, $email, $password) {
+
+		$sql = "UPDATE users SET mobile_no='$mobile_no', address='$address', email='$email' WHERE userid='$userid'";
+		if (Database::$DB_CONN->query($sql)) {
+			$status_progress = 1;
+		} else {
+			$status_progress = 0;
+			echo "Error updating record: " . Database::$DB_CONN->error;
+		}
+
+		if ($password != '') {
+			$password = md5($password);
+			$sql = "UPDATE users SET password='$password' WHERE userid='$userid'";
+			if (Database::$DB_CONN->query($sql)) {
+				$status_progress = 1;
+			} else {
+				$status_progress = 0;
+				echo "Error updating record: " . Database::$DB_CONN->error;
+			}
+		}
+
+		return $status_progress;
+	}
+
+	public function remove_employee($email) {
+
+		$sql = "DELETE FROM users WHERE email='$email'";
+		if (Database::$DB_CONN->query($sql)) {
+			return true;
+		} else {
+			echo "Error deleting record: " . Database::$DB_CONN->error;
+			return false;
+		}
+	}
+
+	public function mark_attendance($userid) {
+
+		$date = date("Y-m-d");
+		$time = date("H:i:s");
+
+		$sql = "INSERT INTO attendance (userid, date, time)
+				VALUES ('$userid', '$date', '$time')";
+		if (Database::$DB_CONN->query($sql)) {
+		    return true;
+		} else {
+		    echo "Error: " . Database::$DB_CONN->error;
+			return false;
+		}
+	}
+
+	public function get_attendances($keyword)	{
+		$users = array();
+		$result = Database::$DB_CONN->query("
+			SELECT users.userid, users.fname, users.lname, users.email, users.mobile_no, users.address, attendance.date, attendance.time, CURRENT_DATE as curr_date
+			FROM users
+			LEFT JOIN attendance
+			ON users.userid=attendance.userid
+			WHERE users.userid LIKE '%$keyword%'
+				OR users.fname LIKE '%$keyword%'
+				OR users.lname LIKE '%$keyword%'
+				OR users.email LIKE '%$keyword%'
+				OR users.mobile_no LIKE '%$keyword%'
+				OR users.address LIKE '%$keyword%'
+				OR attendance.date LIKE '%$keyword%'
+				OR attendance.time LIKE '%$keyword%'
+			ORDER BY attendance.date DESC");
+		if ($result->num_rows > 0) {
+			while($row = $result->fetch_assoc()) {
+				array_push($users, array(
+					'userid' => $row['userid'],
+					'fname' => $row['fname'],
+					'lname' => $row['lname'],
+					'email' => $row['email'],
+					'mobile_no' => $row['mobile_no'],
+					'address' => $row['address'],
+					'date' => $row['date'],
+					'time' => $row['time'],
+					'today' => $row['curr_date'],
+				));
+			}
+		} else {
+			return null;
+		}
+		return $users;
+	}
+
+	public function get_attendance_list()	{
+		$users = array();
+		$unique_users = array();
+		$result = Database::$DB_CONN->query("
+			SELECT users.userid, users.fname, users.lname, users.email, users.mobile_no, users.address, attendance.date, attendance.time, CURRENT_DATE as curr_date
+				FROM users
+				LEFT JOIN attendance
+				ON users.userid=attendance.userid
+				ORDER BY attendance.date DESC");
+		if ($result->num_rows > 0) {
+			while($row = $result->fetch_assoc()) {
+				if (!is_numeric(array_search($row['userid'], $unique_users))) {
+					array_push($unique_users, $row['userid']);
+				} else {
+					continue;
+				}
+				array_push($users, array(
+					'userid' => $row['userid'],
+					'fname' => $row['fname'],
+					'lname' => $row['lname'],
+					'email' => $row['email'],
+					'mobile_no' => $row['mobile_no'],
+					'address' => $row['address'],
+					'date' => $row['date'],
+					'time' => $row['time'],
+					'today' => $row['curr_date'],
+				));
+			}
+		} else {
+			return null;
+		}
+		return array_reverse($users);
+	}
+}
 
 /**
 * Admin Management Class
