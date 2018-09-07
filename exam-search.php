@@ -7,9 +7,7 @@
     if(isset($_POST["delete"])){
         $examid = $_POST["examid"];
         $sql = "DELETE from exams WHERE id='$examid'";
-        if ($dbconn->query($sql)) {
-
-        } else {
+        if (!$dbconn->query($sql)) {
             echo "Error updating record: " . $dbconn->error;
         }
     }
@@ -58,7 +56,7 @@
                                                 $keyword = $_POST['s'];
                                                 $sql = "select * from exams
                                                         WHERE
-                                                            name LIKE '%$keyword%' OR 
+                                                            name LIKE '%$keyword%' OR
                                                             course_id LIKE '%$keyword%'";
                                             } else {
                                                 $sql = "SELECT * FROM exams";

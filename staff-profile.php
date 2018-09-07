@@ -131,11 +131,11 @@
 									<div class="col-sm-10">
 										<div class="form-row">
 											<div class="col-md-3">
-												<input value="<?php echo $user['fname']; ?>" type="text" class="form-control" name="fname" placeholder="First name" required>
+												<input value="<?php echo $user['fname']; ?>" type="text" class="form-control" name="fname" placeholder="First name" maxlength="50" pattern="[A-Za-z.]{3,49}" required>
                                                 <small class="form-text text-muted">First Name</small>
 											</div>
 											<div class="col-md-3">
-												<input value="<?php echo $user['lname']; ?>" type="text" class="form-control" name="lname" placeholder="Last name" required>
+												<input value="<?php echo $user['lname']; ?>" type="text" class="form-control" name="lname" placeholder="Last name" maxlength="50" pattern="[A-Za-z.]{3,49}" required>
                                                 <small class="form-text text-muted">Last Name</small>
 											</div>
 										</div>
@@ -160,15 +160,15 @@
 									<div class="col-sm-10">
 										<div class="form-row">
 											<div class="col-md-2">
-												<input value="<?php echo substr($user['dob'], 0, 4); ?>" type="text" class="form-control" name="doby" placeholder="Year" required>
+												<input value="<?php echo substr($user['dob'], 0, 4); ?>" type="number" class="form-control" name="doby" placeholder="Year" min="1900" max="2100" required>
                                                 <small class="form-text text-muted">Year</small>
 											</div>
 											<div class="col-md-2">
-												<input value="<?php echo substr($user['dob'], 5, 2); ?>" type="text" class="form-control" name="dobm" placeholder="Month" required>
+												<input value="<?php echo substr($user['dob'], 5, 2); ?>" type="number" class="form-control" name="dobm" placeholder="Month" min="1" max="12" required>
                                                 <small class="form-text text-muted">Month</small>
 											</div>
 											<div class="col-md-2">
-												<input value="<?php echo substr($user['dob'], 8, 2); ?>" type="text" class="form-control" name="dobd" placeholder="Date" required>
+												<input value="<?php echo substr($user['dob'], 8, 2); ?>" type="number" class="form-control" name="dobd" placeholder="Date" min="1" max="31" required>
                                                 <small class="form-text text-muted">Date</small>
 											</div>
 										</div>
@@ -179,7 +179,7 @@
 									<div class="col-sm-10">
 										<div class="form-row">
 											<div class="col-md-6">
-												<input value="<?php echo $user['salary']; ?>" type="text" class="form-control" name="salary" placeholder="LKR" required>
+												<input value="<?php echo $user['salary']; ?>" type="number" class="form-control" name="salary" placeholder="LKR" min="10000" max="1000000" required>
 											</div>
 										</div>
 									</div>
@@ -189,7 +189,7 @@
 									<div class="col-sm-10">
 										<div class="form-row">
 											<div class="col-md-6">
-												<input value="<?php echo $user['nic']; ?>" type="text" class="form-control" name="nic" placeholder="Ex: 123456789V" required>
+												<input value="<?php echo $user['nic']; ?>" type="text" class="form-control" name="nic" placeholder="Ex: 123456789V" maxlength="10" required>
 											</div>
 										</div>
 									</div>
@@ -199,7 +199,7 @@
 									<div class="col-sm-10">
 										<div class="form-row">
 											<div class="col-md-6">
-												<input value="<?php echo $user['mobile_no']; ?>" type="text" class="form-control" name="mobile_no" placeholder="Mobile" required>
+												<input value="<?php echo $user['mobile_no']; ?>" type="text" class="form-control" name="mobile_no" placeholder="Mobile" maxlength="10" required>
                                                 <small class="form-text text-muted">Mobile</small>
 											</div>
 										</div>
@@ -210,7 +210,7 @@
 									<div class="col-sm-10">
 										<div class="form-row">
 											<div class="col-md-6">
-												<textarea type="text" class="form-control" name="address" placeholder="Address" rows="3" required><?php echo $user['address']; ?></textarea>
+												<textarea type="text" class="form-control" name="address" placeholder="Address" rows="3" maxlength="512" required><?php echo $user['address']; ?></textarea>
                                                 <small class="form-text text-muted">Address</small>
 											</div>
 										</div>
