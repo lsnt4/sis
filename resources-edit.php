@@ -109,7 +109,7 @@ if($_GET){
 													list($resYear, $resMonth, $resDate) =explode("-",$resDate);
 
 												?>
-												<input type="text" class="form-control" name="rName" placeholder="eg: Damro Wooden Chair" required value="<?php echo $resourceLoad->getProperty('resName');?>">
+												<input type="text" class="form-control" name="rName" placeholder="eg: Damro Wooden Chair" pattern="[A-Za-z]" title="Numbers and Special characters are not allowed for the Name Field." required value="<?php echo $resourceLoad->getProperty('resName');?>">
 											</div>
 											<div class="col-md-3">
 												<input type="text" class="form-control" name="rVersion" placeholder="Type/Version ID eg: Wood CH6732" required value="<?php echo $resourceLoad->getProperty('resVersion');?>">
