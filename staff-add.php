@@ -18,10 +18,10 @@
 									<div class="col-sm-10">
 										<div class="form-row">
 											<div class="col-md-3">
-												<input type="text" class="form-control" name="fname" placeholder="First name" required>
+												<input type="text" class="form-control" name="fname" placeholder="First name" maxlength="50" pattern="[A-Za-z.]{3,49}" required>
 											</div>
 											<div class="col-md-3">
-												<input type="text" class="form-control" name="lname" placeholder="Last name" required>
+												<input type="text" class="form-control" name="lname" placeholder="Last name" maxlength="50" pattern="[A-Za-z.]{3,49}" required>
 											</div>
 										</div>
 									</div>
@@ -31,13 +31,13 @@
 									<div class="col-sm-10">
 										<div class="form-row">
 											<div class="col-md-2">
-												<input type="text" class="form-control" name="doby" placeholder="Year" required>
+												<input type="number" class="form-control" name="doby" placeholder="Year" min="1900" max="2100" required>
 											</div>
 											<div class="col-md-2">
-												<input type="text" class="form-control" name="dobm" placeholder="Month" required>
+												<input type="number" class="form-control" name="dobm" placeholder="Month" min="1" max="12" required>
 											</div>
 											<div class="col-md-2">
-												<input type="text" class="form-control" name="dobd" placeholder="Date" required>
+												<input type="number" class="form-control" name="dobd" placeholder="Date" min="1" max="31" required>
 											</div>
 										</div>
 									</div>
@@ -47,7 +47,7 @@
 									<div class="col-sm-10">
 										<div class="form-row">
 											<div class="col-md-6">
-												<input type="text" class="form-control" name="salary" placeholder="LKR" required>
+												<input type="number" class="form-control" name="salary" placeholder="LKR" min="10000" max="1000000" required>
 											</div>
 										</div>
 									</div>
@@ -57,7 +57,7 @@
 									<div class="col-sm-10">
 										<div class="form-row">
 											<div class="col-md-6">
-												<input type="text" class="form-control" name="nic" placeholder="Ex: 123456789V" required>
+												<input type="text" class="form-control" name="nic" placeholder="Ex: 123456789V" maxlength="10" required>
 											</div>
 										</div>
 									</div>
@@ -67,7 +67,7 @@
 									<div class="col-sm-10">
 										<div class="form-row">
 											<div class="col-md-6">
-												<input type="text" class="form-control" name="mobile_no" placeholder="Mobile" required>
+												<input type="text" class="form-control" name="mobile_no" placeholder="Mobile" maxlength="10" required>
 											</div>
 										</div>
 									</div>
@@ -77,7 +77,7 @@
 									<div class="col-sm-10">
 										<div class="form-row">
 											<div class="col-md-6">
-												<input type="text" class="form-control" name="address" placeholder="Address" required>
+												<textarea type="text" class="form-control" name="address" placeholder="Address" rows="3" maxlength="512" required></textarea>
 											</div>
 										</div>
 									</div>
