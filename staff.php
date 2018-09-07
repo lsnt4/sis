@@ -29,7 +29,7 @@
 							<div class="card mb-4 p-2">
 								<img class="card-img-top p-4" src="assets/images/businessman-permissions.png" alt="Image">
 								<div class="card-body">
-									<a href="staff-permissions.php" class="btn btn-lg btn-dark btn-block">Permissions</a>
+									<a href="staff-departments.php" class="btn btn-lg btn-dark btn-block">Departments</a>
 								</div>
 							</div>
 						</div>
