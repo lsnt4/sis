@@ -28,7 +28,7 @@ define('ERROR_MSG', 'error_msg');
 define('SUCCESS_MSG', 'success_msg');
 session_start();
 
-$db_conn = new mysqli('localhost', 'root', 'pass', 'itpprojectdb', '3306');
+$db_conn = new mysqli('localhost', 'root', '', 'itpprojectdb', '3306');
 if($db_conn->connect_error) {
 	define('DB_CONN_STATUS', false);
 	die("Database connection error: " . $db_conn->connect_error);
