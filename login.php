@@ -55,16 +55,12 @@
 							<form action="login.php" method="post">
 								<div class="form-group">
 									<label for="email">Email</label>
-									<input type="text" class="form-control" id="email" name="email" required>
+									<input type="email" class="form-control" id="email" name="email" required>
 								</div>
 								<div class="form-group">
 									<label for="password">Password</label>
 									<input type="password" class="form-control" id="password" name="password" required>
 									<small class="form-text text-muted">Contact department staff for forgotten / lost password.</small>
-								</div>
-								<div class="form-check">
-									<input type="checkbox" class="form-check-input" id="rememberme" name="rememberme">
-									<label class="form-check-label" for="rememberme">Remember Me</label>
 								</div>
 								<button type="submit" class="btn btn-lg btn-dark">Login</button>
 							</form>
