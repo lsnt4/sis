@@ -15,6 +15,7 @@
 	<title>Success International School | Dashboard</title>
 	<link rel="stylesheet" href="assets/css/bootstrap.css">
 	<link rel="stylesheet" href="assets/css/style.css">
+	<link rel="stylesheet" href="assets/css/Finance_Style.css">
 	</head>
 	<body>
 		<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
