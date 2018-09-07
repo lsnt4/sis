@@ -16,11 +16,8 @@ if($dbconn->connect_error) {
         $etime=$_POST["etime"];
         $fee=$_POST["fee"];
         $sql = "UPDATE exams SET name='$name', course_id='$cid', date='$date', time_start='$stime', time_end='$etime', fee='$fee' WHERE id='$examid'";
-        if ($dbconn->query($sql)) {
-
-        } else {
+        if (!$dbconn->query($sql)) {
             echo "Error updating record: " . $dbconn->error;
-
         }
     }
 
