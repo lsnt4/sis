@@ -1,29 +1,33 @@
 <?php include_once 'staff-header.php'; ?>
 <?php
 
-    $db =new mysqli('localhost','root','','itpprojectdb');
-        if ($db->connect_errno)
-            {
-              die("Failed to connect to MySQL: " .  $db->connect_error);
+$db = new mysqli('localhost', 'root', '', 'itpprojectdb');
+if($db->connect_error) {
+    die("Database connection error: " . $db->connect_error);
+}
+
+            if(isset($_POST["updateb"])){
+
+            $courseid = $_POST["course_id"];
+            $name = $_POST["name"];
+            $grade = $_POST["grade"];
+            $day = $_POST["day"];
+            $stime = $_POST["stime"];
+            $etime = $_POST["etime"];
+            $hall = $_POST["hall"];
+            $fee = $_POST["fee"];
+            $sql  = "UPDATE courses SET name='$name',grade= '$grade',day='$day',time_start='$stime',time_end='$etime',hall_no='$hall',fee='$fee' WHERE cid ='$courseid' ";
+            if (!$db->query($sql)) {
+                echo "Error updating record: " . $db->error;
+              }
             }
+            if(isset($_POST['update'])) {
 
-        if(isset($_POST['addCourse']))
-        {
-            $name = $_POST['name'];
-            $grade = $_POST['grade'];
-            $day = $_POST['day'];
-            $time = $_POST['stime'];
-            $etime = $_POST['etime'];
-            $hall = $_POST['hall'];
-            $fee = $_POST['fee'];
-
-                $sql_in = "INSERT INTO courses (name,grade,day,time_start,time_end,hall_no,fee) VALUES ('$name','$grade','$day','$time','$etime','$hall','$fee')";
-                    if(!$db->query($sql_in)){
-                        echo "Error Inserting data  : " . $db->error;
-                      }
-        }
-
-
+                    $courseid = $_POST['courseid'];
+                    $sql = "select * from courses where cid = '$courseid' ";
+                    $data_update = $db->query($sql) or die ($db->error);
+                    $row = $data_update->fetch_assoc();
+                    
 
 ?>
 
@@ -31,23 +35,30 @@
     <div class="col-md-10">
         <nav>
             <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                <a class="nav-item nav-link active">Add</a>
-                <a href="course-search.php" class="nav-item nav-link disabled">Search</a>
-                <a href="course-schedule.php" class="nav-item nav-link disabled">Schedule</a>
-                <a href="course-overview.php" class="nav-item nav-link disabled">Overview</a>
-                <a href="course-reports.php" class="nav-item nav-link disabled">Reports</a>
+                <a href="course-updateing.php" class="nav-item nav-link disabled">Update</a>
+                <a href="course-search.php" class="nav-item nav-link disabled">Back</a>
+
             </div>
         </nav>
         <div class="tab-content">
             <div class="tab-pane mt-4 show active">
-                <form method="post" action="course-add.php">
+                <form method="post" action="course-updateing.php">
+                  <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Course ID</label>
+                <div class="col-sm-10">
+                  <div class="form-row">
+                    <div class="col-md-6">
+                      <input type="number" class="form-control" name="course_id" value="<?php echo $row["cid"]; ?>" readonly>
+                    </div>
+                  </div>
+                </div>
+              </div>
                     <div class="form-group row">
-                        <form method="post" action="course-add.php">
                         <label class="col-sm-2 col-form-label">Name</label>
                         <div class="col-sm-10">
                             <div class="form-row">
                                 <div class="col-md-6">
-                                    <input type="text" class="form-control" name="name" pattern="[A-Z.]{3,30}" placeholder="Course Name" required>
+                                    <input type="text" class="form-control" name="name" value="<?php echo $row["name"];  ?>" pattern= "[A-Z.]{3,30}" required>
                                 </div>
                             </div>
                         </div>
@@ -57,7 +68,7 @@
                         <div class="col-sm-10">
                             <div class="form-row">
                                 <div class="col-md-6">
-                                    <select name="grade" class="form-control">
+                                    <select name="grade" class="form-control" value="<?php echo $row["grade"]; ?>">
                                         <option value="1">Grade 01</option>
                                         <option value="2">Grade 02</option>
                                         <option value="3">Grade 03</option>
@@ -81,7 +92,7 @@
                         <div class="col-sm-10">
                             <div class="form-row">
                                 <div class="col-md-6">
-                                    <select name="day" class="form-control">
+                                    <select name="day" class="form-control" value="<?php echo $row["day"]; ?>">
                                         <option value="Monday">Monday</option>
                                         <option value="Tuesday">Tuesday</option>
                                         <option value="Wednesday">Wednesday</option>
@@ -99,7 +110,7 @@
                         <div class="col-sm-10">
                             <div class="form-row">
                                 <div class="col-md-6">
-                                    <input type="time" class="form-control" name="stime"  required>
+                                    <input type="time" class="form-control" name="stime" value="<?php echo $row["time_start"]; ?>" required>
                                     <span class="hours">Class hours  8AM to 5PM</span>
                                 </div>
                             </div>
@@ -110,7 +121,7 @@
                         <div class="col-sm-10">
                             <div class="form-row">
                                 <div class="col-md-6">
-                                    <input type="time" class="form-control" name="etime" required>
+                                    <input type="time" class="form-control" name="etime" value="<?php echo $row["time_end"]; ?>"required>
                                 </div>
                             </div>
                         </div>
@@ -120,7 +131,7 @@
                         <div class="col-sm-10">
                             <div class="form-row">
                                 <div class="col-md-6">
-                                    <select name="hall" class="form-control">
+                                    <select name="hall" class="form-control" value="<?php echo $row["hall_no"]; ?>">
                                         <option value="01">H01</option>
                                         <option value="02">H03</option>
                                         <option value="03">H03</option>
@@ -143,18 +154,19 @@
                         <div class="col-sm-10">
                             <div class="form-row">
                                 <div class="col-md-6">
-                                    <input type="number"  class="form-control" name="fee" placeholder="LKR" min="500" max="2000" required>
+                                    <input type="number"  class="form-control" name="fee" value="<?php echo $row["fee"]; ?>" min="500" max="2000" required>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="form-group row">
                         <div class="col-sm-10">
-                            <button type="submit" name="addCourse"  class="btn btn-dark">Add Course</button>
+                            <button type="submit" name="updateb" class="btn btn-dark">UPDATE</button>
                         </div>
                     </div>
                 </form>
             </div>
         </div>
     </div>
+  <?php } ?>
 <?php include_once 'staff-footer.php'; ?>
