@@ -2,26 +2,26 @@
 	include_once 'staff-header.php';
 	include_once 'DB_Connection.php';
 	  	      
-    $income_max= mysqli_query($conn,"SELECT MAX(id) AS maximum FROM incomes");
+    $income_max= mysqli_query($conn,"SELECT MAX(id) AS maximum FROM expenses");
 	$result = mysqli_fetch_assoc($income_max); 
 	$max = $result['maximum']+1;
 	
 	$tot = 0;
-	$income_tot = "select amount from incomes";
+	$income_tot = "select amount from expenses";
 	$result_tot = $conn->query($income_tot);
 	while($row_tot = $result_tot->fetch_assoc()){
 		$tot = $tot + $row_tot["amount"];
 	}
 	
 	$tot_pen = 0;
-	$income_pen = "select amount from incomes where status='pending'";
+	$income_pen = "select amount from expenses where status='pending'";
 	$result_pen = $conn->query($income_pen);
 	while($row_pen = $result_pen->fetch_assoc()){
 		$tot_pen = $tot_pen + $row_pen["amount"];
 	}
 	
 	$tot_close = 0;
-	$income_close = "select amount from incomes where status='closed'";
+	$income_close = "select amount from expenses where status='closed'";
 	$result_close = $conn->query($income_close);
 	while($row_close = $result_close->fetch_assoc()){
 		$tot_close = $tot_close + $row_close["amount"];
@@ -73,29 +73,31 @@
 				$final_paid_by = $paid_by_others;
 		}
 		
-		$sql_check = "select * from incomes where catogory='$deparment_name' and description='$final_dept_task' and payment_method='$final_pay_method' and amount='$amount' and paid_by='$final_paid_by'";
+		$sql_check = "select * from expenses where catogory='$deparment_name' and description='$final_dept_task' and payment_method='$final_pay_method' and amount='$amount' and paid_for='$final_paid_by'";
 		$result_check = $conn->query($sql_check);
 		
 		if($result_check->num_rows>0){
 			echo "<script> alert(' The record you inserted already available in database!.. Try a new record!..') </script>";
 			set_error_msg("<strong>Failed!</strong> Already available in the Database!... Try new record to insert!...");
-			header("Location: Finance_Add_Incomes.php");
+			header("Location: Finance_Add_Expenses.php");
 			
 		}
 		else{
 			reset_error_msg();
-			$sql_insert = "insert into incomes (catogory,description,payment_method,amount,paid_by,added_by,added_date,status) values"
+			$sql_insert = "insert into expenses (catogory,description,payment_method,amount,paid_for,added_by,added_date,status) values"
 						  ." ('$deparment_name','$final_dept_task','$final_pay_method','$amount','$final_paid_by','$added_by','$added_date','$status')";
 						  if($conn->query($sql_insert) == true){
-							  		set_success_msg("<strong>Success!</strong> New income has been successfully inserted!");
-									header("Location: Finance_Add_Incomes.php");
+							  		set_success_msg("<strong>Success!</strong> New expense has been successfully inserted!");
+									header("Location: Finance_Add_Expenses.php");
 							  }
 						  else{
 								  set_error_msg("<strong>Oops!</strong> Something went wrong!...!");
-								  header("Location: Finance_Add_Incomes.php");
+								  header("Location: Finance_Add_Expenses.php");
 						  }
 		}
 	}
+	
+	
 	 
 
 ?>
@@ -103,13 +105,13 @@
 				<div class="col-md-8">                    
                     <nav>
 						<div class="nav nav-tabs" id="nav-tab" role="tablist">
-                        	<a href="Finance_Income_Overview.php" class="nav-item nav-link"> Income Overview </a>
-							<a class="nav-item nav-link active"> Add Incomes </a>
-                            <a href="Finance_Update_Incomes.php" class="nav-item nav-link"> Update Incomes </a>
-                            <a href="Finance_Delete_Incomes.php" class="nav-item nav-link"> Delete Incomes </a>
-                            <a href="Finance_Verify_Incomes.php" class="nav-item nav-link"> Verify Incomes </a>
-                            <a href="Finance_Closed_Incomes.php" class="nav-item nav-link"> Closed Incomes </a>
-							<a class="nav-item nav-link disabled"> Income Reports </a>				
+                            <a href="Finance_Expense_Overview.php" class="nav-item nav-link"> Expenses Overview </a>
+							<a class="nav-item nav-link active"> Add Expenses </a>
+                            <a href="Finance_Update_Expenses.php" class="nav-item nav-link"> Update Expenses </a>
+                            <a href="Finance_Delete_Expenses.php" class="nav-item nav-link"> Delete Expenses </a>
+                            <a href="Finance_Verify_Expenses.php" class="nav-item nav-link"> Verify Expenses </a>
+                            <a href="Finance_Closed_Expenses.php" class="nav-item nav-link"> Closed Expenses </a>
+							<a class="nav-item nav-link disabled"> Expenses Reports </a>			
 						</div>
 					</nav>
 					<div class="tab-content">
@@ -117,11 +119,11 @@
 							<form method="post" name="AddIncome" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" onsubmit="return(incomeValidation());">
                             	
 								<div class="form-group row">
-									<label class="col-sm-2 col-form-label">Income ID</label>
+									<label class="col-sm-2 col-form-label">Expense ID</label>
 									<div class="col-sm-10">
 										<div class="form-row">
 											<div class="col-md-6">
-												<input id="incomeid" type="text" class="form-control" name="incomeid" value="<?php echo " INC".$max; ?>"  readonly="readonly">
+												<input id="incomeid" type="text" class="form-control" name="incomeid" value="<?php echo " EXP".$max; ?>"  readonly="readonly">
 											</div>
 										</div>
 									</div>
@@ -137,14 +139,17 @@
 									<label class="col-sm-2 col-form-label">Catogory</label>
 									<div class="col-sm-10">
 										<div class="form-row">
-											<div class="col-md-6">
-                                                    <?php 
+                                        	<div class="col-md-6">
+                                        	<?php 
 														$deparments = "select * from departments";
 														$result_deparment = $conn->query($deparments);
 														if($result_deparment->num_rows>0){
-															echo "<select id='dept' name='department' class='form-control' onChange='deptChange(this);selOthers(this);progress();'>";
+															
+															echo "<select id='dept' name='department' class='form-control' onChange='deptChange_e(this);selOthers(this);progress();'>";
 															echo "<option value='Selected' selected>Please Select</option>";
 															while($row_dept = $result_deparment->fetch_assoc()){
+																
+																	
 																echo "<option value='".$row_dept["name"]."'> ".$row_dept["name"]." </option>";
 															}
 															echo "</select>";
@@ -152,15 +157,13 @@
 															echo "<input type='text' class='form-control' value='There are no Departments' readonly>";
 														}
 													?>
-												
 											</div>
-										</div>
+                                        </div>
 									</div>
 								</div>
                                 <div class="form-group row">
 									<div class="col-sm-7">
-                                    	<div id="catogory_alert" class="message-hide" role="alert">  											
-                                        <strong id="strong_message2"></strong><span id="soft_message2"></span>
+                                    	<div id="catogory_alert" class="message-hide" role="alert">  											<strong id="strong_message2"></strong><span id="soft_message2"></span>
 										</div>
 									</div>
 								</div>
@@ -217,7 +220,7 @@
 									<div class="col-sm-10">
 										<div class="form-row">
 											<div class="col-md-6">
-												<input id="amount" type="number" class="form-control" name="amount" placeholder="Amount">
+												<input id="amount" type="text" class="form-control" name="amount" placeholder="Amount">
 											</div>
 										</div>
 									</div>
@@ -231,7 +234,7 @@
 									</div>
 								</div>
                                 <div class="form-group row">
-									<label class="col-sm-2 col-form-label">Paid By</label>
+									<label class="col-sm-2 col-form-label">Paid For</label>
 									<div class="col-sm-10">
 										<div class="form-row">
                                         	<div class="col-md-3">
@@ -289,8 +292,10 @@
 								<div class="form-group row">
 									<div class="col-sm-10">
                                     	<div class="form-row">
+										<div class="col-md-7">
+										</div>
 										<div class="col-md-3">
-											<input id="income_submit" name="add" type="submit" class="btn btn-dark" value=" Add an Income">
+											<input id="income_submit" name="add" type="submit" class="btn btn-dark" value=" Add an Expense">
                                         </div>
                                         </div>
 									</div>
@@ -302,20 +307,20 @@
 				</div>
                 <div class="col-md-2">
 					<div class="finance-box">
-						<h5>Total Income :</h5>
+						<h5>Total Expense :</h5>
 						<h3>Rs. <?php echo $tot; ?>/=</h3>
 						<hr>
-						<a href="Finance_Update_Incomes.php" class="btn btn-success btn-lg btn-block"> View Total Income </a>
+						<a href="Finance_Update_Expenses.php" class="btn btn-success btn-lg btn-block"> View Total Expense </a>
                         <br />
-                        <h5>Pending Income :</h5>
+                        <h5>Pending Expense :</h5>
 						<h3>Rs. <?php echo $tot_pen; ?>/=</h3>
 						<hr>
-						<a href="Finance_Verify_Incomes.php" class="btn btn-success btn-lg btn-block"> View Pending Income </a>
+						<a href="Finance_Verify_Expenses.php" class="btn btn-success btn-lg btn-block"> View Pending Expense </a>
                         <br />
-                        <h5>Closed Income :</h5>
+                        <h5>Closed Expense :</h5>
 						<h3>Rs. <?php echo $tot_close; ?>/=</h3>
 						<hr>
-						<a href="Finance_Closed_Incomes.php" class="btn btn-success btn-lg btn-block"> View Closed Income </a>
+						<a href="Finance_Closed_Expenses.php" class="btn btn-success btn-lg btn-block"> View Closed Expense </a>
 					</div>
 				</div>
 <?php include_once 'staff-footer.php'; ?>
