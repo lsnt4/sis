@@ -27,7 +27,7 @@
 						</div>
 						<div class="col-md-3">
 							<div class="card mb-4 p-2">
-								<img class="card-img-top p-4" src="assets/images/exam_overview.jpg" alt="Image">
+								<img class="card-img-top p-4" src="assets/images/exam_overview.jpg" alt="Image" style="height: 232px;">
 								<div class="card-body">
 									<a href="exam-overview.php" class="btn btn-lg btn-dark btn-block">Overview</a>
 								</div>

@@ -49,7 +49,7 @@ if(isset($_POST["add"])){
                                     <div class="col-sm-10">
                                         <div class="form-row">
                                             <div class="col-md-6">
-                                                <input type="text" class="form-control" name="exam_name" placeholder="Spot Test II - 2018 Batch A" required>
+                                                <input type="text" class="form-control" name="exam_name" placeholder="Spot Test II 2018 Batch A" pattern="[A-Za-z0-9 ]{3,49}" required>
                                             </div>
                                         </div>
                                     </div>
