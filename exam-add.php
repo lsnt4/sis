@@ -1,16 +1,12 @@
 <?php include_once 'staff-header.php';
+
 $dbconn = new mysqli('localhost', 'root', '', 'itpprojectdb');
 if($dbconn->connect_error) {
     die("Database connection error: " . $dbconn->connect_error);
 }
 
-$sql= "select MAX(id) as maximum from exams";
-$result = $dbconn->query($sql);
-$row = $result->fetch_assoc();
-$max = $row["maximum"]+1;
-
-
 if(isset($_POST["add"])){
+
     $examid=$_POST["exam_id"];
     $name = $_POST["exam_name"];
     $cid=$_POST["courseid"];
@@ -19,11 +15,8 @@ if(isset($_POST["add"])){
     $etime=$_POST["etime"];
     $fee=$_POST["fee"];
     $sql = "insert into exams values('$examid','$name','$cid','$date','$stime','$etime','$fee')";
-    if ($dbconn->query($sql)) {
-
-    } else {
+    if (!$dbconn->query($sql)) {
         echo "Error updating record: " . $dbconn->error;
-
     }
 }
 
@@ -31,7 +24,7 @@ if(isset($_POST["add"])){
 				<div class="col-md-10">
 					<nav>
 						<div class="nav nav-tabs" id="nav-tab" role="tablist">
-							<a class="nav-item nav-link active">Add</a>
+							<a href="exam-add.php" class="nav-item nav-link active">Add</a>
 							<a href="exam-search.php" class="nav-item nav-link disabled">Search</a>
 							<a href="exam-schedule.php" class="nav-item nav-link disabled">Schedule</a>
 							<a href="exam-overview.php" class="nav-item nav-link disabled">Overview</a>
@@ -46,7 +39,7 @@ if(isset($_POST["add"])){
                                     <div class="col-sm-10">
                                         <div class="form-row">
                                             <div class="col-md-6">
-                                                <input type="text" class="form-control" name="exam_id" value="<?php echo $max; ?>" readonly>
+                                                <input type="text" class="form-control" name="exam_id" value="<?php echo substr(number_format(time() * rand(),0,'',''),0,6); ?>" readonly>
                                             </div>
                                         </div>
                                     </div>
@@ -56,23 +49,22 @@ if(isset($_POST["add"])){
                                     <div class="col-sm-10">
                                         <div class="form-row">
                                             <div class="col-md-6">
-                                                <input type="text" class="form-control"  name="exam_name" placeholder="Exam Name" required>
+                                                <input type="text" class="form-control" name="exam_name" placeholder="Spot Test II - 2018 Batch A" required>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class="col-sm-2 col-form-label">Exam Name</label>
+                                    <label class="col-sm-2 col-form-label">Course Name</label>
                                     <div class="col-sm-10">
                                         <div class="form-row">
                                             <div class="col-md-6">
                                                 <select name="courseid" class="form-control">
-                                                    <option value="selected" selected>Please select</option>
                                                     <?php
                                                         $sql_course = "select * from courses";
                                                         $result_course = $dbconn->query($sql_course);
                                                         while($row_course = $result_course->fetch_assoc()){
-                                                            echo "<option value='".$row_course["cid"]."'> ".$row_course["cid"]." ".$row_course["name"]." </option>";
+                                                            echo "<option value='".$row_course["cid"]."'> ".$row_course["name"]." </option>";
                                                         }
                                                     ?>
                                                 </select>
