@@ -38,137 +38,6 @@ define('PERMISSION_RESOURCES', 'permission_resources');
 define('PERMISSION_EMPLOYEES', 'permission_employees');
 
 /**
-* StaffMember
-*/
-class StaffMember {
-
-	private $userid;
-	private $department;
-	private $fname;
-	private $lname;
-	private $dob;
-	private $nic;
-	private $mobile_no;
-	private $address;
-	private $email;
-	private $gender;
-	private $reg_date;
-	private $salary;
-	private $password;
-
-	public function getUserid()	{
-		return $this->userid;
-	}
-
-	public function setUserid($userid) {
-		$this->userid = $userid;
-	}
-
-	public function getDepartment()	{
-		return $this->department;
-	}
-
-	public function setDepartment($department) {
-		$this->department = $department;
-	}
-
-	public function getFname() {
-		return $this->fname;
-	}
-
-	public function setFname($fname) {
-		$this->fname = $fname;
-	}
-
-	public function getLname() {
-		return $this->lname;
-	}
-
-	public function setLname($lname) {
-		$this->lname = $lname;
-	}
-
-	public function getEmail() {
-		return $this->email;
-	}
-
-	public function setEmail($email) {
-		$this->email = $email;
-	}
-
-	public function getMobileno() {
-		return $this->mobile_no;
-	}
-
-	public function setMobileno($mobile_no) {
-		$this->mobile_no = $mobile_no;
-	}
-
-	public function getAddress() {
-		return $this->address;
-	}
-
-	public function setAddress($address) {
-		$this->address = $address;
-	}
-
-	public function getDob() {
-		return $this->dob;
-	}
-
-	public function setDob($dob) {
-		$this->dob = $dob;
-	}
-
-	public function getGender() {
-		return $this->gender;
-	}
-
-	public function setGender($gender) {
-		$this->gender = $gender;
-	}
-
-	public function getNic() {
-		return $this->nic;
-	}
-
-	public function setNic($nic) {
-		$this->nic = $nic;
-	}
-
-	public function getRegdate() {
-		return date("Y-m-d");
-	}
-
-	public function setRegdate($reg_date) {
-		$this->reg_date = $reg_date;
-	}
-
-	public function getSalary() {
-		return $this->salary;
-	}
-
-	public function setSalary($salary) {
-		$this->salary = $salary;
-	}
-
-	public function getPassword() {
-		return $this->password;
-	}
-
-	public function setPassword($password) {
-		$this->password = $password;
-	}
-
-	public function add() {
-		$Helpers = new Helpers();
-		$this->userid = $Helpers->generate_userid();
-		$this->password = $this->nic;
-		return (isset($this->userid) && isset($this->fname) && isset($this->lname) && isset($this->email) && isset($this->mobile_no) && isset($this->address) && isset($this->dob) && isset($this->gender) && isset($this->nic) && isset($this->salary) );
-	}
-}
-
-/**
 * Admin Management Class
 */
 class AdminManager extends Database {
@@ -329,10 +198,6 @@ class AdminManager extends Database {
 			return false;
 		}
 	}
-
-	public function get_dashboard_list() {
-
-	}
 }
 
 /**
@@ -340,20 +205,8 @@ class AdminManager extends Database {
 */
 class Helpers {
 
-	function __construct() {
-
-	}
-
 	public function generate_userid() {
 		return substr(number_format(time() * rand(),0,'',''),0,6);
-	}
-
-	public function get_header() {
-
-	}
-
-	public function get_footer() {
-
 	}
 }
 
@@ -499,10 +352,6 @@ class Database {
 
 	public function db_conn_status() {
 		return $this->DB_CONN_STATUS;
-	}
-
-	function __destruct() {
-
 	}
 }
 ?>
