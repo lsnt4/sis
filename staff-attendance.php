@@ -40,7 +40,7 @@
 								<div class="row">
 									<div class="col-md-12">
 										<div class="input-group mb-3">
-											<input type="text" value="<?php echo $retVal = (isset($_GET['s'])) ? $_GET['s'] : '' ; ?>" name="s" class="form-control" placeholder="Employee id, name, email, date" aria-label="Recipient's username" aria-describedby="basic-addon2">
+											<input type="text" value="<?php echo $retVal = (isset($_GET['s'])) ? $_GET['s'] : '' ; ?>" name="s" class="form-control" placeholder="Employee id, name, mobile, email, date" aria-label="Recipient's username" aria-describedby="basic-addon2" pattern="[A-Za-z0-9@.]{3,49}" required>
 											<div class="input-group-append">
 												<button class="btn btn-dark" type="submit">Search</button>
 											</div>
