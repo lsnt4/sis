@@ -21,7 +21,7 @@
 							<div class="card mb-4 p-2">
 								<img class="card-img-top p-4" src="assets/images/schedule_exam.jpg" alt="Image">
 								<div class="card-body">
-									<a href="exam-attendance.php" class="btn btn-lg btn-dark btn-block">Schedule</a>
+									<a href="exam-schedule.php" class="btn btn-lg btn-dark btn-block">Schedule</a>
 								</div>
 							</div>
 						</div>
