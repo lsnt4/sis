@@ -30,6 +30,7 @@
 					<div class="row">
 						<div class="col-md-12">
 							<div class="card bg-light mb-3">
+								<?php $Helpers = new Helpers(); ?>
 								<div class="card-header">Overview</div>
 								<div class="card-body">
 									<div class="row">
@@ -37,7 +38,7 @@
 											<div class="card text-white bg-secondary mb-3">
 												<div class="card-header">Total Employees</div>
 												<div class="card-body">
-													<h3 class="card-title">3</h3>
+													<h3 class="card-title"><?php echo $Helpers->get_total_employees(); ?></h3>
 													<p class="card-text"></p>
 												</div>
 											</div>
@@ -46,7 +47,7 @@
 											<div class="card text-white bg-success mb-3">
 												<div class="card-header">Total Departments</div>
 												<div class="card-body">
-													<h3 class="card-title">8</h3>
+													<h3 class="card-title"><?php echo $Helpers->get_total_departments(); ?></h3>
 													<p class="card-text"></p>
 												</div>
 											</div>
@@ -55,7 +56,7 @@
 											<div class="card text-white bg-info mb-3">
 												<div class="card-header">Today Attendance</div>
 												<div class="card-body">
-													<h3 class="card-title">13</h3>
+													<h3 class="card-title"><?php echo $Helpers->get_today_attendance(); ?></h3>
 													<p class="card-text"></p>
 												</div>
 											</div>
@@ -64,7 +65,7 @@
 											<div class="card text-white bg-primary mb-3">
 												<div class="card-header">Total Students</div>
 												<div class="card-body">
-													<h3 class="card-title">180</h3>
+													<h3 class="card-title"><?php echo $Helpers->get_total_students(); ?></h3>
 													<p class="card-text"></p>
 												</div>
 											</div>

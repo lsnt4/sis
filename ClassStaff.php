@@ -161,18 +161,6 @@ class StaffManager extends Database {
 		$sql = "UPDATE users SET fname='$fname', lname='$lname', dob='$dob', salary='$salary', nic='$nic', mobile_no='$mobile_no', address='$address', email='$email', gender='$gender' WHERE userid='$userid'";
 		if (Database::$DB_CONN->query($sql)) {
 			$status_progress = 1;
-
-
-			$sql_dpt = "INSERT INTO user_departments (userid, department_id)
-					VALUES ('$userid', '$departments') ON DUPLICATE KEY UPDATE department_id='$departments'";
-			if (Database::$DB_CONN->query($sql_dpt)) {
-			    $status_progress = 1;
-			} else {
-			    echo "Error: " . Database::$DB_CONN->error;
-				$status_progress = 0;
-			}
-
-
 		} else {
 			$status_progress = 0;
 			echo "Error updating record: " . Database::$DB_CONN->error;
@@ -468,10 +456,76 @@ class AdminManager extends Database {
 /**
 * Helpers Class
 */
-class Helpers {
+class Helpers extends Database {
+
+	function __construct() {
+		parent::__construct();
+	}
 
 	public function generate_userid() {
 		return substr(number_format(time() * rand(),0,'',''),0,6);
+	}
+
+	public function get_total_employees() {
+
+		$result = Database::$DB_CONN->query("
+			SELECT count(*) AS cnt
+			FROM users
+		");
+		if ($result->num_rows != 0) {
+			while($row = $result->fetch_assoc()) {
+				return $row['cnt'];
+			}
+		} else {
+			return 0;
+		}
+	}
+
+	public function get_total_departments() {
+
+		$result = Database::$DB_CONN->query("
+			SELECT count(*) AS cnt
+			FROM departments
+		");
+		if ($result->num_rows != 0) {
+			while($row = $result->fetch_assoc()) {
+				return $row['cnt'];
+			}
+		} else {
+			return 0;
+		}
+	}
+
+	public function get_today_attendance() {
+
+		$date = date('Y-m-d');
+		$result = Database::$DB_CONN->query("
+			SELECT count(*) AS cnt
+			FROM attendance
+			WHERE date='$date'
+		");
+		if ($result->num_rows != 0) {
+			while($row = $result->fetch_assoc()) {
+				return $row['cnt'];
+			}
+		} else {
+			return 0;
+		}
+	}
+
+	public function get_total_students() {
+
+		$result = Database::$DB_CONN->query("
+			SELECT count(*) AS cnt
+			FROM students
+		");
+		if ($result->num_rows != 0) {
+			while($row = $result->fetch_assoc()) {
+				return $row['cnt'];
+			}
+		} else {
+			return 0;
+		}
 	}
 }
 
