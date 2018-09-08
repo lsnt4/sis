@@ -47,7 +47,7 @@
                         <div class="col-sm-10">
                             <div class="form-row">
                                 <div class="col-md-6">
-                                    <input type="text" class="form-control" name="name" pattern="[A-Z.]{3,30}" placeholder="Course Name" required>
+                                    <input type="text" class="form-control" name="name" pattern="[A-Z.]{3,30}" placeholder="Ex: ENGLISH" required>
                                 </div>
                             </div>
                         </div>

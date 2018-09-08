@@ -107,7 +107,7 @@ if(isset($_POST["add"])){
                                     <div class="col-sm-10">
                                         <div class="form-row">
                                             <div class="col-md-6">
-                                                <input type="number" class="form-control"  name="fee" placeholder="Exam Fees" required>
+                                                <input type="number" class="form-control"  name="fee" placeholder="Exam Fees" min="500" max="1000" required>
                                             </div>
                                         </div>
                                     </div>
