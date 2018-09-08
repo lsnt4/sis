@@ -161,6 +161,18 @@ class StaffManager extends Database {
 		$sql = "UPDATE users SET fname='$fname', lname='$lname', dob='$dob', salary='$salary', nic='$nic', mobile_no='$mobile_no', address='$address', email='$email', gender='$gender' WHERE userid='$userid'";
 		if (Database::$DB_CONN->query($sql)) {
 			$status_progress = 1;
+
+
+			$sql_dpt = "INSERT INTO user_departments (userid, department_id)
+					VALUES ('$userid', '$departments') ON DUPLICATE KEY UPDATE department_id='$departments'";
+			if (Database::$DB_CONN->query($sql_dpt)) {
+			    $status_progress = 1;
+			} else {
+			    echo "Error: " . Database::$DB_CONN->error;
+				$status_progress = 0;
+			}
+
+
 		} else {
 			$status_progress = 0;
 			echo "Error updating record: " . Database::$DB_CONN->error;

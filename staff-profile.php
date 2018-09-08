@@ -14,7 +14,7 @@
         $userid = $_POST['userid'];
         $fname = $_POST['fname'];
         $lname = $_POST['lname'];
-        $departments = $_POST['userid'];
+        $departments = $_POST['departments'];
         $dob = $_POST['doby'] . '-' . $_POST['dobm'] . '-' . $_POST['dobd'];
         $salary = $_POST['salary'];
         $nic = $_POST['nic'];
@@ -59,11 +59,11 @@
 									<div class="col-sm-10">
 										<div class="form-row">
 											<div class="col-md-3">
-												<input value="<?php echo $user['fname']; ?>" type="text" class="form-control" name="fname" placeholder="First name" maxlength="50" pattern="[A-Za-z.]{3,49}" required>
+												<input value="<?php echo $user['fname']; ?>" type="text" class="form-control" name="fname" placeholder="First name" maxlength="50" pattern="[A-Za-z.]{1,50}" required>
                                                 <small class="form-text text-muted">First Name</small>
 											</div>
 											<div class="col-md-3">
-												<input value="<?php echo $user['lname']; ?>" type="text" class="form-control" name="lname" placeholder="Last name" maxlength="50" pattern="[A-Za-z.]{3,49}" required>
+												<input value="<?php echo $user['lname']; ?>" type="text" class="form-control" name="lname" placeholder="Last name" maxlength="50" pattern="[A-Za-z.]{1,50}" required>
                                                 <small class="form-text text-muted">Last Name</small>
 											</div>
 										</div>
@@ -74,7 +74,7 @@
 									<div class="col-sm-10">
 										<div class="form-row">
 											<div class="col-md-6">
-                                                <select size="5" name="departments" class="form-control" multiple>
+                                                <select size="5" name="departments" class="form-control">
                                                     <?php foreach($user['departments'] as $department) { ?>
                                                     <option value="<?php echo $department['did']; ?>" <?php echo ($department['status']) ? 'selected' : '' ; ?>><?php echo $department['name']; ?></option>
                                                     <?php } ?>
