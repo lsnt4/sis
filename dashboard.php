@@ -118,7 +118,7 @@
 												<a href="student-attendance.php" class="btn btn-lg btn-dark btn-block">Attendance</a>
 											</div>
 											<div class="col-md-3 mb-3">
-												<a href="student-reports.php" class="btn btn-lg btn-dark btn-block">Reports</a>
+												<a href="student-enrollments.php" class="btn btn-lg btn-dark btn-block">Enrollments</a>
 											</div>
 										</div>
 									</div>
@@ -209,16 +209,16 @@
 									<div class="card-body">
 										<div class="row">
 											<div class="col-md-3 mb-3">
-												<a href="finance-add.php" class="btn btn-lg btn-dark btn-block">Add Finance</a>
+												<a href="Finance_Add_Incomes.php" class="btn btn-lg btn-dark btn-block">Add Incomes</a>
 											</div>
 											<div class="col-md-3 mb-3">
-												<a href="finance-search.php" class="btn btn-lg btn-dark btn-block">Search Finance</a>
+												<a href="Finance_Verify_Incomes.php" class="btn btn-lg btn-dark btn-block">Verify Incomes</a>
 											</div>
 											<div class="col-md-3 mb-3">
-												<a href="finance-approvals.php" class="btn btn-lg btn-dark btn-block">Approvals</a>
+												<a href="Finance_Closed_Incomes.php" class="btn btn-lg btn-dark btn-block">Closed Incomes</a>
 											</div>
 											<div class="col-md-3 mb-3">
-												<a href="finance-reports.php" class="btn btn-lg btn-dark btn-block">Reports</a>
+												<a href="Finance_Reports.php" class="btn btn-lg btn-dark btn-block">Reports</a>
 											</div>
 										</div>
 									</div>
@@ -259,16 +259,13 @@
 									<div class="card-body">
 										<div class="row">
 											<div class="col-md-3 mb-3">
-												<a href="resource-add.php" class="btn btn-lg btn-dark btn-block">Add Resource</a>
+												<a href="resources-add.php" class="btn btn-lg btn-dark btn-block">Add Resources</a>
 											</div>
 											<div class="col-md-3 mb-3">
-												<a href="resource-search.php" class="btn btn-lg btn-dark btn-block">Search Resources</a>
+												<a href="resources-search.php" class="btn btn-lg btn-dark btn-block">Search Resources</a>
 											</div>
 											<div class="col-md-3 mb-3">
-												<a href="resource-overview.php" class="btn btn-lg btn-dark btn-block">Overview</a>
-											</div>
-											<div class="col-md-3 mb-3">
-												<a href="resource-reports.php" class="btn btn-lg btn-dark btn-block">Reports</a>
+												<a href="resources-reports.php" class="btn btn-lg btn-dark btn-block">Reports</a>
 											</div>
 										</div>
 									</div>
