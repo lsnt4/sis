@@ -9,7 +9,7 @@
     }
 ?>
 <?php
-	if (isset($_POST['userid']) && isset($_POST['fname']) && isset($_POST['lname']) && isset($_POST['doby']) && isset($_POST['dobm']) && isset($_POST['dobd']) && isset($_POST['salary']) && isset($_POST['nic']) && isset($_POST['mobile_no']) && isset($_POST['address']) && isset($_POST['email']) && isset($_POST['gender'])) {
+	if (isset($_POST['e'])) {
 
         $userid = $_POST['userid'];
         $fname = $_POST['fname'];
@@ -28,10 +28,25 @@
 		if($user_update_status) {
 			set_success_msg("<strong>Success!</strong> User has been successfully updated!");
 		} else {
-			set_error_msg("<strong>Failed!</strong> Something strange happened while trying to update!");
+			set_error_msg("<strong>Failed!</strong> Something strange happened while trying to update the employee!");
 		}
 
 		header('Location: staff-profile.php?uid='.$userid);
+	}
+
+	if (isset($_POST['d'])) {
+
+        $email = $_POST['email'];
+
+		$user_removal_status = $StaffManager->remove_employee($email);
+
+		if($user_removal_status) {
+			set_success_msg("<strong>Success!</strong> User has been successfully removed!");
+		} else {
+			set_error_msg("<strong>Failed!</strong> Something strange happened while trying to remove the employee!");
+		}
+
+		header('Location: staff-search.php');
 	}
 ?>
 				<div class="col-md-10">
@@ -169,10 +184,10 @@
 								<div class="form-group row mt-5">
                                     <div class="col-sm-2"></div>
                                     <div class="col-sm-2">
-                                        <button type="submit" class="btn btn-danger">Remove</button>
+                                        <button type="submit" name="e" value="1" class="btn btn-dark">Update Profile</button>
                                     </div>
 									<div class="col-sm-3" style="text-align: right;">
-										<button type="submit" class="btn btn-dark">Update Profile</button>
+                                        <button type="submit" name="d" value="1" class="btn btn-danger">Remove</button>
 									</div>
 								</div>
 							</form>
