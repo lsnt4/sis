@@ -233,9 +233,9 @@ class StaffManager extends Database {
 		return $status_progress;
 	}
 
-	public function remove_employee($email) {
+	public function remove_employee($userid) {
 
-		$sql = "DELETE FROM users WHERE email='$email'";
+		$sql = "DELETE FROM users WHERE userid='$userid'";
 		$stmt = Database::$DB_CONN->prepare($sql);
 		$stmt->execute();
 		if ($stmt->affected_rows == 1) {

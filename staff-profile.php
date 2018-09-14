@@ -36,9 +36,9 @@
 
 	if (isset($_POST['d'])) {
 
-        $email = $_POST['email'];
+        $userid = $_POST['userid'];
 
-		$user_removal_status = $StaffManager->remove_employee($email);
+		$user_removal_status = $StaffManager->remove_employee($userid);
 
 		if($user_removal_status) {
 			set_success_msg("<strong>Success!</strong> User has been successfully removed!");
