@@ -414,7 +414,13 @@ class AdminManager extends Database {
 			LEFT JOIN user_departments ON departments.did=user_departments.department_id
 		");
 		if ($result->num_rows != 0) {
+			$dup_dept = array();
 			while($row = $result->fetch_assoc()) {
+				if (!is_numeric(array_search($row['name'], $dup_dept))) {
+					array_push($dup_dept, $row['name']);
+				} else {
+					continue;
+				}
 				array_push($departments, array(
 					'did' => $row['did'],
 					'name' => $row['name'],
