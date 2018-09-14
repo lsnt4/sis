@@ -139,6 +139,34 @@ class StaffManager extends Database {
 		return $users;
 	}
 
+	public function get_employee_list_with_departments()	{
+		$users = array();
+		$result = Database::$DB_CONN->query("
+		SELECT u.userid, u.fname, u.lname, u.email, u.mobile_no, u.address, u.dob, u.reg_date, d.name AS department_name
+		FROM users AS u
+		LEFT JOIN user_departments AS ud ON ud.userid=u.userid
+		LEFT JOIN departments AS d ON d.did=ud.department_id
+		");
+		if ($result->num_rows > 0) {
+			while($row = $result->fetch_assoc()) {
+				array_push($users, array(
+					'userid' => $row['userid'],
+					'fname' => $row['fname'],
+					'lname' => $row['lname'],
+					'email' => $row['email'],
+					'mobile_no' => $row['mobile_no'],
+					'address' => $row['address'],
+					'dob' => $row['dob'],
+					'reg_date' => $row['reg_date'],
+					'department' => $row['department_name'],
+				));
+			}
+		} else {
+			return null;
+		}
+		return $users;
+	}
+
 	public function add_employee($fname, $lname, $salary, $nic, $dob, $mobile_no, $address, $email, $gender) {
 
 		$Helpers = new Helpers();
