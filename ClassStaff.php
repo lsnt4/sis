@@ -416,16 +416,16 @@ class AdminManager extends Database {
 		if ($result->num_rows != 0) {
 			$dup_dept = array();
 			while($row = $result->fetch_assoc()) {
-				if (!is_numeric(array_search($row['name'], $dup_dept))) {
+				if (!is_numeric(array_search($row['name'], $dup_dept)) || ($row['userid'] == $userid)) {
 					array_push($dup_dept, $row['name']);
+					array_push($departments, array(
+						'did' => $row['did'],
+						'name' => $row['name'],
+						'status' => ($row['userid'] == $userid)
+					));
 				} else {
 					continue;
 				}
-				array_push($departments, array(
-					'did' => $row['did'],
-					'name' => $row['name'],
-					'status' => ($row['userid'] == $userid)
-				));
 			}
 			return $departments;
 		} else {
