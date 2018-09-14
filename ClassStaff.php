@@ -208,7 +208,9 @@ class StaffManager extends Database {
 	public function remove_employee($email) {
 
 		$sql = "DELETE FROM users WHERE email='$email'";
-		if (Database::$DB_CONN->query($sql)) {
+		$stmt = Database::$DB_CONN->prepare($sql);
+		$stmt->execute();
+		if ($stmt->affected_rows == 1) {
 			return true;
 		} else {
 			echo "Error deleting record: " . Database::$DB_CONN->error;
