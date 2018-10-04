@@ -21,7 +21,7 @@ padding: 10px;
 	}
 	
 .rejected{
-	color: DC143C;
+	color: #F00;
 	text-transform:capitalize;
 	}
 
@@ -61,6 +61,10 @@ padding: 10px;
 
 .glyphicon-remove-circle:before {
   content: "\e088";
+}
+
+.glyphicon-ok-circle:before {
+  content: "\e089";
 }
 
 .message-hide{
@@ -394,6 +398,7 @@ ul.ca-menu li i {
 	
 	.ca-menu li {
 		width: 197px;
+
 		height: 208px;
 		margin-right: 9px;
 	}
