@@ -59,14 +59,14 @@
 		
 		{
 				if($dept_task == "Others")
-					$final_dept_task = $dept_task_other;
+					$final_dept_task = ucwords(strtolower($dept_task_other));
 				else
 					$final_dept_task = $dept_task;
 		}
 		
 		{
 			if($pay_method == "Others")
-				$final_pay_method = $pay_method_others;
+				$final_pay_method = ucwords(strtolower($pay_method_others));
 			else
 				$final_pay_method = $pay_method;
 		}
@@ -77,7 +77,7 @@
 			else if($paid_by_cat == "staff")
 				$final_paid_by = $paid_by_staff;
 			else
-				$final_paid_by = $paid_by_others;
+				$final_paid_by = ucwords(strtolower($paid_by_others));
 		}
 		
 		$sql_check = "select * from expenses where catogory='$deparment_name' and description='$final_dept_task' and payment_method='$final_pay_method' and amount='$amount' and paid_for='$final_paid_by'";
@@ -112,13 +112,45 @@
 				<div class="col-md-8">                    
                     <nav>
 						<div class="nav nav-tabs" id="nav-tab" role="tablist">
-							<a href="Finance_Add_Incomes.php" class="nav-item nav-link"> Add Incomes </a>
-                            <a class="nav-item nav-link active"> Update Incomes </a>
-                            <a href="Finance_Delete_Incomes.php" class="nav-item nav-link"> Delete Incomes </a>
-                            <a href="Finance_Verify_Incomes.php" class="nav-item nav-link"> Verify Incomes </a>
-                            <a href="Finance_Closed_Incomes.php" class="nav-item nav-link"> Closed Incomes </a>
-                            <a class="nav-item nav-link disabled"> Income Overview </a>
-							<a class="nav-item nav-link disabled"> Income Reports </a>				
+                        	<a href="Finance_Expense_Dashboard.php" class="nav-item nav-link"><strong> Expenses Dashboard </strong></a>
+                            <?php
+							$sql_tot = "SELECT * FROM expenses";
+							$result_tot=mysqli_query($conn,$sql_tot);
+							$row_tot=mysqli_num_rows($result_tot);
+			
+							$sql_close = "SELECT * FROM expenses where status='closed'";
+							$result_close=mysqli_query($conn,$sql_close);
+							$row_close=mysqli_num_rows($result_close);
+			
+							$sql_pen = "SELECT * FROM expenses where status='pending'";
+							$result_pen=mysqli_query($conn,$sql_pen);
+							$row_pen=mysqli_num_rows($result_pen);
+							?>
+							<a href="Finance_Add_Expenses.php" class="nav-item nav-link"><strong> Add Expenses </strong></a>
+                            <a class="nav-item nav-link active"><strong> Update Expenses 
+                            <?php if($row_tot>0){
+									echo "<span class='badge badge-success badge-pill'> ".$row_tot." <span>";
+								  } 
+							?>
+                            </strong></a>
+                            <a href="Finance_Delete_Expenses.php" class="nav-item nav-link"><strong> Delete Expenses 
+                            <?php if($row_tot>0){
+									echo "<span class='badge badge-danger badge-pill'> ".$row_tot." <span>";
+								  } 
+							?>
+                            </strong></a>
+                            <a href="Finance_Verify_Expenses.php" class="nav-item nav-link"><strong> Verify Expenses 
+                            <?php if($row_pen>0){
+									echo "<span class='badge badge-danger badge-pill'> ".$row_pen." <span>";
+								  } 
+							?>
+                            </strong></a>
+                            <a href="Finance_Closed_Expenses.php" class="nav-item nav-link"><strong> Closed Expenses 
+                            <?php if($row_close>0){
+									echo "<span class='badge badge-danger badge-pill'> ".$row_tot." <span>";
+								  } 
+							?>
+                            </strong></a>			
 						</div>
 					</nav>
 					<div class="tab-content">

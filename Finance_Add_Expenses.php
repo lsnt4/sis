@@ -52,14 +52,14 @@
 		
 		{
 				if($dept_task == "Others")
-					$final_dept_task = $dept_task_other;
+					$final_dept_task = ucwords(strtolower($dept_task_other));
 				else
 					$final_dept_task = $dept_task;
 		}
 		
 		{
 			if($pay_method == "Others")
-				$final_pay_method = $pay_method_others;
+				$final_pay_method = ucwords(strtolower($pay_method_others));
 			else
 				$final_pay_method = $pay_method;
 		}
@@ -70,7 +70,7 @@
 			else if($paid_by_cat == "staff")
 				$final_paid_by = $paid_by_staff;
 			else
-				$final_paid_by = $paid_by_others;
+				$final_paid_by = ucwords(strtolower($paid_by_others));
 		}
 		
 		$sql_check = "select * from expenses where catogory='$deparment_name' and description='$final_dept_task' and payment_method='$final_pay_method' and amount='$amount' and paid_for='$final_paid_by'";
@@ -105,13 +105,45 @@
 				<div class="col-md-8">                    
                     <nav>
 						<div class="nav nav-tabs" id="nav-tab" role="tablist">
-                            <a href="Finance_Expense_Overview.php" class="nav-item nav-link"> Expenses Overview </a>
-							<a class="nav-item nav-link active"> Add Expenses </a>
-                            <a href="Finance_Update_Expenses.php" class="nav-item nav-link"> Update Expenses </a>
-                            <a href="Finance_Delete_Expenses.php" class="nav-item nav-link"> Delete Expenses </a>
-                            <a href="Finance_Verify_Expenses.php" class="nav-item nav-link"> Verify Expenses </a>
-                            <a href="Finance_Closed_Expenses.php" class="nav-item nav-link"> Closed Expenses </a>
-							<a class="nav-item nav-link disabled"> Expenses Reports </a>			
+                            <a href="Finance_Expense_Dashboard.php" class="nav-item nav-link"><strong> Expenses Dashboard </strong></a>
+                            <?php
+							$sql_tot = "SELECT * FROM expenses";
+							$result_tot=mysqli_query($conn,$sql_tot);
+							$row_tot=mysqli_num_rows($result_tot);
+			
+							$sql_close = "SELECT * FROM expenses where status='closed'";
+							$result_close=mysqli_query($conn,$sql_close);
+							$row_close=mysqli_num_rows($result_close);
+			
+							$sql_pen = "SELECT * FROM expenses where status='pending'";
+							$result_pen=mysqli_query($conn,$sql_pen);
+							$row_pen=mysqli_num_rows($result_pen);
+							?>
+							<a class="nav-item nav-link active"><strong> Add Expenses </strong></a>
+                            <a href="Finance_Update_Expenses.php" class="nav-item nav-link"><strong> Update Expenses 
+                            <?php if($row_tot>0){
+									echo "<span class='badge badge-danger badge-pill'> ".$row_tot." <span>";
+								  } 
+							?>
+                            </strong></a>
+                            <a href="Finance_Delete_Expenses.php" class="nav-item nav-link"><strong> Delete Expenses 
+                            <?php if($row_tot>0){
+									echo "<span class='badge badge-danger badge-pill'> ".$row_tot." <span>";
+								  } 
+							?>
+                            </strong></a>
+                            <a href="Finance_Verify_Expenses.php" class="nav-item nav-link"><strong> Verify Expenses 
+                            <?php if($row_pen>0){
+									echo "<span class='badge badge-danger badge-pill'> ".$row_pen." <span>";
+								  } 
+							?>
+                            </strong></a>
+                            <a href="Finance_Closed_Expenses.php" class="nav-item nav-link"><strong> Closed Expenses 
+                            <?php if($row_close>0){
+									echo "<span class='badge badge-danger badge-pill'> ".$row_tot." <span>";
+								  } 
+							?>
+                            </strong></a>
 						</div>
 					</nav>
 					<div class="tab-content">
@@ -141,7 +173,7 @@
 										<div class="form-row">
                                         	<div class="col-md-6">
                                         	<?php 
-														$deparments = "select * from departments";
+														$deparments = "select * from departments where name not in ('Student')";
 														$result_deparment = $conn->query($deparments);
 														if($result_deparment->num_rows>0){
 															
@@ -292,8 +324,6 @@
 								<div class="form-group row">
 									<div class="col-sm-10">
                                     	<div class="form-row">
-										<div class="col-md-7">
-										</div>
 										<div class="col-md-3">
 											<input id="income_submit" name="add" type="submit" class="btn btn-dark" value=" Add an Expense">
                                         </div>

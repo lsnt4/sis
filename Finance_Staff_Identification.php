@@ -27,6 +27,10 @@ $user = $_GET["user"];
 												$result = $conn->query($sql_view);
 												$row = $result->fetch_assoc();
 												
+												$sql_view1 = "select * from students where sid='$user'";
+												$result1 = $conn->query($sql_view1);
+												$row1 = $result1->fetch_assoc();
+												
 												if($result->num_rows>0){
 											
                                             		echo "<table class='table table-bordered'>";
@@ -100,13 +104,81 @@ $user = $_GET["user"];
 													echo "</table>";
 													
 											
+													
+												}else if($result1->num_rows>0){
+													
+														echo "<table class='table table-bordered'>";
+											?>			<thead class="odd">
+															<tr>
+																<th scope="col" colspan="2"><center><h1> Student Details </h1></center></th> 
+															</tr>
+														</thead>
+                                                        <tbody>
+															<tr class="even">
+																<th scope="row"> Student ID </th>
+																<td><?php echo $row1["sid"]; ?></td>
+                                                        	</tr>
+                                                        </tbody>
+                                                        <tbody>
+															<tr class="odd">
+																<th scope="row"> Student Name</th>
+																<td><?php echo $row1["fname"]." ".$row1["lname"]; ?></td>
+                                                        	</tr>
+                                                        </tbody>
+                                                        <tbody>
+															<tr class="even">
+																<th scope="row"> Student E-Mail </th>
+																<td><?php echo $row1["email"]; ?></td>
+                                                        	</tr>
+                                                        </tbody>
+                                                        <tbody>
+															<tr class="odd">
+																<th scope="row"> Student Grade </th>
+																<td><?php echo $row1["grade"]; ?></td>
+                                                        	</tr>
+                                                        </tbody>
+                                                        <tbody>
+															<tr class="even">
+																<th scope="row"> Student Mobile No. </th>
+																<td><?php echo $row1["mobile_no"]; ?></td>
+                                                        	</tr>
+                                                        </tbody>
+                                                        <tbody>
+															<tr class="odd">
+																<th scope="row"> Student Date of Birth </th>
+																<td><?php echo $row1["dob"]; ?></td>
+                                                        	</tr>
+                                                        </tbody>
+                                                        <?php
+														$gender = "";
+														 if($row1["gender"] == 1)
+														 $gender = "Male";
+														 else
+														 $gender = "Female"; 
+														 ?>
+                                                        <tbody>
+															<tr class="even">
+																<th scope="row"> Student Gender </th>
+																<td><?php echo $gender; ?></td>
+                                                        	</tr>
+                                                        </tbody>
+                                                        <tbody>
+															<tr class="odd">
+																<th scope="row"> Student Joined Date </th>
+																<td><?php echo $row1["reg_date"]; ?></td>
+                                                        	</tr>
+                                                        </tbody>
+                                            <?php
+													echo "</table>";
+													
 													$conn->close();
-												}else{
+													}
+												else{
 											?>
 													<table class="table table-bordered">
 													<thead class="odd">
 															<tr>
-																<th scope="col" colspan="2"><center><h1> No Staff Details Available </h1></center></th> 
+																<th scope="col" colspan="2"><center><h1> No User Details Available </h1></center></th> 
 															</tr>
 														</thead>
                                                    	</table>
