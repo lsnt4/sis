@@ -71,5 +71,12 @@
 						<?php if(true /* $session->get_session('permission_employees') */ ) { ?>
 							<a href="profile.php" class="list-group-item list-group-item-action list-group-item-secondary <?php $active_state = (is_on_page("profile")) ? 'active' : '' ; echo $active_state; ?>">Profile</a>
 						<?php } ?>
+                        
+                        <?php if($session->get_session('permission_employees')) { ?>
+							<a href="leave-balance.php" class="list-group-item list-group-item-action list-group-item-secondary <?php $active_state = (is_on_page("leave")) ? 'active' : '' ; echo $active_state; ?>">Leave Management</a>
+						<?php } ?>
+                        <?php if($session->get_session('permission_employees')) { ?>
+							<a href="salaryslip.php" class="list-group-item list-group-item-action list-group-item-secondary <?php $active_state = (is_on_page("salaryslip")) ? 'active' : '' ; echo $active_state; ?>">Salary Slips</a>
+						<?php } ?>
 					</div>
 				</div>
