@@ -28,7 +28,7 @@
 			<div class="collapse navbar-collapse" id="navbarText">
 				<span class="navbar-nav mr-auto"></span>
 				<ul class="navbar-nav">
-					<li class="nav-item <?php $active_state = (is_on_page("profile")) ? 'active' : '' ; echo $active_state; ?>"><a class="nav-link" href="profile.php">Profile</a></li>
+					<li class="nav-item"><a href="profile.php" class="badge badge-pill badge-secondary" style="margin-top: 11px;margin-right: 12px;<?php echo (is_on_page("profile")) ? 'background-color: #d6d8db;' : '' ; ?>color: #343a40;"><?php echo $session->get_session('fname') . ' ' . $session->get_session('lname'); ?></a></li>
 					<li class="nav-item <?php $active_state = (is_on_page("dashboard")) ? 'active' : '' ; echo $active_state; ?>"><a class="nav-link" href="dashboard.php">Dashboard</a></li>
 					<li class="nav-item"><a class="nav-link" href="logout.php">Logout</a></li>
 				</ul>
