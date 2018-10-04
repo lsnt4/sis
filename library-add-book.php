@@ -22,28 +22,57 @@ if($conn->query($sql_update) == true){
 }
 
 
-
-$selectQ = "SELECT * FROM library_books";
-$res = $conn->query($selectQ);
-
-$select_payment_ids  = "SELECT * FROM library_books";
-$payment_res = $conn->query($select_payment_ids);
-
-$hd = "<select name='del_res' id='del_res'>";
-$body = "";
-$tail = "</select>";
-$listBox = "";
-
-if($payment_res->num_rows>0){
-	while($myres = $payment_res->fetch_assoc()){
-		$payment_id_auto = $myres['BID'];
-		$payment_id = $myres['fname'];
-		$student_id = $myres['ISBN'];
-		$Aname = $myres['Aname'];
-		$body = $body .	"<option value='$payment_id_auto'>$payment_id - $student_id </option>";
-	}
-	$listBox = $hd.$body.$tail;
+if(isset($_POST["searchme"]) ){
+	$fname = $_POST['tbSearch'];
 	
+	$selectQ = "SELECT * FROM library_books where fname LIKE '%$fname%'";
+	$res = $conn->query($selectQ);
+
+	$select_payment_ids  = "SELECT * FROM library_books";
+	$payment_res = $conn->query($select_payment_ids);
+
+	$hd = "<select name='del_res' id='del_res'>";
+	$body = "";
+	$tail = "</select>";
+	$listBox = "";
+
+	if($payment_res->num_rows>0){
+		while($myres = $payment_res->fetch_assoc()){
+			$payment_id_auto = $myres['BID'];
+			$payment_id = $myres['fname'];
+			$student_id = $myres['ISBN'];
+			$Aname = $myres['Aname'];
+			$body = $body .	"<option value='$payment_id_auto'>$payment_id - $student_id </option>";
+		}
+		$listBox = $hd.$body.$tail;
+		
+	}
+}
+
+
+else{
+	$selectQ = "SELECT * FROM library_books";
+	$res = $conn->query($selectQ);
+
+	$select_payment_ids  = "SELECT * FROM library_books";
+	$payment_res = $conn->query($select_payment_ids);
+
+	$hd = "<select name='del_res' id='del_res'>";
+	$body = "";
+	$tail = "</select>";
+	$listBox = "";
+
+	if($payment_res->num_rows>0){
+		while($myres = $payment_res->fetch_assoc()){
+			$payment_id_auto = $myres['BID'];
+			$payment_id = $myres['fname'];
+			$student_id = $myres['ISBN'];
+			$Aname = $myres['Aname'];
+			$body = $body .	"<option value='$payment_id_auto'>$payment_id - $student_id </option>";
+		}
+		$listBox = $hd.$body.$tail;
+		
+	}
 }
 ?>
 
@@ -61,10 +90,11 @@ if($payment_res->num_rows>0){
 						</div>
 					</nav>
 					
+					<form name="search" method="post">
 					<div>
-					<input type="text" class="form-control" placeholder="Employee name, email, id" aria-label="Recipient's username" aria-describedby="basic-addon2">
-					<button class="btn btn-dark" type="button">Search</button>
-					
+					<input type="text" class="form-control" placeholder="book title" aria-label="Recipient's username" aria-describedby="basic-addon2" name="tbSearch" id="tbSearch">
+					<button class="btn btn-dark" type="submit" name="searchme">Search</button>
+					</form>
 					</div>
 					
 					
