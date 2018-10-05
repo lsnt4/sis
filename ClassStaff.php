@@ -76,12 +76,40 @@ class StaffManager extends Database {
 				));
 				break;
 			}
-
 		} else {
 			return null;
 		}
 		return $user;
 	}
+
+	public function get_single_student($userid) {
+		$user = array();
+		$result = Database::$DB_CONN->query("
+			SELECT sid, fname, lname, email, mobile_no, dob, reg_date, gender, password
+			FROM students
+			WHERE sid='$userid'
+		");
+		if ($result->num_rows != 0) {
+			while($row = $result->fetch_assoc()) {
+
+				array_push($user, array(
+					'userid' => $row['sid'],
+					'fname' => $row['fname'],
+					'lname' => $row['lname'],
+					'email' => $row['email'],
+					'mobile_no' => $row['mobile_no'],
+					'dob' => $row['dob'],
+					'reg_date' => $row['reg_date'],
+					'gender' => $row['gender'],
+				));
+				break;
+			}
+		} else {
+			return null;
+		}
+		return $user;
+	}
+
 
 	public function get_employees($keyword)	{
 		$users = array();
@@ -234,6 +262,31 @@ class StaffManager extends Database {
 
 		return $status_progress;
 	}
+
+	public function update_student_profile($userid, $mobile_no, $email, $password) {
+
+		$sql = "UPDATE students SET mobile_no='$mobile_no', email='$email' WHERE sid='$userid'";
+		if (Database::$DB_CONN->query($sql)) {
+			$status_progress = 1;
+		} else {
+			$status_progress = 0;
+			echo "Error updating record: " . Database::$DB_CONN->error;
+		}
+
+		if ($password != '') {
+			$password = md5($password);
+			$sql = "UPDATE students SET password='$password' WHERE sid='$userid'";
+			if (Database::$DB_CONN->query($sql)) {
+				$status_progress = 1;
+			} else {
+				$status_progress = 0;
+				echo "Error updating record: " . Database::$DB_CONN->error;
+			}
+		}
+
+		return $status_progress;
+	}
+
 
 	public function remove_employee($userid) {
 
