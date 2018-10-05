@@ -352,6 +352,35 @@ class StaffManager extends Database {
 		return $users;
 	}
 
+	public function get_attendances_by_date_range($start_date, $end_date) {
+		$users = array();
+		$result = Database::$DB_CONN->query("
+			SELECT users.userid, users.fname, users.lname, users.email, users.mobile_no, users.address, attendance.date, attendance.time, CURRENT_DATE as curr_date
+			FROM users
+			LEFT JOIN attendance
+			ON users.userid=attendance.userid
+			WHERE attendance.date BETWEEN '$start_date' AND '$end_date'
+			ORDER BY attendance.date DESC");
+		if ($result->num_rows > 0) {
+			while($row = $result->fetch_assoc()) {
+				array_push($users, array(
+					'userid' => $row['userid'],
+					'fname' => $row['fname'],
+					'lname' => $row['lname'],
+					'email' => $row['email'],
+					'mobile_no' => $row['mobile_no'],
+					'address' => $row['address'],
+					'date' => $row['date'],
+					'time' => $row['time'],
+					'today' => $row['curr_date'],
+				));
+			}
+		} else {
+			return null;
+		}
+		return $users;
+	}
+
 	public function get_attendance_list()	{
 		$users = array();
 		$unique_users = array();
