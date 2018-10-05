@@ -1,5 +1,6 @@
 <?php include_once 'staff-header.php';
 require_once 'database_credentials.php';
+require_once 'common_functions.php';
 $dbconn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 if($dbconn->connect_error) {
     die("Database connection error: " . $dbconn->connect_error);
@@ -17,6 +18,9 @@ if($dbconn->connect_error) {
         $sql = "UPDATE exams SET name='$name', course_id='$cid', date='$date', time_start='$stime', time_end='$etime', fee='$fee' WHERE id='$examid'";
         if (!$dbconn->query($sql)) {
             echo "Error updating record: " . $dbconn->error;
+        } else {
+            set_success_msg("<strong>Success!</strong> Exam has been successfully updated!");
+            header('location: exam-search.php');
         }
     }
 
@@ -61,7 +65,7 @@ if(isset($_POST['update'])) {
 									</div>
 								</div>
                                 <div class="form-group row">
-                                    <label class="col-sm-2 col-form-label">Exam Name</label>
+                                    <label class="col-sm-2 col-form-label">Course Name</label>
                                     <div class="col-sm-10">
                                         <div class="form-row">
                                             <div class="col-md-6">
