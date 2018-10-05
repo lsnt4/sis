@@ -6,7 +6,7 @@ $session = new SessionManager();
 $resourceLoad = new Resource;
 $resources = $resourceLoad->loadAllResources();
 
-include_once 'libs/fpdf181/fpdf.php';
+include_once 'assets/fpdf/fpdf.php';
 
 class PDF extends FPDF {
 	function Footer(){
