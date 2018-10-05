@@ -1,7 +1,7 @@
 
-<?php 
+<?php
 include('DB_Connection.php');
-include_once 'staff-header.php'; 
+include_once 'staff-header.php';
 
 if(isset($_POST["update"])){
 $bookid = $_POST["bid"];
@@ -16,15 +16,15 @@ if($conn->query($sql_update) == true){
 	echo "<script>alert('Successfully added')</script>";
 	//header('Location : library-add-book.php');
 	}
-	
-	
-	
+
+
+
 }
 
 
 if(isset($_POST["searchme"]) ){
 	$fname = $_POST['tbSearch'];
-	
+
 	$selectQ = "SELECT * FROM library_books where fname LIKE '%$fname%'";
 	$res = $conn->query($selectQ);
 
@@ -45,7 +45,7 @@ if(isset($_POST["searchme"]) ){
 			$body = $body .	"<option value='$payment_id_auto'>$payment_id - $student_id </option>";
 		}
 		$listBox = $hd.$body.$tail;
-		
+
 	}
 }
 
@@ -57,7 +57,7 @@ else{
 	$select_payment_ids  = "SELECT * FROM library_books";
 	$payment_res = $conn->query($select_payment_ids);
 
-	$hd = "<select name='del_res' id='del_res'>";
+	$hd = "<select class='form-control' name='del_res' id='del_res'>";
 	$body = "";
 	$tail = "</select>";
 	$listBox = "";
@@ -71,7 +71,7 @@ else{
 			$body = $body .	"<option value='$payment_id_auto'>$payment_id - $student_id </option>";
 		}
 		$listBox = $hd.$body.$tail;
-		
+
 	}
 }
 ?>
@@ -89,15 +89,17 @@ else{
 							<a href="library-reports.php" class="nav-item nav-link disabled">Reports</a>
 						</div>
 					</nav>
-					
+
 					<form name="search" method="post">
-					<div>
+					<div class="input-group mb-3 mt-3">
 					<input type="text" class="form-control" placeholder="book title" aria-label="Recipient's username" aria-describedby="basic-addon2" name="tbSearch" id="tbSearch">
-					<button class="btn btn-dark" type="submit" name="searchme">Search</button>
-					</form>
+					<div class="input-group-append">
+						<button class="btn btn-dark" type="submit" name="searchme">Search</button>
 					</div>
-					
-					
+					</div>
+				</form>
+
+
 					<div class="tab-content">
 					  <div class="tab-pane mt-4 show active">
 							<form method="post" action="savemebooks.php">
@@ -160,7 +162,7 @@ else{
 											</div>
 										</div>
 									</div>
-								
+
 								</div>
 								<div class="form-group row">
 									<div class="col-sm-10">
@@ -168,7 +170,7 @@ else{
 									</div>
 								</div>
 							</form>
-  <table width='75%'" border="1">
+  <table class="table table-bordered" width='75%' border="1">
   <tr>
     <td>#</td>
     <td>Book Id</td>
@@ -178,9 +180,9 @@ else{
     <td>Year</td>
     <td>Copies</td>
   </tr>
-  
+
   <?php
-  
+
   if($res->num_rows>0){
 	  $count = 1;
 	  while($row = $res->fetch_assoc()){
@@ -190,10 +192,10 @@ else{
 		  $SBN = $row['ISBN'];
 		  $book_year = $row['book_year'];
 		  $copies = $row['copies'];
-		  
-		  
+
+
 		  ?>
-          
+
           <tr>
     <td><?php echo $count++; ?></td>
     <td><?php echo $BID; ?></td>
@@ -206,58 +208,58 @@ else{
     <form action="Book_update.php" method="post">
     		<input type="hidden" value="<?php echo $BID; ?>" name="book_id">
 			<button type="submit" name="edit" class="btn btn-dark">Edit</button>
-    </form>	
+    </form>
 			</div></td>
   </tr>
-          
+
           <?php
-		  
-		  
+
+
 		  }
-	  
+
 	  ?>
       </table>
       <p>
         <?php
-	  
+
 	  }
-	  
+
 else{
-	
+
 		echo 'no records found';
 	}
-  
-  
-  ?>                          
-        
-        
-        
-        
+
+
+  ?>
+
+
+
+
       </p>
       <form action="del_books.php" method="post"  >
-     <table width="75%" border="1">
-	 
+     <table class="table table-bordered" width="75%" border="1">
+
 	 <form action="book-updt.php" method="post">
-	 
-			
-			
+
+
+
 	 </form>
   <tr>
     <td>book id</td>
     <td>action</td>
   </tr>
-  
-  <?php 
-  
-  
-  
+
+  <?php
+
+
+
   ?>
-  
-  
-  
+
+
+
   <tr>
     <td><?php echo $listBox;?><td>
-    <td><input type="submit" name="button2" id="button2" value="Delete Record" /></td>
+    <td><input class="btn btn-danger" type="submit" name="button2" id="button2" value="Delete Record" /></td>
   </tr>
 </table>
 </form>
