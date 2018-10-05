@@ -28,7 +28,7 @@
 				<div class="col-md-10">                    
                     <nav>
 						<div class="nav nav-tabs" id="nav-tab" role="tablist">
-							<a class="nav-item nav-link active"><strong> Leave Overview </strong></a>
+							<a class="nav-item nav-link active"><strong> Leave Dashboard </strong></a>
                         	<a href="Finance_Add_Leaves.php" class="nav-item nav-link"><strong> Add Leaves 
                             <?php if($row_tot>0){
 									echo "<span class='badge badge-danger badge-pill'> ".$row_tot." <span>";
