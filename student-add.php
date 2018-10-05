@@ -58,7 +58,6 @@
 							<a href="student-add.php" class="nav-item nav-link active"> Add Students </a>
 							<a href="student-search.php" class="nav-item nav-link disabled"> Search Students </a>
 							<a href="student-attendance.php" class="nav-item nav-link disabled"> Mark Attendance </a>
-							<a href="student-overview.php" class="nav-item nav-link disabled">Overview</a>
 							<a href="student-reports.php" class="nav-item nav-link disabled">Reports</a>
 						</div>
 					</nav>
