@@ -36,7 +36,7 @@ if(isset($_POST["update"])){
 				<div class="col-md-10">
 					<nav>
 						<div class="nav nav-tabs" id="nav-tab" role="tablist">
-                        	<a href="Finance_Leave_Dashboard.php" class="nav-item nav-link"><strong> Leave Overview </strong></a>
+                        	<a href="Finance_Leave_Dashboard.php" class="nav-item nav-link"><strong> Leave Dashboard </strong></a>
                             <?php 
 							$sql_tot = "select * from users where userid NOT IN (select userid from leaves)";
 							$result_tot=mysqli_query($conn,$sql_tot);
