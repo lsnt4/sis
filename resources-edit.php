@@ -1,5 +1,5 @@
 <?php 
-require 'ResourceManager.php';
+include_once 'ResourceManager.php';
 include_once 'staff-header.php'; 
 reset_success_msg();
 
@@ -9,6 +9,58 @@ if($_GET){
 	$resID = $_POST['resID'];
 }
 
+
+$resourceLoad = new Resource();
+$resourceLoad->loadResource($resID);
+
+$resDate = $resourceLoad->getProperty('dateofp');
+$resQty = $resourceLoad->getProperty('resQty');
+$lostQty = $resourceLoad->getProperty('lostQty');
+
+list($resYear, $resMonth, $resDate) =explode("-",$resDate);
+
+$availQty = $resourceLoad->getAvailCount($resQty,$lostQty);
+
+
+if (isset($_POST['submitted'])){
+
+	// var_dump($_POST);
+	if(($_POST['rQty']) > ($_POST['lostQty'])){
+		$resStatus = 1;
+	}else{
+		$resStatus = 0;
+	}
+
+	$purchaseDate = Resource::getDate($_POST['rDopy'], $_POST['rDopm'],$_POST['rDopd']);
+	$resArray = array(
+
+		'resCategory' => $_POST['rCategory'],
+		'resSupplier' => $_POST['rSupplier'],
+		'resName' => $_POST['rName'],
+		'resVersion' => $_POST['rVersion'],
+		'resQty' => $_POST['rQty'],
+		'resDesc' => $_POST['rAdditional_info'],
+		'staffID' => $_POST['staffid'],
+		'resPrice' => $_POST['rPrice'],
+		'dateofp' => $purchaseDate,
+		'resStatus' => $resStatus,
+		'lostQty' => $_POST['lostQty'],
+);
+
+	$resMang = new Resource;
+
+	$resMang->setResource($resArray);
+
+	$resMang->resourceUpdate($resID);
+
+	if(mysqli_affected_rows(Database::$DB_CONN) >= 0){ 
+		set_success_msg('Resource Successfully Updated!');
+	}else{
+		set_error_msg('Error! unable to update resource.');
+	}
+
+	header('Location: resources-edit.php?resID='.$_POST['resID']);
+}
 //var_dump($_POST);
 ?>
 <!-- <pre>
@@ -39,6 +91,57 @@ if($_GET){
 	        elem.value = 31; 
 	    }
 	}
+
+		function calculateTotal(){
+		qty = document.getElementById('resQty').value;
+		price = document.getElementById('resPrice').value;
+
+		if (qty == 0 || price == 0){
+			document.getElementById('totalPrice').innerHTML = "Not Calculated"
+		}else{
+
+			total = qty * price;
+
+			document.getElementById('totalPrice').innerHTML = "LKR " + total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+		}
+	}
+
+	function resetTotal(){
+
+		document.getElementById('totalPrice').innerHTML = "Not Calculated"
+	}
+
+	function checkLostCount(){
+
+		resQty = parseInt(document.getElementById('resQty').value);
+		lostQty = parseInt(document.getElementById('lostQty').value);
+		
+
+
+		if(lostQty < 0){
+			document.getElementById('lostQty').value = 0;
+			document.getElementById('lostQty').className = "form-control is-invalid";
+		}else if(resQty < lostQty){
+			console.log(resQty);
+			document.getElementById('lostQty').value = resQty;
+			document.getElementById('lostQty').className = "form-control is-invalid";
+		}else{
+			document.getElementById('lostQty').className = "form-control";
+		}
+	}
+
+	function getAvailableCount(){
+
+		resQty = parseInt(document.getElementById('resQty').value);
+		lostQty = parseInt(document.getElementById('lostQty').value);
+
+		remainingQty = resQty - lostQty;
+
+		document.getElementById('availQty').value = remainingQty;
+	}
+
+
+
  </script>
 
 				<div class="col-md-10">
@@ -84,13 +187,23 @@ if($_GET){
 									<div class="col-sm-10">
 										<div class="form-row">
 											<div class="col-md-6">
-												<select name="rCategory" class="form-control">
-													<option value="Furniture">Furnitures</option>
-													<option value="Electronic">Electronic</option>
-													<option value="Vehicles">Vehicles</option>
-													<option value="Property">Property</option>
-													<option value="Others">Exam</option>
+												<select id="resCategory" name="rCategory" class="form-control">
+													<option <?php if ($resourceLoad->getProperty('resCategory') == 'Furniture' ) echo 'selected' ; ?> value="Furniture">Furnitures</option>
+													<option <?php if ($resourceLoad->getProperty('resCategory') == 'Electronic' ) echo 'selected' ; ?> value="Electronic">Electronic</option>
+													<option <?php if ($resourceLoad->getProperty('resCategory') == 'Vehicles' ) echo 'selected' ; ?> value="Vehicles">Vehicles</option>
+													<option <?php if ($resourceLoad->getProperty('resCategory') == 'Property' ) echo 'selected' ; ?> value="Property">Property</option>
+													<option <?php if ($resourceLoad->getProperty('resCategory') == 'Other' ) echo 'selected' ; ?> value="Other">Other</option>
 												</select>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="form-group row">
+									<label class="col-sm-2 col-form-label">Supplier Name</label>
+									<div class="col-sm-10">
+										<div class="form-row">
+											<div class="col-md-6">
+												<input id="resSupplier" type="text" class="form-control" name="rSupplier" placeholder="eg: GYG Electronics (PVT) LTD" value="<?php echo $resourceLoad->getProperty('resSupplier');?>" required>
 											</div>
 										</div>
 									</div>
@@ -100,16 +213,7 @@ if($_GET){
 									<div class="col-sm-10">
 										<div class="form-row">
 											<div class="col-md-3">
-												<?php
-													$resourceLoad = new Resource();
-													$resourceLoad->loadResource($resID);
-
-													$resDate = $resourceLoad->getProperty('dateofp');
-
-													list($resYear, $resMonth, $resDate) =explode("-",$resDate);
-
-												?>
-												<input type="text" class="form-control" name="rName" placeholder="eg: Damro Wooden Chair" pattern="[A-Za-z]" title="Numbers and Special characters are not allowed for the Name Field." required value="<?php echo $resourceLoad->getProperty('resName');?>">
+												<input type="text" class="form-control" name="rName" placeholder="eg: Damro Wooden Chair" title="Numbers and Special characters are not allowed for the Name Field." onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123 || event.charcode == 32)" required value="<?php echo $resourceLoad->getProperty('resName');?>">
 											</div>
 											<div class="col-md-3">
 												<input type="text" class="form-control" name="rVersion" placeholder="Type/Version ID eg: Wood CH6732" required value="<?php echo $resourceLoad->getProperty('resVersion');?>">
@@ -122,7 +226,7 @@ if($_GET){
 									<div class="col-sm-10">
 										<div class="form-row">
 											<div class="col-md-2">
-												<input type="number" class="form-control" name="rQty" placeholder="# Items" required value="<?php echo $resourceLoad->getProperty('resQty');?>">
+												<input id="resQty" type="number" class="form-control" name="rQty" placeholder="# Items" required value="<?php echo $resourceLoad->getProperty('resQty');?>" onblur="calculateTotal()">
 											</div>
 										</div>
 									</div>
@@ -151,7 +255,7 @@ if($_GET){
 													<?php   // output data of each row
 														    while($row = $allStaffResult->fetch_assoc()) {
 													?>
-																<option value="<?php print $row['userid'] ?>"><?php print $row['fname'].$row['lname'] ?></option>
+																<option <?php if ($resourceLoad->getProperty('staffID') == $row['userid'] ) echo 'selected' ; ?> value="<?php print $row['userid'] ?>"><?php print $row['fname'].$row['lname'] ?></option>
 																
 														        
 													<?php   } ?>
@@ -172,12 +276,22 @@ if($_GET){
 									<div class="col-sm-10">
 										<div class="form-row">
 											<div class="col-md-6">
-												<input type="number" class="form-control" name="rPrice" placeholder="eg: 250.00" required value="<?php echo $resourceLoad->getProperty('resPrice');?>" onblur ="this.value = Number(this.value).toFixed(2)"">
+												<input id="resPrice" type="number" class="form-control" name="rPrice" placeholder="eg: 250.00" required value="<?php echo $resourceLoad->getProperty('resPrice');?>" onblur ="this.value = Number(this.value).toFixed(2); calculateTotal();">
 											</div>
 										</div>
 									</div>
 								</div>
-								
+								<div class="form-group row">
+									<label class="col-sm-2 col-form-label">Total Price</label>
+									<div class="col-sm-10">
+										<div class="form-row">
+											<div class="col-md-6">
+												<label id="totalPrice" class="col-form-label">Not Calculated</label>
+												<button name="demo" type="button" class="btn btn-link float-right" onclick="calculateTotal();getAvailableCount();">Calculate Total</button>
+											</div>
+										</div>
+									</div>
+								</div>
 								<div class="form-group row">
 									<label class="col-sm-2 col-form-label">Date of Purchase</label>
 									<div class="col-sm-10">
@@ -194,23 +308,21 @@ if($_GET){
 										</div>
 									</div>
 								</div>
-								<fieldset class="form-group">
-									<div class="row">
-										<legend class="col-form-label col-sm-2 pt-0">Resource Image</legend>
-										<div class="col-sm-10 col-md-2">
-											<input type="file" class="" name="rImage"/>
-										</div>
-									</div>
-								</fieldset>
 								<div class="form-group row">
 									<label class="col-sm-2 col-form-label">Status</label>
 									<div class="col-sm-10">
 										<div class="form-row">
-											<div class="col-md-4">
-												<select name="resStatus" clas="form-control">
-													<option value="1">Available</option>
-													<option value="2">Lost/Unvailable</option>
-												</select>
+											<div class="col-md-1">
+												<label class="col-sm-2 col-form-label">Available</label>
+											</div>
+											<div class="col-md-1">	
+												<input id="availQty" type="number" class="form-control" name="availableQty" value="<?php echo $availQty;?>" disabled>
+											</div>
+											<div class="col-md-2 form-check">
+												<label id="lostQtyLabel" class="col-lg-12 col-form-label" for="exampleCheck1">Resources Lost/Damaged</label>
+											</div>
+											<div class="col-md-1">
+												<input id="lostQty" type="number" class="form-control" name="lostQty" value="<?php echo $resourceLoad->getProperty('lostQty');?>" oninput="checkLostCount();getAvailableCount();">
 											</div>
 										</div>
 									</div>
@@ -225,42 +337,4 @@ if($_GET){
 						</div>
 					</div>
 				</div>
-<?php 
-	if (isset($_POST['submitted'])){
-
-		// var_dump($_POST);
-
-		$imageName = $_FILES['rImage']['name'];
-		$targetImage = "images/".basename($_FILES['rImage']['name']);
-		$purchaseDate = Resource::getDate($_POST['rDopy'], $_POST['rDopm'],$_POST['rDopd']);
-		$resArray = array(
-
-			'resCategory' => $_POST['rCategory'],
-			'resName' => $_POST['rName'],
-			'resVersion' => $_POST['rVersion'],
-			'resQty' => $_POST['rQty'],
-			'resDesc' => $_POST['rAdditional_info'],
-			'staffID' => $_POST['staffid'],
-			'resPrice' => $_POST['rPrice'],
-			'dateofp' => $purchaseDate,
-			// 'resImage' => $imageName,
-			'resStatus' => $_POST['resStatus'],
-	);
-
-		$resMang = new Resource;
-
-		$resMang->setResource($resArray);
-
-		$resMang->resourceUpdate($resID);
-
-		if(mysqli_affected_rows(Database::$DB_CONN) >= 0){ 
-			set_success_msg('Resource Successfully Updated!');
-		}
-
-		move_uploaded_file($_FILES['rImage']['name'], $targetImage);
-
-		echo "<meta http-equiv='refresh' content='0'>";
-	}
-	
-?>
 <?php include_once 'staff-footer.php'; ?>

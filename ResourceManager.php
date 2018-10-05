@@ -1,11 +1,12 @@
  <?php
- require('ClassStaff.php');
- require('common_functions.php');
+ include_once('ClassStaff.php');
+ include_once('common_functions.php');
 
  class Resource extends Database{
 
  	private $resID;
 	private $resCategory;
+	private $resSupplier;
 	private $resName;
 	private $resVersion;
 	private $resQty;
@@ -15,6 +16,7 @@
 	private $dateofp;
 	private $resimage;
 	private $resStatus;
+	private $lostQty;
 
 	function __construct(){
 		parent::__construct();
@@ -23,6 +25,7 @@
 	public function setResource ($res){
 
 		$this->resCategory = $res['resCategory'] ;
+		$this->resSupplier = $res['resSupplier'];
 		$this->resName = $res['resName'];
 		$this->resVersion = $res['resVersion'];
 		$this->resQty = $res['resQty'];
@@ -32,6 +35,7 @@
 		$this->dateofp = $res['dateofp'];
 		// $this->resimage = $res['resimage'];
 		$this->resStatus = $res['resStatus'];
+		$this->lostQty = $res['lostQty'];
 
 	}
 
@@ -82,6 +86,7 @@
 	 $resQuery = "INSERT INTO resources (
 	   resID,
 	   resCategory,
+	   resSupplier,
 	   resName,
 	   resVersion,
 	   resQty,
@@ -94,6 +99,7 @@
 	   ) VALUES  (
 	   NULL, '".
 	   $this->getProperty('resCategory')."','".
+	   $this->getProperty('resSupplier')."','".
 	   $this->getProperty('resName')."','".
 	   $this->getProperty('resVersion')."','".
 	   $this->getProperty('resQty')."','".
@@ -111,6 +117,7 @@
 	public function resourceUpdate($resID){
 
 		$resCategory =$this->getProperty('resCategory');
+		$resSupplier =$this->getProperty('resSupplier');
 		$resName =$this->getProperty('resName');
 		$resVersion=$this->getProperty('resVersion');
 		$resQty=$this->getProperty('resQty');
@@ -119,9 +126,11 @@
 		$resPrice=$this->getProperty('resPrice');
 		$dateofp=$this->getProperty('dateofp');
 		$resStatus=$this->getProperty('resStatus');
+		$lostQty =$this->getProperty('lostQty');
 
 	 $resQuery = "UPDATE resources
 	 			SET resCategory = '".$resCategory."',
+	 			resSupplier = '".$resSupplier."',
 	 			resName = '".$resName."',
 	 			resVersion = '".$resVersion."',
 	 			resQty = '".$resQty."',
@@ -129,7 +138,8 @@
 	 			staffID = '".$staffID."',
 	 			resPrice = '".$resPrice."',
 	 			dateofp = '".$dateofp."',
-	 			resStatus = '".$resStatus."'
+	 			resStatus = '".$resStatus."',
+	 			lostQty = '".$lostQty."'
 	 			WHERE resID = ".$resID;
 
 	   Database::$DB_CONN->query($resQuery);
@@ -154,6 +164,7 @@
 		$row = $loadResult->fetch_assoc();
 
 		$this->resCategory = $row['resCategory'] ;
+		$this->resSupplier = $row['resSupplier'];
 		$this->resName = $row['resName'];
 		$this->resVersion = $row['resVersion'];
 		$this->resQty = $row['resQty'];
@@ -163,6 +174,111 @@
 		$this->dateofp = $row['dateofp'];
 		// $this->resimage = $row['resimage'];
 		$this->resStatus = $row['resStatus'];
+		$this->lostQty = $row['lostQty'];
+
+	}
+
+	public function loadAllResources (){
+
+
+		
+		//Database Query
+		$loadResQuery = "SELECT * FROM resources";
+		$loadResult = Database::$DB_CONN->query($loadResQuery);
+
+		if ($loadResult->num_rows > 0) {
+			$resources = [];
+			while($row = $loadResult->fetch_assoc()) {
+				array_push($resources, array(
+
+				'resID' => $row['resID'],
+				'resCategory' => $row['resCategory'],
+				'resSupplier' => $row['resSupplier'],
+				'resName' => $row['resName'],
+				'resVersion' => $row['resVersion'],
+				'resQty' => $row['resQty'],
+				'resDesc' => $row['resDesc'],
+				'staffID' => $row['staffID'],
+				'resPrice' => $row['resPrice'],
+				'dateofp' => $row['dateofp'],
+				'lostQty' => $row['lostQty'],
+				'resStatus' => $row['resStatus'],
+			));
+			}
+		}else{
+			return null;
+		}
+
+		return $resources;
+
+	}
+
+	public function loadAllResources_Category ($resCategory){
+
+
+		
+		//Database Query
+		$loadResQuery = "SELECT * FROM resources WHERE resCategory='".$resCategory."'";
+		$loadResult = Database::$DB_CONN->query($loadResQuery);
+
+		if ($loadResult->num_rows > 0) {
+			$resources = [];
+			while($row = $loadResult->fetch_assoc()) {
+				array_push($resources, array(
+
+				'resID' => $row['resID'],
+				'resSupplier' => $row['resSupplier'],
+				'resName' => $row['resName'],
+				'resVersion' => $row['resVersion'],
+				'resQty' => $row['resQty'],
+				'resDesc' => $row['resDesc'],
+				'staffID' => $row['staffID'],
+				'resPrice' => $row['resPrice'],
+				'dateofp' => $row['dateofp'],
+				'lostQty' => $row['lostQty'],
+				'resStatus' => $row['resStatus'],
+			));
+			}
+		}else{
+			return null;
+		}
+
+		return $resources;
+
+	}
+
+	public function loadAllResources_Date ($fromDate, $toDate){
+
+
+		
+		//Database Query
+		$loadResQuery = "SELECT * FROM resources WHERE dateofp BETWEEN '".$fromDate."' AND '".$toDate."'
+		ORDER by dateofp";
+		$loadResult = Database::$DB_CONN->query($loadResQuery);
+
+		if ($loadResult->num_rows > 0) {
+			$resources = [];
+			while($row = $loadResult->fetch_assoc()) {
+				array_push($resources, array(
+
+				'resID' => $row['resID'],
+				'resSupplier' => $row['resSupplier'],
+				'resName' => $row['resName'],
+				'resVersion' => $row['resVersion'],
+				'resQty' => $row['resQty'],
+				'resDesc' => $row['resDesc'],
+				'staffID' => $row['staffID'],
+				'resPrice' => $row['resPrice'],
+				'dateofp' => $row['dateofp'],
+				'lostQty' => $row['lostQty'],
+				'resStatus' => $row['resStatus'],
+			));
+			}
+		}else{
+			return null;
+		}
+
+		return $resources;
 
 	}
 
@@ -193,6 +309,7 @@
 		$searchQuery = "SELECT resID, resCategory, resName, resVersion, resQty, staffID, resStatus from resources
 			WHERE 
 			resID LIKE '%".$search."%' OR
+			resSupplier LIKE '%".$search."%' OR
 			resCategory LIKE '%".$search."%' OR
 			resName LIKE '%".$search."%' OR
 			resVersion LIKE '%".$search."%' OR
@@ -221,20 +338,44 @@
 
 	public static function selectLastRow(){
 
-		$lastrowQuery = "SELECT    resID
-						FROM      resources
-						ORDER BY  resID DESC
-						LIMIT     1";
+		// $lastrowQuery = "SELECT    resID
+		// 				FROM      resources
+		// 				ORDER BY  resID DESC
+		// 				LIMIT     1";
+
+		// $lastrowResult = Database::$DB_CONN->query($lastrowQuery);
+
+		// if ($lastrowResult->num_rows > 0){
+		// 	return $lastrowResult;
+		// }
+
+		$lastrowQuery = "SHOW TABLE STATUS LIKE 'resources'";
 
 		$lastrowResult = Database::$DB_CONN->query($lastrowQuery);
 
-		if ($lastrowResult->num_rows > 0){
-			return $lastrowResult;
-		}
+		$row = $lastrowResult->fetch_assoc();
+
+		echo $row['Auto_increment'];
+
+	}
+
+	public function getAvailCount($total, $lostQty){
+
+		$remainingCount = $total - $lostQty;
+		return $remainingCount;
+	}
+
+	function categoryCount($resCategory){
+
+		$categoryCountQuery = "SELECT COUNT(*) FROM resources WHERE resCategory = '".$resCategory."'";
+		$categoryCountResult = Database::$DB_CONN->query($categoryCountQuery);
+
+		$row = $categoryCountResult->fetch_assoc();
+
+		return $row['COUNT(*)'];
 
 	}
 }
-
 class ResourceManager{
 
 }
