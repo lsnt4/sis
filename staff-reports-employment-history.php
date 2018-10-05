@@ -5,7 +5,7 @@ $session = new SessionManager();
 $staff_manager = new StaffManager();
 $employees = $staff_manager->get_employee_list_with_departments();
 
-include_once 'assets/libs/fpdf181/fpdf.php';
+include_once 'assets/fpdf/fpdf.php';
 
 class PDF extends FPDF {
 	function Footer(){
