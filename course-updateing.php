@@ -60,7 +60,7 @@ if($db->connect_error) {
                         <div class="col-sm-10">
                             <div class="form-row">
                                 <div class="col-md-6">
-                                    <input type="text" class="form-control" name="name" value="<?php echo $row["name"];  ?>" pattern= "[A-Z.]{3,30}" required>
+                                    <input type="text" class="form-control" name="name" value="<?php echo $row["name"];  ?>" pattern= "[A-Z\s]{3,30}" title="Please enter only Capital letters" required>
                                 </div>
                             </div>
                         </div>
@@ -112,7 +112,7 @@ if($db->connect_error) {
                         <div class="col-sm-10">
                             <div class="form-row">
                                 <div class="col-md-6">
-                                    <input type="time" class="form-control" name="stime" value="<?php echo $row["time_start"]; ?>" required>
+                                    <input type="time" class="form-control" name="stime" value="<?php echo $row["time_start"];  ?>" min="08:00:00" max="18:00:00" title="Class time 8.00 AM to 6.00 PM" required>
                                     <span class="hours">Class hours  8AM to 5PM</span>
                                 </div>
                             </div>
@@ -123,7 +123,7 @@ if($db->connect_error) {
                         <div class="col-sm-10">
                             <div class="form-row">
                                 <div class="col-md-6">
-                                    <input type="time" class="form-control" name="etime" value="<?php echo $row["time_end"]; ?>"required>
+                                    <input type="time" class="form-control" name="etime" value="<?php echo $row["time_end"]; ?>" min="08:00:00" max="18:00:00" title="Class time 8.00 AM to 6.00 PM" required>
                                 </div>
                             </div>
                         </div>

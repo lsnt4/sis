@@ -37,8 +37,7 @@
                 <a class="nav-item nav-link active">Add</a>
                 <a href="course-search.php" class="nav-item nav-link disabled">Search</a>
                 <a href="course-schedule.php" class="nav-item nav-link disabled">Schedule</a>
-                <a href="course-overview.php" class="nav-item nav-link disabled">Overview</a>
-                <a href="course-reports.php" class="nav-item nav-link disabled">Reports</a>
+                <a href="course-report.php" class="nav-item nav-link disabled">Reports</a>
             </div>
         </nav>
         <div class="tab-content">
@@ -50,7 +49,7 @@
                         <div class="col-sm-10">
                             <div class="form-row">
                                 <div class="col-md-6">
-                                    <input type="text" class="form-control" name="name" pattern="[A-Z.]{3,30}" placeholder="Ex: ENGLISH" required>
+                                    <input type="text" class="form-control" name="name" pattern="[A-Z\s]{3,30}" placeholder="Ex: ICT TUTE" title="Please enter only Capital letters" required>
                                 </div>
                             </div>
                         </div>
@@ -102,8 +101,8 @@
                         <div class="col-sm-10">
                             <div class="form-row">
                                 <div class="col-md-6">
-                                    <input type="time" class="form-control" name="stime"  required>
-                                    <span class="hours">Class hours  8AM to 5PM</span>
+                                    <input type="time" class="form-control" name="stime" min="08:00:00" max="18:00:00" title="Class time 8.00 AM to 6.00 PM" required>
+                                    <span class="hours">Class hours  8AM to 6PM</span>
                                 </div>
                             </div>
                         </div>
@@ -113,7 +112,7 @@
                         <div class="col-sm-10">
                             <div class="form-row">
                                 <div class="col-md-6">
-                                    <input type="time" class="form-control" name="etime" required>
+                                    <input type="time" class="form-control" name="etime" min="08:00:00" max="18:00:00" title="Class time 8.00 AM to 6.00 PM" required>
                                 </div>
                             </div>
                         </div>
@@ -146,7 +145,7 @@
                         <div class="col-sm-10">
                             <div class="form-row">
                                 <div class="col-md-6">
-                                    <input type="number"  class="form-control" name="fee" placeholder="LKR" min="500" max="2000" required>
+                                    <input type="number"  class="form-control" name="fee" placeholder="LKR" min="500" max="2000" title="Current Course range is min:-lkr 500 max:-2000" required>
                                 </div>
                             </div>
                         </div>
