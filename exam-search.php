@@ -1,5 +1,6 @@
 <?php include_once 'staff-header.php';
     require_once 'database_credentials.php';
+    require_once 'common_functions.php';
 
     $dbconn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
     if($dbconn->connect_error) {
@@ -11,6 +12,9 @@
         $sql = "DELETE from exams WHERE id='$examid'";
         if (!$dbconn->query($sql)) {
             echo "Error updating record: " . $dbconn->error;
+        } else {
+            set_success_msg("<strong>Success</strong> Exam has been successfully removed!");
+            header('location: exam-search.php');
         }
     }
     ?>

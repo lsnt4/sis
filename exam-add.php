@@ -1,5 +1,6 @@
 <?php include_once 'staff-header.php';
 require_once 'database_credentials.php';
+require_once 'common_functions.php';
 
 $dbconn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 if($dbconn->connect_error) {
@@ -15,9 +16,21 @@ if(isset($_POST["add"])){
     $stime=$_POST["stime"];
     $etime=$_POST["etime"];
     $fee=$_POST["fee"];
-    $sql = "insert into exams values('$examid','$name','$cid','$date','$stime','$etime','$fee')";
-    if (!$dbconn->query($sql)) {
-        echo "Error updating record: " . $dbconn->error;
+
+    $sqltchk = "SELECT * FROM exams WHERE date = '$date' AND ((('$stime' <= time_start) AND ('$etime' > time_start)) OR (('$stime' >= time_end) AND ('$stime' < time_end)))";
+
+    $overlaps = $dbconn->query($sqltchk);
+    if($overlaps->num_rows == 0) {
+        $sql = "insert into exams values('$examid','$name','$cid','$date','$stime','$etime','$fee')";
+        if (!$dbconn->query($sql)) {
+            echo "Error updating record: " . $dbconn->error;
+        } else {
+            set_success_msg("<strong>Success!</strong> Exam has been successfully added!");
+            header('location: exam-add.php');
+        }
+    } else {
+        set_error_msg("<strong>Aborted! </strong> Requested time slot has been already allocated, please try again!");
+        header('location: exam-add.php');
     }
 }
 
