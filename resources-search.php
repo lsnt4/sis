@@ -1,5 +1,5 @@
 <?php
-require ('ResourceManager.php');
+include_once ('ResourceManager.php');
 include_once 'staff-header.php';
 reset_success_msg();
 
@@ -25,6 +25,10 @@ reset_success_msg();
 										</div>
 									</div>
 								</div>
+							</form>
+								<?php
+								if(isset($_POST['searchResult'])){
+								?>
 								<div class="row">
 									<div class="col-md-12">
 										<table class="table table-bordered">
@@ -43,40 +47,43 @@ reset_success_msg();
 											</thead>
 											<tbody>
 											<?php
-												if(isset($_POST['searchResult'])){
 													$searchResult = Resource::searchResources($_POST['searchResult']);
 													if ($searchResult == false){
 														set_error_msg("No results Found");
 													}else{
-													while($row = $searchResult->fetch_assoc()) { ?>
+													while($row = $searchResult->fetch_assoc()) { 
+
+														$resID =$row["resID"];
+														$resCategory =$row["resCategory"];
+														$resName=$row["resName"];
+														$resVersion=$row["resVersion"];
+														$resQty=$row["resQty"];
+														$staffID=$row["staffID"];
+														$resStatus=$row["resStatus"];
+
+														$staffNameResult = Resource::getStaff($row["staffID"]);
+														if ($staffNameResult->num_rows > 0) {
+															while($row = $staffNameResult->fetch_assoc()) {
+																$staffName = $row['fname']." ".$row['lname'];
+															}
+														}else{
+															echo "Not assigned to any individual.";
+														}?>
 														<tr>
-															<th><?php print $row["resID"]?></th>
-															<td><?php print $row["resCategory"]?></td>
-															<td><?php print $row["resName"]?></td>
-															<td><?php print $row["resVersion"]?></td>
-															<td><?php print $row["resQty"]?></td>
-															<td><a href ="resources-view.php?resID=<?php print $row["resID"]?>">Click Here for more info</td>
-															<td><?php print $row["staffID"]?></td>
-															<td><?php print ($row["resStatus"] == 1)?'Available':'Not Available'?></td>
+															<th><?php print $resID?></th>
+															<td><?php print $resCategory?></td>
+															<td><?php print $resName?></td>
+															<td><?php print $resVersion?></td>
+															<td><?php print $resQty?></td>
+															<td><a href ="resources-view.php?resID=<?php print $resID?>">Click Here for more info</td>
+															<td><?php print $staffName?></td>
+															<td><?php print ($resStatus == 1)?'Available':'Not Available'?></td>
 															<td>
 																<div class="btn-group" role="group" aria-label="Basic example">
-																	<a class="btn btn-dark" href = "resources-edit.php?resID=<?php print $row["resID"]?>">Edit</a>
+																	<a class="btn btn-dark" href = "resources-edit.php?resID=<?php print $resID?>">Edit</a>
 																	<form method="post" action="resources-search.php" onSubmit="if(!confirm('Are you sure you want to delete this?')){return false;}">
-																		<input id="delConfirm" type="hidden" name="operation" value="<?php print $row["resID"]?>">
+																		<input id="delConfirm" type="hidden" name="operation" value="<?php print $row["resID"]?>" >
 																		<input type="submit" class="btn btn-danger" value="Delete"/>
-																		<!-- <script>
-																			
-																			function confirmDelete(e) {
-																				e.preventDefault()
-																				e.StopPropagation()
-																			    var r = confirm("Press a button!");
-																			    console.log(r);
-																			    // if (r == false) {
-																			    	return false
-																			    // }
-																			}
-
-																		</script> -->
 																	</form>
 																</div>
 															</td>
@@ -103,6 +110,9 @@ reset_success_msg();
 		if(mysqli_affected_rows(Database::$DB_CONN) >= 0){ 
 			set_success_msg('Resource Successfully Deleted!');
 		}
+
+		header('Location: resources-search.php');
+
 	}
 
 	// echo mysqli_affected_rows(Database::$DB_CONN);

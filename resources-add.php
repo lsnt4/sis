@@ -1,7 +1,39 @@
 <?php 
-require 'ResourceManager.php';
+include_once 'ResourceManager.php';
 include_once 'staff-header.php';
-reset_success_msg();
+
+if (isset($_POST['submitted'])){
+
+		$purchaseDate = Resource::getDate($_POST['rDopy'], $_POST['rDopm'],$_POST['rDopd']);
+		$resArray = array(
+
+			'resCategory' => $_POST['rCategory'],
+			'resSupplier' => $_POST['rSupplier'],
+			'resName' => $_POST['rName'],
+			'resVersion' => $_POST['rVersion'],
+			'resQty' => $_POST['rQty'],
+			'resDesc' => $_POST['rAdditional_info'],
+			'staffID' => $_POST['staffid'],
+			'resPrice' => $_POST['rPrice'],
+			'dateofp' => $purchaseDate,
+			'lostQty' => 0,
+			'resStatus' => '1'
+		);
+
+		$resMang = new Resource;
+
+		$resMang->setResource($resArray);
+
+		$resMang->resourceAdd();
+
+		if(mysqli_affected_rows(Database::$DB_CONN) >= 0){ 
+		set_success_msg('Resource Successfully Added!');
+		}else{
+			set_error_msg('Error! unable to add resource.');
+		}
+
+		header('Location: resources-add.php');
+}
 
 //var_dump($_POST);
 ?>
@@ -33,6 +65,43 @@ reset_success_msg();
 	        elem.value = 31; 
 	    }
 	}
+
+	function autofill(){
+
+		document.getElementById('resCategory').value = "Electronic";
+		document.getElementById('resSupplier').value = "Samsung Global Electronics (PVT) LTD";
+		document.getElementById('resName').value = "Samsung CCTV";
+		document.getElementById('resVersion').value = "D12MP Cam";
+		document.getElementById('resQty').value = "25";
+		document.getElementById('resDesc').value = "Colour = White \nAuto Rotatable Camera with Movement Sensor";
+		document.getElementById('resPrice').value = "8500.00";
+		document.getElementById('resYear').value = "2018";
+		document.getElementById('resMonth').value = "03";
+		document.getElementById('resDate').value = "11";
+		calculateTotal();
+
+
+	}
+
+	function calculateTotal(){
+		qty = document.getElementById('resQty').value;
+		price = document.getElementById('resPrice').value;
+
+		if (qty == 0 || price == 0){
+			document.getElementById('totalPrice').innerHTML = "Not Calculated"
+		}else{
+
+			total = qty * price;
+
+			document.getElementById('totalPrice').innerHTML = "LKR " + total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+		}
+	}
+
+	function resetTotal(){
+
+		document.getElementById('totalPrice').innerHTML = "Not Calculated"
+	}
+
  </script>
 
 				<div class="col-md-10">
@@ -45,7 +114,7 @@ reset_success_msg();
 					</nav>
 					<div class="tab-content">
 						<div class="tab-pane mt-4 show active">
-							<form method="post" action="resources-add.php" enctype="multipart/form-data">
+							<form method="post" action="resources-add.php">
 								<div class="form-group row">
 									<label class="col-sm-2 col-form-label">Resource ID</label>
 									<div class="col-sm-10">
@@ -53,11 +122,7 @@ reset_success_msg();
 											<div class="col-md-6">
 												<label class="col-sm-2 col-form-label">
 													<?php
-														$lastRowResult = Resource::selectLastRow();
-														while($row = $lastRowResult->fetch_assoc()){
-															print $row['resID'] + 1;
-														}
-
+														Resource::selectLastRow();
 													?>
 												</label>
 											</div>
@@ -69,13 +134,23 @@ reset_success_msg();
 									<div class="col-sm-10">
 										<div class="form-row">
 											<div class="col-md-6">
-												<select name="rCategory" class="form-control">
+												<select id="resCategory" name="rCategory" class="form-control">
 													<option value="Furniture">Furnitures</option>
 													<option value="Electronic">Electronic</option>
 													<option value="Vehicles">Vehicles</option>
 													<option value="Property">Property</option>
-													<option value="Others">Other</option>
+													<option value="Other">Other</option>
 												</select>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="form-group row">
+									<label class="col-sm-2 col-form-label">Supplier Name</label>
+									<div class="col-sm-10">
+										<div class="form-row">
+											<div class="col-md-6">
+												<input id="resSupplier" type="text" class="form-control" name="rSupplier" placeholder="eg: GYG Electronics (PVT) LTD" required>
 											</div>
 										</div>
 									</div>
@@ -85,10 +160,10 @@ reset_success_msg();
 									<div class="col-sm-10">
 										<div class="form-row">
 											<div class="col-md-3">
-												<input type="text" class="form-control" name="rName" placeholder="eg: Damro Wooden Chair" pattern="[A-Za-z]" title="Numbers and Special characters are not allowed for the Name Field." required>
+												<input id="resName" type="text" class="form-control" name="rName" placeholder="eg: Damro Wooden Chair" title="Numbers and Special characters are not allowed for the Name Field." onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || (event.charCode == 32)" required>
 											</div>
 											<div class="col-md-3">
-												<input type="text" class="form-control" name="rVersion" placeholder="Type/Version ID eg: Wood CH6732" required>
+												<input id="resVersion" type="text" class="form-control" name="rVersion" placeholder="Type/Version ID eg: Wood CH6732" required>
 											</div>
 										</div>
 									</div>
@@ -98,7 +173,7 @@ reset_success_msg();
 									<div class="col-sm-10">
 										<div class="form-row">
 											<div class="col-md-2">
-												<input type="number" class="form-control" name="rQty" placeholder="# Items" required>
+												<input id="resQty" type="number" class="form-control" name="rQty" placeholder="# Items" onblur="calculateTotal();" required>
 											</div>
 										</div>
 									</div>
@@ -108,7 +183,7 @@ reset_success_msg();
 									<div class="col-sm-10">
 										<div class="form-row">
 											<div class="col-md-6">
-												<textarea class="form-control" name="rAdditional_info" rows="5" placeholder=""></textarea>
+												<textarea id="resDesc" class="form-control" name="rAdditional_info" rows="5" placeholder=""></textarea>
 											</div>
 										</div>
 									</div>
@@ -148,36 +223,38 @@ reset_success_msg();
 									<div class="col-sm-10">
 										<div class="form-row">
 											<div class="col-md-6">
-												<input type="number" class="form-control" name="rPrice" placeholder="eg: 250.00" required onblur ="this.value = Number(this.value).toFixed(2)"">
+												<input id="resPrice" type="number" class="form-control" name="rPrice" placeholder="eg: 250.00" required onblur ="this.value = Number(this.value).toFixed(2); calculateTotal();">
 											</div>
 										</div>
 									</div>
 								</div>
-								
+								<div class="form-group row">
+									<label class="col-sm-2 col-form-label">Total Price</label>
+									<div class="col-sm-10">
+										<div class="form-row">
+											<div class="col-md-6">
+												<label id="totalPrice" class="col-form-label">Not Calculated</label>
+												<button name="demo" type="button" class="btn btn-link float-right" onclick="calculateTotal()">Calculate Total</button>
+											</div>
+										</div>
+									</div>
+								</div>
 								<div class="form-group row">
 									<label class="col-sm-2 col-form-label">Date of Purchase</label>
 									<div class="col-sm-10">
 										<div class="form-row">
 											<div class="col-md-2">
-												<input type="number" class="form-control" name="rDopy" placeholder="Year" required oninput="checkYearLength(this);">
+												<input id="resYear" type="number" class="form-control" name="rDopy" placeholder="Year" required oninput="checkYearLength(this);">
 											</div>
 											<div class="col-md-2">
-												<input type="number" class="form-control" name="rDopm" placeholder="Month" required oninput="checkMonthLength(this);">
+												<input id="resMonth" type="number" class="form-control" name="rDopm" placeholder="Month" required oninput="checkMonthLength(this);">
 											</div>
 											<div class="col-md-2">
-												<input type="number" class="form-control" name="rDopd" placeholder="Date" required oninput="checkDateLength(this);">
+												<input id="resDate" type="number" class="form-control" name="rDopd" placeholder="Date" required oninput="checkDateLength(this);">
 											</div>
 										</div>
 									</div>
 								</div>
-								<fieldset class="form-group">
-									<div class="row">
-										<legend class="col-form-label col-sm-2 pt-0">Resource Image</legend>
-										<div class="col-sm-10 col-md-2">
-											<input type="file" class="" name="rImage"/>
-										</div>
-									</div>
-								</fieldset>
 								<div class="form-group row">
 									<label class="col-sm-2 col-form-label">Status</label>
 									<div class="col-sm-10">
@@ -189,9 +266,10 @@ reset_success_msg();
 									</div>
 								</div>
 								<div class="form-group row">
-									<div class="col-sm-10">
+									<div class="col-md-7">
 										<button type="submit" class="btn btn-dark">Add Resource</button>
-										<button type="reset" class="btn btn-danger ml-2" >Reset</button>
+										<button type="reset" class="btn btn-danger ml-2" onclick="resetTotal();">Reset</button>
+										<button name="demo" type="button" class="btn btn-primary float-right" onclick="autofill()">Demo</button>
 									</div>
 								</div>
 								<input type ="hidden" name="submitted" value="1">
@@ -199,42 +277,4 @@ reset_success_msg();
 						</div>
 					</div>
 				</div>
-<?php 
-	if (isset($_POST['submitted'])){
-
-		$imageName = $_FILES['rImage']['name'];
-		$targetImage = "images/".basename($_FILES['rImage']['name']);
-		$purchaseDate = Resource::getDate($_POST['rDopy'], $_POST['rDopm'],$_POST['rDopd']);
-		$resArray = array(
-
-			'resCategory' => $_POST['rCategory'],
-			'resName' => $_POST['rName'],
-			'resVersion' => $_POST['rVersion'],
-			'resQty' => $_POST['rQty'],
-			'resDesc' => $_POST['rAdditional_info'],
-			'staffID' => $_POST['staffid'],
-			'resPrice' => $_POST['rPrice'],
-			'dateofp' => $purchaseDate,
-			'resImage' => $imageName,
-			'resStatus' => '1',
-	);
-
-		$resMang = new Resource;
-
-		$resMang->setResource($resArray);
-
-		$resMang->resourceAdd();
-
-		if(mysqli_affected_rows(Database::$DB_CONN) >= 0){ 
-			set_success_msg('Resource Successfully Added!');
-		}
-
-		
-
-		move_uploaded_file($_FILES['rImage']['name'], $targetImage);
-
-		echo "<meta http-equiv='refresh' content='0'>";
-	}
-	
-?>
 <?php include_once 'staff-footer.php'; ?>
