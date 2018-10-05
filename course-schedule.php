@@ -37,6 +37,7 @@
 													<th scope="col">Course ID</th>
 													<th scope="col">Course Name</th>
 													<th scope="col">Day</th>
+													<th scope="col">Hall NO</th>
 													<th scope="col">Time</th>
 													<th scope="col"></th>
 												</tr>
@@ -47,10 +48,10 @@
                             $sql = "select * from courses
                                     	WHERE
                                           name LIKE '%$keyword%' OR
-                                          day LIKE '%$keyword%'";
+                                          day LIKE '%$keyword%'  ORDER BY hall_no ASC";
                                             }
 																						 else {
-                                                $sql = "SELECT * FROM courses";
+                                                $sql = "SELECT * FROM courses ORDER BY hall_no ASC";
                                             }
                                             $result=$dbconn->query($sql);
 																						  if($result->num_rows>0) {
@@ -61,9 +62,9 @@
 													<th scope="row"><?php echo $row['cid']; ?></th>
 													<td><?php echo $row['name']; ?></td>
 													<td><?php echo $row['day']; ?></td>
+													<td><?php echo $row['hall_no']; ?></td>
 													<td>
 														<?php $time = date('H'); ?>
-
 														<span class="hr <?php echo ( (substr($row['time_start'], 0, 2) <= 8) && substr($row['time_end'], 0, 2) >= 8) ? 'hr-act': ''; ?> <?php echo ($time == 8) ? 'hr-curr' : '' ; ?>">8</span>
 														<span class="hr <?php echo ( (substr($row['time_start'], 0, 2) <= 9) && substr($row['time_end'], 0, 2) >= 9) ? 'hr-act': ''; ?> <?php echo ($time == 9) ? 'hr-curr' : '' ; ?>">9</span>
 														<span class="hr <?php echo ( (substr($row['time_start'], 0, 2) <= 10) && substr($row['time_end'], 0, 2) >= 10) ? 'hr-act': ''; ?> <?php echo ($time == 10) ? 'hr-curr' : '' ; ?>">10</span>
