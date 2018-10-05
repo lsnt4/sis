@@ -65,7 +65,6 @@
 							<a href="staff-search.php" class="nav-item nav-link disabled">Search</a>
 							<a href="staff-attendance.php" class="nav-item nav-link disabled">Attendance</a>
 							<a href="staff-departments.php" class="nav-item nav-link active">Departments</a>
-							<a href="staff-overview.php" class="nav-item nav-link disabled">Overview</a>
 							<a href="staff-reports.php" class="nav-item nav-link disabled">Reports</a>
 						</div>
 					</nav>

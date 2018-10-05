@@ -80,11 +80,7 @@ else{
 				<div class="col-md-10">
 					<nav>
 						<div class="nav nav-tabs" id="nav-tab" role="tablist">
-							<a href="library-add-member.php" class="nav-item nav-link disabled">Add Member</a>
-							<a href="library-search-members.php" class="nav-item nav-link disabled">Search Members</a>
 							<a class="nav-item nav-link active">Add Book</a>
-							<a href="library-search-books.php" class="nav-item nav-link disabled">Search Books</a>
-							<a href="library-borrow-books.php" class="nav-item nav-link disabled">Book Borrows</a>
 							<a href="library-overview.php" class="nav-item nav-link disabled">Overview</a>
 							<a href="library-reports.php" class="nav-item nav-link disabled">Reports</a>
 						</div>
