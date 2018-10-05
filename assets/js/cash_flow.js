@@ -3,15 +3,15 @@
 
 	var deptLists = new Array(9) 
  	deptLists["Selected"] = ["Select a Deparment"];
-	deptLists["Admin"] = ["Please Select","Funds","Others"];
+	deptLists["Admin"] = ["Please Select","Funds","Water","Electricity","Transport","Petrol","Others"];
 	deptLists["Resource Management"] = ["Please Select","Table Chairs Sold Out","Others"];
-	deptLists["Student Management"] = ["Please Select","Table Chairs Sold Out","Others"];
+	deptLists["Student Management"] = ["Please Select","Donations","Funds","Others"];
 	deptLists["Course Management"] = ["Please Select","Table Chairs Sold Out","Others"];
 	deptLists["Exam Management"] = ["Please Select","Table Chairs Sold Out","Others"];
-	deptLists["Finance Management"] = ["Please Select","Table Chairs Sold Out","Others"];
-	deptLists["Payment Management"] = ["Please Select","Table Chairs Sold Out","Others"];
+	deptLists["Finance Management"] = ["Please Select","Bank Interest","Others"];
+	deptLists["Payment Management"] = ["Please Select","Late Registration Fee","Others"];
 	deptLists["Library Management"] = ["Please Select","Table Chairs Sold Out","Others"];
-	deptLists["Staff Management"] = ["Please Select","Table Chairs Sold Out","Others"];
+	deptLists["Staff Management"] = ["Please Select","Funds","Donations","Others"];
 	deptLists["Student"] = ["Please Select","Table Chairs Sold Out","Others"];
 	
 	function deptChange(selectObj) { 
@@ -44,15 +44,15 @@
 	
 	var deptLists1 = new Array(9) 
  	deptLists1["Selected"] = ["Select a Deparment"];
-	deptLists1["Admin"] = ["Please Select","Funds","Others"];
+	deptLists1["Admin"] = ["Please Select","Refunds","Others"];
 	deptLists1["Resource Management"] = ["Please Select","Table Chairs Buy","Others"];
-	deptLists1["Student Management"] = ["Please Select","Table Chairs Buy","Others"];
-	deptLists1["Course Management"] = ["Please Select","Table Chairs Buy","Others"];
-	deptLists1["Exam Management"] = ["Please Select","Table Chairs Buy","Others"];
-	deptLists1["Finance Management"] = ["Please Select","Table Chairs Buy","Others"];
-	deptLists1["Payment Management"] = ["Please Select","Table Chairs Buy","Others"];
-	deptLists1["Library Management"] = ["Please Select","Table Chairs Buy","Others"];
-	deptLists1["Staff Management"] = ["Please Select","Table Chairs Buy","Others"];
+	deptLists1["Student Management"] = ["Please Select","Student ID Card Payments","Others"];
+	deptLists1["Course Management"] = ["Please Select","Course Planning Fee","Course Material Purchase","Others"];
+	deptLists1["Exam Management"] = ["Please Select","Exam Planning Fee","Exam Material Purchase","Others"];
+	deptLists1["Finance Management"] = ["Please Select","Finance Planning Cost","Others"];
+	deptLists1["Payment Management"] = ["Please Select","Refunds","Others"];
+	deptLists1["Library Management"] = ["Please Select","Purchase Books","Purchase Cupboards","Member ID Card Payments","Others"];
+	deptLists1["Staff Management"] = ["Please Select","Refunds","Others"];
 	deptLists1["Student"] = ["Please Select","Table Chairs Buy","Others"];
 	
 	function deptChange_e(selectObj) { 
@@ -159,17 +159,21 @@
 	
 	}
 	*/
-	
-	function openWindow() {
-    window.open("Finance_Search_Incomes.php","_blank","height=600,width=400,status=yes,toolbar=no,menubar=no,location=no"); 
+	function openWin(user) {
+    window.open("Finance_Staff_Bank_Account_Identification.php?user="+user,"_blank","resizable=0,top=200,left=500,height=300,width=500,status=yes,toolbar=no,menubar=no,location=no"); 
+  }
+	function openWindow(month,year,user) {
+    window.open("Finance_Attendance_Identification.php?month="+month+"&year="+year+"&user="+user,"_blank","resizable=0,top=200,left=500,height=500,width=400,status=yes,toolbar=no,menubar=no,location=no"); 
   }
   
+function openWinAccount(acc_id){
+myWin = window.open("Finance_Bank_Account_Identification.php?acc_id="+acc_id, "myWindow", 'resizable=0,top=200,left=500,width=500,height=300,status=yes,toolbar=no,menubar=no,location=no');
+}
+  
 function openWinStaff(user){
-myWin = window.open("Finance_Staff_Identification.php?user="+user, "myWindow", 'resizable=0,top=300,left=500,width=500,height=600');
+myWin = window.open("Finance_Staff_Identification.php?user="+user, "myWindow", 'resizable=0,top=200,left=500,width=500,height=400,status=yes,toolbar=no,menubar=no,location=no');
 }
-function openWin(){
-myWin = window.open("popup.html", "myWindow", 'resizable=0,top=300,left=500,width=600,height=300');
-}
++
 
 function paidCatogory(selectObj){
 	var idx = selectObj.selectedIndex; 
@@ -394,3 +398,4 @@ function search(){
 	}
 	return true;
 }
+

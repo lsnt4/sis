@@ -1,85 +1,193 @@
 <?php 
 	include_once 'staff-header.php';
 	include_once 'DB_Connection.php';
-	  	      
-    		$sql_tot = "SELECT * FROM incomes";
-			$result_tot=mysqli_query($conn,$sql_tot);
-			$row_tot=mysqli_num_rows($result_tot);
-			
-			$sql_max= mysqli_query($conn,"SELECT MAX(id) AS maximum FROM incomes");
-			$result_max = mysqli_fetch_assoc($sql_max); 
-			$row_max = $result_max['maximum'];
-			$row_del = $row_max - $row_tot;
-			
-			$sql_close = "SELECT * FROM incomes where status='closed'";
-			$result_close=mysqli_query($conn,$sql_close);
-			$row_close=mysqli_num_rows($result_close);
-			
-			$sql_pen = "SELECT * FROM incomes where status='pending'";
-			$result_pen=mysqli_query($conn,$sql_pen);
-			$row_pen=mysqli_num_rows($result_pen);
-	
-	 
-
 ?>
 
 				<div class="col-md-10">                    
                     <nav>
 						<div class="nav nav-tabs" id="nav-tab" role="tablist">
-                        	<a class="nav-item nav-link active"> Income Overview </a>
-							<a href="Finance_Add_Incomes.php" class="nav-item nav-link"> Add Incomes </a>
-                            <a href="Finance_Update_Incomes.php" class="nav-item nav-link"> Update Incomes </a>
-                            <a href="Finance_Delete_Incomes.php" class="nav-item nav-link"> Delete Incomes </a>
-                            <a href="Finance_Verify_Incomes.php" class="nav-item nav-link"> Verify Incomes </a>
-                            <a href="Finance_Closed_Incomes.php" class="nav-item nav-link"> Closed Incomes </a>
-							<a class="nav-item nav-link disabled"> Income Reports </a>				
+                            <a class="nav-item nav-link active"><strong> Income Overview </strong></a>
+                        	<a href="Finance_Expense_Overview.php" class="nav-item nav-link"><strong> Expense Overview </strong></a>
+                            <a href="Finance_Payroll_Overview.php" class="nav-item nav-link"><strong> Payroll Overview </strong></a>
+                            <a href="Finance_Leave_Overview.php" class="nav-item nav-link"><strong> Leave Overview </strong></a>
+                            <a href="Finance_Bank_Accounts_Overview.php" class="nav-item nav-link"><strong> Bank Accounts Overview </strong></a>
+                            <a href="Finance_Acounting_Overview.php" class="nav-item nav-link"><strong> Accounting Overview </strong></a>	
 						</div>
 					</nav>
                     
 					<div class="tab-content">
 						<div class="tab-pane mt-4 show active">
-                        	<div class="card bg-light mb-4">
+                        	<div class="card bg-light mb-3">
 								<div class="card-header">Income Overview</div>
 								<div class="card-body">
-							<ul class="ca-menu">
-									<li>
-										<a href="Finance_Update_Incomes.php">
-											
-											<i class="glyphicon glyphicon-list-alt" aria-hidden="true"></i>
-											<div class="ca-content">
-												<h4 class="ca-main"><?php echo $row_tot; ?></h4>
-												<h3 class="ca-sub"> Total Incomes </h3>
-											</div>
-										</a>
-									</li>
-									<li>
-										<a href="Finance_Delete_Incomes.php">
-										  <i class="glyphicon glyphicon-ban-circle" aria-hidden="true"></i>
-											<div class="ca-content">
-												<h4 class="ca-main one"><?php echo $row_del; ?></h4>
-												<h3 class="ca-sub one"> Deleted Incomes </h3>
-											</div>
-										</a>
-									</li>
-									<li>
-										<a href="Finance_Closed_Incomes.php">
-											<i class="glyphicon glyphicon-remove-circle" aria-hidden="true"></i>
-											<div class="ca-content">
-											<h4 class="ca-main two"><?php echo $row_close; ?></h4>
-												<h3 class="ca-sub two"> Closed Incomes </h3>
-											</div>
-										</a>
-									</li>
-									<li>
-										<a href="Finance_Verify_Incomes.php">
-											<i class="glyphicon glyphicon-warning-sign" aria-hidden="true"></i>
-											<div class="ca-content">
-												<h4 class="ca-main three"><?php echo $row_pen; ?></h4>
-												<h3 class="ca-sub three"> Pending Incomes </h3>
-											</div>
-										</a>
-									</li>
-								</ul>
+								
+<script src="assets/js/jquery-3.3.1.min.js"></script>
+<script src="assets/Finance_Charts/code/highcharts.js"></script>
+<script src="assets/Finance_Charts/code/modules/exporting.js"></script>
+<script src="assets/Finance_Charts/code/modules/export-data.js"></script>
+<script src="assets/Finance_Charts/code/highcharts-more.js"></script>
+
+<div id="container" style="min-width: 10px; height: 400px; max-width: 600px; margin: 0 auto"></div>
+
+		<script type="text/javascript">
+
+// Build the chart
+Highcharts.chart('container', {
+    chart: {
+        plotBackgroundColor: null,
+        plotBorderWidth: null,
+        plotShadow: false,
+        type: 'pie'
+    },
+    title: {
+        text: 'Incomes from Each Departments'
+    },
+    tooltip: {
+        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+    },
+    plotOptions: {
+        pie: {
+            allowPointSelect: true,
+            cursor: 'pointer',
+            dataLabels: {
+                enabled: false
+            },
+            showInLegend: true
+        }
+    },
+    series: [{
+        name: 'Income(Rs.)',
+        colorByPoint: true,
+        data: [
+		<?php 
+		$sql = "select catogory, SUM(amount) as total from incomes group by catogory";
+		$result = $conn->query($sql);
+		$i = 0;
+		$t = " ";
+		
+		while($row = $result->fetch_assoc()){
+		
+		#echo $row["catogory"]." ".$row["total"];
+		$t .= "{   name: '".$row["catogory"]."', y: ".$row["total"];
+		if($i == 0){
+		$t .= ", sliced: true, selected: true";
+		}
+		$t .= "},";
+		$i++;		
+		}
+		
+		
+		echo $t; 
+		?>
+		]
+    }]
+});
+		</script>
+
+                                    
+                                </div>
+                                </div>
+                                </div>
+                                
+                                <div class="card bg-light mb-4">
+								<div class="card-header">Income Overview</div>
+								<div class="card-body">
+
+<div id="container1"></div>
+<button id="plain" class="btn btn-danger" >Plain View</button>
+<button id="inverted" class="btn btn-success">Inverted View</button>
+<button id="polar" class="btn btn-info">Polar View</button>
+
+
+
+		<script type="text/javascript">
+
+var chart = Highcharts.chart('container1', {
+
+    title: {
+        text: 'Monthly Incomes'
+    },
+
+    subtitle: {
+        text: 'Plain View'
+    },
+
+    xAxis: {
+        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    },
+
+    series: [{
+        type: 'column',
+        colorByPoint: true,
+		<?php
+		$m = " ";
+		$s = 1;
+		
+		while($s <= 12){
+			
+			$sql_month = "SELECT 
+  				SUM(amount) as tot 
+				FROM incomes
+				WHERE MONTH(added_date) = '$s'";
+			$result_month = $conn->query($sql_month);
+			$row_month = $result_month->fetch_assoc();
+			if(empty($row_month["tot"])){
+				$m .= "0,";
+			}else{
+			#$row_month = $result_month->fetch_assoc();
+			#echo $row_month["tot"];
+			$m .= $row_month["tot"].",";
+			}
+			$s++;
+			}
+			
+		 ?>
+        data: [<?php echo $m; ?>],
+        showInLegend: false
+    }]
+
+});
+
+
+$('#plain').click(function () {
+    chart.update({
+        chart: {
+            inverted: false,
+            polar: false
+        },
+        subtitle: {
+            text: 'Plain View'
+        }
+    });
+});
+
+$('#inverted').click(function () {
+    chart.update({
+        chart: {
+            inverted: true,
+            polar: false
+        },
+        subtitle: {
+            text: 'Inverted View'
+        }
+    });
+});
+
+$('#polar').click(function () {
+    chart.update({
+        chart: {
+            inverted: false,
+            polar: true
+        },
+        subtitle: {
+            text: 'Polar View'
+        }
+    });
+});
+
+		</script>
+
+                                    
                                 </div>
                                 </div>
                                 </div>

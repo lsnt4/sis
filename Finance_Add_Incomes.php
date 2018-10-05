@@ -1,3 +1,6 @@
+
+
+
 <?php 
 	include_once 'staff-header.php';
 	include_once 'DB_Connection.php';
@@ -52,14 +55,14 @@
 		
 		{
 				if($dept_task == "Others")
-					$final_dept_task = $dept_task_other;
+					$final_dept_task = ucwords(strtolower($dept_task_other));
 				else
 					$final_dept_task = $dept_task;
 		}
 		
 		{
 			if($pay_method == "Others")
-				$final_pay_method = $pay_method_others;
+				$final_pay_method = ucwords(strtolower($pay_method_others));
 			else
 				$final_pay_method = $pay_method;
 		}
@@ -70,7 +73,7 @@
 			else if($paid_by_cat == "staff")
 				$final_paid_by = $paid_by_staff;
 			else
-				$final_paid_by = $paid_by_others;
+				$final_paid_by = ucwords(strtolower($paid_by_others));
 		}
 		
 		$sql_check = "select * from incomes where catogory='$deparment_name' and description='$final_dept_task' and payment_method='$final_pay_method' and amount='$amount' and paid_by='$final_paid_by'";
@@ -103,13 +106,45 @@
 				<div class="col-md-8">                    
                     <nav>
 						<div class="nav nav-tabs" id="nav-tab" role="tablist">
-                        	<a href="Finance_Income_Overview.php" class="nav-item nav-link"> Income Overview </a>
-							<a class="nav-item nav-link active"> Add Incomes </a>
-                            <a href="Finance_Update_Incomes.php" class="nav-item nav-link"> Update Incomes </a>
-                            <a href="Finance_Delete_Incomes.php" class="nav-item nav-link"> Delete Incomes </a>
-                            <a href="Finance_Verify_Incomes.php" class="nav-item nav-link"> Verify Incomes </a>
-                            <a href="Finance_Closed_Incomes.php" class="nav-item nav-link"> Closed Incomes </a>
-							<a class="nav-item nav-link disabled"> Income Reports </a>				
+                        	<a href="Finance_Income_Dashboard.php" class="nav-item nav-link"><strong> Income Dashboard </strong></a>
+							<a class="nav-item nav-link active"><strong> Add Incomes </strong></a>
+                            <?php
+                            $sql_up = "SELECT * FROM incomes where catogory not in ('Student','Exam Management','Library Management','Course Management')";
+							$result_up=mysqli_query($conn,$sql_up);
+							$row_up=mysqli_num_rows($result_up);
+							
+							$sql_close = "SELECT * FROM incomes where status='closed'";
+							$result_close=mysqli_query($conn,$sql_close);
+							$row_close=mysqli_num_rows($result_close);
+			
+							$sql_pen = "SELECT * FROM incomes where status='pending'";
+							$result_pen=mysqli_query($conn,$sql_pen);
+							$row_pen=mysqli_num_rows($result_pen);
+            				?>
+                            <a href="Finance_Update_Incomes.php" class="nav-item nav-link"><strong> Update Incomes 
+                            <?php if($row_up>0){
+									echo "<span class='badge badge-danger badge-pill'> ".$row_up." <span>";
+								  } 
+							?>
+                            </strong></a>
+                            <a href="Finance_Delete_Incomes.php" class="nav-item nav-link"><strong> Delete Incomes 
+                            <?php if($row_up>0){
+									echo "<span class='badge badge-danger badge-pill'> ".$row_up." <span>";
+								  } 
+							?>
+                            </strong></a>
+                            <a href="Finance_Verify_Incomes.php" class="nav-item nav-link"><strong> Verify Incomes 
+                            <?php if($row_pen>0){
+									echo "<span class='badge badge-danger badge-pill'> ".$row_pen." <span>";
+								  } 
+							?>
+                            </strong></a>
+                            <a href="Finance_Closed_Incomes.php" class="nav-item nav-link"><strong> Closed Incomes 
+                            <?php if($row_close>0){
+									echo "<span class='badge badge-danger badge-pill'> ".$row_close." <span>";
+								  } 
+							?>
+                            </strong></a>
 						</div>
 					</nav>
 					<div class="tab-content">
@@ -139,7 +174,7 @@
 										<div class="form-row">
 											<div class="col-md-6">
                                                     <?php 
-														$deparments = "select * from departments";
+														$deparments = "select * from departments where name not in ('Student','Library Management','Exam Management','Course Management')";
 														$result_deparment = $conn->query($deparments);
 														if($result_deparment->num_rows>0){
 															echo "<select id='dept' name='department' class='form-control' onChange='deptChange(this);selOthers(this);progress();'>";

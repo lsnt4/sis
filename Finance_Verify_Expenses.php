@@ -24,13 +24,45 @@ if(isset($_POST["verify"])){
 				<div class="col-md-10">
 					<nav>
 						<div class="nav nav-tabs" id="nav-tab" role="tablist">
-                            <a href="Finance_Expense_Overview.php" class="nav-item nav-link"> Expenses Overview </a>
-                        	<a href="Finance_Add_Expenses.php" class="nav-item nav-link"> Add Expenses </a>
-                            <a href="Finance_Update_Expenses.php" class="nav-item nav-link"> Update Expenses </a>
-                            <a href="Finance_Delete_Expenses.php" class="nav-item nav-link"> Delete Expenses </a>
-                            <a class="nav-item nav-link active"> Verify Expenses </a>
-                            <a href="Finance_Closed_Expenses.php" class="nav-item nav-link"> Closed Expenses </a>
-							<a class="nav-item nav-link disabled"> Expenses Reports </a>
+                            <a href="Finance_Expense_Dashboard.php" class="nav-item nav-link"><strong> Expenses Dashboard </strong></a>
+                            <?php
+							$sql_tot = "SELECT * FROM expenses";
+							$result_tot=mysqli_query($conn,$sql_tot);
+							$row_tot=mysqli_num_rows($result_tot);
+			
+							$sql_close = "SELECT * FROM expenses where status='closed'";
+							$result_close=mysqli_query($conn,$sql_close);
+							$row_close=mysqli_num_rows($result_close);
+			
+							$sql_pen = "SELECT * FROM expenses where status='pending'";
+							$result_pen=mysqli_query($conn,$sql_pen);
+							$row_pen=mysqli_num_rows($result_pen);
+							?>
+							<a href="Finance_Add_Expenses.php" class="nav-item nav-link"><strong> Add Expenses </strong></a>
+                            <a href="Finance_Update_Expenses.php" class="nav-item nav-link"><strong> Update Expenses 
+                            <?php if($row_tot>0){
+									echo "<span class='badge badge-danger badge-pill'> ".$row_tot." <span>";
+								  } 
+							?>
+                            </strong></a>
+                            <a href="Finance_Delete_Expenses.php" class="nav-item nav-link"><strong> Delete Expenses 
+                            <?php if($row_tot>0){
+									echo "<span class='badge badge-danger badge-pill'> ".$row_tot." <span>";
+								  } 
+							?>
+                            </strong></a>
+                            <a class="nav-item nav-link active"><strong> Verify Expenses 
+                            <?php if($row_pen>0){
+									echo "<span class='badge badge-success badge-pill'> ".$row_pen." <span>";
+								  } 
+							?>
+                            </strong></a>
+                            <a href="Finance_Closed_Expenses.php" class="nav-item nav-link"><strong> Closed Expenses 
+                            <?php if($row_close>0){
+									echo "<span class='badge badge-danger badge-pill'> ".$row_tot." <span>";
+								  } 
+							?>
+                            </strong></a>
 						</div>
 					</nav>
 					<div class="tab-content">
@@ -64,7 +96,7 @@ if(isset($_POST["verify"])){
 														echo "<script>alert(' Search Text is Empty!... ')</script>";
 														$sql_delete = "select * from expenses where status='pending'";
 													}else{
-														$sql_delete = "select * from expenses where ".$search." = '".$s_text."' and status='pending'";
+														$sql_delete = "select * from expenses where ".$search." like '%".$s_text."%' and status='pending'";
 													}
 													
 												}else{
@@ -118,7 +150,7 @@ if(isset($_POST["verify"])){
 																	} 
 																?>
                                                     			<td><center><?php echo $result_paid_by; ?></center></td>
-                                                                <td><center><button class="btn btn-outline-info <?php echo $result_paid_by_btn;  ?>" type="button" onclick="openWin();"><span class="glyphicon glyphicon-user"></span></button></center></td>
+                                                                <td><center><button class="btn btn-outline-info <?php echo $result_paid_by_btn;  ?>" type="button" onclick="openWinStaff(<?php echo $row["paid_for"]; ?>);"><span class="glyphicon glyphicon-user"></span></button></center></td>
 																<?php if($row["added_by"]==0 || $row["added_by"]==""){
 																		$result_added_by = " _ ";
 																		$result_added_by_btn = "message-hide";
@@ -173,7 +205,7 @@ if(isset($_POST["verify"])){
                                                     			<td><?php echo $result_ver_date; ?></td>
                                                     			<th scope="row" class="<?php echo $row["status"]; ?>"><?php echo $row["status"]; ?></th>
                                                    				<th scope="row">
-                                             					<form action="Finance_Verify_Expenses.php" method="post" onSubmit="return confirm('WARNING!\n\n1. Accidentally verifying of records cannot backup from the system.\n2. There is no way to undo this action.\n\nDo you still really want to verify EXP<?php echo $row["id"]; ?>?');"">
+                                             					<form action="Finance_Verify_Expenses.php" method="post" onSubmit="return confirm('WARNING!\n\n1. Accidentally verifying of records cannot backup from the system.\n2. There is no way to undo this action.\n\nDo you still really want to verify EXP<?php echo $row["id"]; ?>?');">
                                                                		<input type="hidden" value="<?php echo $row["id"]; ?>" name="expense_id">
                                                                 	<input type="submit" value=" Verify " name="verify" class="btn btn btn-outline-primary">
                                                         		</form>
