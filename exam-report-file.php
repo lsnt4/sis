@@ -1,12 +1,21 @@
 <?php
 include_once 'common_functions.php';
 include_once 'ClassStaff.php';
-include_once 'ResourceManager.php';
-$session = new SessionManager();
-$resourceLoad = new Resource;
-$resources = $resourceLoad->loadAllResources();
-
 include_once 'assets/fpdf/fpdf.php';
+include_once 'database_credentials.php';
+include_once 'course-class.php';
+
+
+
+$session = new SessionManager();
+
+
+
+$dbconn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+if($dbconn->connect_error) {
+		die("Database connection error: " . $dbconn->connect_error);
+}
+
 
 class PDF extends FPDF {
 	function Footer(){
@@ -20,7 +29,7 @@ class PDF extends FPDF {
 
 $pdf = new PDF('P','mm','Letter');
 $pdf->AliasNbPages();
-$pdf->SetTitle("Success Internation School - Resource Complete Report");
+$pdf->SetTitle("Success Internation School -Course Enrollment Details");
 $pdf->AddPage();
 
 $pdf->SetFont('Arial','',12);
@@ -30,7 +39,7 @@ $pdf->SetFont('Arial','B',14);
 $pdf->Cell(115 ,15,' SUCCESS INTERNATIONAL SCHOOL',0,0);
 $pdf->SetFont('Arial','B',10);
 $pdf->Cell(15,15,'Report: ',0,0);
-$pdf->Cell(50,15,'Complete Resource Log',0,1);
+$pdf->Cell(50,15,'Exam Report',0,1);
 
 $pdf->Cell(195 ,5,'',0,1);
 
@@ -57,29 +66,29 @@ $pdf->Cell(35 ,5,'',0,1);
 $pdf->Cell(0 ,15,'__________________________________________________________________________________________________',0,1);
 
 $pdf->SetFont('Arial','B',9);
-$pdf->Cell(5, 5,'#',0,0);
-$pdf->Cell(5, 5,'ID',0,0);
-$pdf->Cell(38, 5,'Resource Name',0,0);
-$pdf->Cell(32, 5,'Resource Version',0,0);
-$pdf->Cell(20, 5,'Category',0,0);
-$pdf->Cell(45, 5,'Supplier Name',0,0);
-$pdf->Cell(20, 5,'Purchased',0,0);
-$pdf->Cell(10, 5,'Qty',0,0);
-$pdf->Cell(30, 5,'Status',0,1);
+$pdf->Cell(10, 5,'#',0,0);
+$pdf->Cell(15, 5,'ID',0,0);
+$pdf->Cell(80, 5,'Exam Name',0,0);
+$pdf->Cell(25, 5,'Date',0,0);
+$pdf->Cell(25, 5,'Start Time',0,0);
+$pdf->Cell(30, 5,'End Time',0,0);
+$pdf->Cell(30, 5,'fee',0,1);
 
-$resource_count = 1;
-foreach ($resources as $resource) {
-	// var_dump($resource);
+$exam_count = 1;
+
+$result = $dbconn->query("select * from exams");
+while($row = $result->fetch_assoc()){
+
 	$pdf->SetFont('Arial','',9);
-	$pdf->Cell(5, 5, $resource_count++, 0, 0);
-	$pdf->Cell(5, 5, $resource['resID'], 0, 0);
-	$pdf->Cell(38, 5, $resource['resName'], 0, 0);
-	$pdf->Cell(32, 5, $resource['resVersion'], 0, 0);
-	$pdf->Cell(20, 5, $resource['resCategory'], 0, 0);
-	$pdf->Cell(45, 5, $resource['resSupplier'], 0, 0);
-	$pdf->Cell(20, 5, $resource['dateofp'], 0, 0);
-	$pdf->Cell(10, 5, $resource['resQty'], 0, 0);
-	$pdf->Cell(30, 5, ($resource['resStatus'] == 1)?'Available':'Not Available', 0, 1);
+	$pdf->Cell(10, 5, $exam_count++, 0, 0);
+	$pdf->Cell(15, 5, $row['id'], 0, 0);
+	$pdf->Cell(80, 5, $row['name'], 0, 0);
+	$pdf->Cell(25, 5, $row['date'], 0, 0);
+	$pdf->Cell(25, 5, $row['time_start'], 0, 0);
+	$pdf->Cell(30, 5, $row['time_end'], 0, 0);
+	$pdf->Cell(30, 5, $row['fee'], 0, 1);
+//	$pdf->Cell(30, 5, ();
+
 }
 
 $pdf->Close();

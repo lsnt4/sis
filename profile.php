@@ -3,28 +3,16 @@
 	$session = new SessionManager();
 	$userid = $session->get_session('userid');
 	$sm = new StaffManager();
+	$user = $sm->get_single_employee($userid)[0];
 
-	if($session->get_session('user_role') == 'staff') {
-		$user = $sm->get_single_employee($userid)[0];
-		if (isset($_POST['mobile_no']) && isset($_POST['address']) && isset($_POST['email'])) {
-			$mobile_no = $_POST['mobile_no'];
-			$address = $_POST['address'];
-			$email = $_POST['email'];
-			$password = $_POST['password'];
-			$sm->update_employee_profile($userid, $mobile_no, $address, $email, $password);
-			set_success_msg("<strong>Success!</strong> Profile has been successfully updated!");
-			header('Location: profile.php');
-		}
-	} else if ($session->get_session('user_role') == 'student') {
-		$user = $sm->get_single_student($userid)[0];
-		if (isset($_POST['mobile_no']) && isset($_POST['email'])) {
-			$mobile_no = $_POST['mobile_no'];
-			$email = $_POST['email'];
-			$password = $_POST['password'];
-			$sm->update_student_profile($userid, $mobile_no, $email, $password);
-			set_success_msg("<strong>Success!</strong> Profile has been successfully updated!");
-			header('Location: profile.php');
-		}
+	if (isset($_POST['mobile_no']) && isset($_POST['address']) && isset($_POST['email'])) {
+		echo "string";
+		$mobile_no = $_POST['mobile_no'];
+		$address = $_POST['address'];
+		$email = $_POST['email'];
+		$password = $_POST['password'];
+		$sm->update_employee_profile($userid, $mobile_no, $address, $email, $password);
+		header('Location: profile.php');
 	}
 ?>
 				<div class="col-md-10">
@@ -46,7 +34,6 @@
 										</div>
 									</div>
 								</div>
-								<?php if($session->get_session('user_role') == 'staff') { ?>
 								<div class="form-group row">
 									<label class="col-sm-2 col-form-label">Departments</label>
 									<div class="col-sm-10">
@@ -74,7 +61,6 @@
 										</div>
 									</div>
 								</div>
-								<?php } ?>
 								<div class="form-group row">
 									<label class="col-sm-2 col-form-label">Name</label>
 									<div class="col-sm-10">
@@ -109,7 +95,6 @@
 										</div>
 									</div>
 								</div>
-								<?php if($session->get_session('user_role') == 'staff') { ?>
 								<div class="form-group row">
 									<label class="col-sm-2 col-form-label">NIC</label>
 									<div class="col-sm-10">
@@ -120,7 +105,6 @@
 										</div>
 									</div>
 								</div>
-								<?php } ?>
 								<div class="form-group row">
 									<label class="col-sm-2 col-form-label">Contacts</label>
 									<div class="col-sm-10">
@@ -132,7 +116,6 @@
 										</div>
 									</div>
 								</div>
-								<?php if($session->get_session('user_role') == 'staff') { ?>
 								<div class="form-group row">
 									<label class="col-sm-2 col-form-label"></label>
 									<div class="col-sm-10">
@@ -144,7 +127,6 @@
 										</div>
 									</div>
 								</div>
-								<?php } ?>
 								<div class="form-group row">
 									<label class="col-sm-2 col-form-label"></label>
 									<div class="col-sm-10">

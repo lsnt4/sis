@@ -125,11 +125,11 @@ include_once "DB_Connection.php" ;
 																#$row_student = $result_student->fetch_assoc();
 																?>
                                                                 <?php
-                                                                $sql_book = "select * from library_books where bid = '".$row['book_id']."'";
+                                                                $sql_book = "select * from library_books where BID = '".$row['book_id']."'";
 																$result_book = $conn->query($sql_book);
 																$row_book = $result_book->fetch_assoc();
 																?>
-                                                                <td><center><?php echo $row_book['name']; ?></center></td>
+                                                                <td><center><?php echo $row_book['fname']; ?></center></td>
                                                                 <td><center><?php echo $row['borrowed_date']; ?></center></td>
                                                                 <td><center><?php echo $row['returned_date']; ?></center></td>
                                                                 <?php

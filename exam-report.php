@@ -2,20 +2,19 @@
 				<div class="col-md-10">
 					<nav>
 						<div class="nav nav-tabs" id="nav-tab" role="tablist">
-							<a href="library-add-book.php" class="nav-item nav-link disabled">Add Book</a>
-							<a href="library-overview.php" class="nav-item nav-link disabled">Overview</a>
-							<a class="nav-item nav-link active">Reports</a>
+							<a href="exam-add.php" class="nav-item nav-link disabled">Add</a>
+							<a href="exam-search.php" class="nav-item nav-link disabled">Search</a>
+							<a href="exam-schedule.php" class="nav-item nav-link disabled">Schedule</a>
+							<a href="exam-report.php" class="nav-item nav-link active">Reports</a>
 						</div>
 					</nav>
-					<div class="tab-content">
-						<div class="tab-pane mt-4 show active">
-							<div class="row">
+
 								<div class="col-md-3">
 									<div class="card bg-light mb-3">
-										<div class="card-header">Book History</div>
+										<div class="card-header">Exam History</div>
 										<div class="card-body">
-											<p class="card-text">View Book Details.</p>
-											<form action="library-book-report.php" method="post">
+											<p class="card-text">View exam Details.</p>
+											<form action="exam-report-file.php">
 												<button class="btn btn-dark btn-block" type="submit">View Report</button>
 											</form>
 										</div>

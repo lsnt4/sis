@@ -1,4 +1,5 @@
-<?php include_once 'staff-header.php';
+<?php
+include_once 'staff-header.php';
     require_once 'database_credentials.php';
 ?>
 <?php

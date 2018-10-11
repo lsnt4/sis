@@ -1,25 +1,29 @@
 
-<?php
+<?php 
 include 'DB_Connection.php';
-include_once 'staff-header.php';
+include_once 'staff-header.php'; 
 
 
 
 if(isset($_POST["edit"])){
 	$id = $_POST["book_id"];
-
+	
 	$sql = "select * from library_books where BID = '$id'";
 	$result = $conn->query($sql);
 	$row = $result->fetch_assoc();
-
-
+	
+	
 ?>
 
 
 				<div class="col-md-10">
 					<nav>
 						<div class="nav nav-tabs" id="nav-tab" role="tablist">
+							<a href="library-add-member.php" class="nav-item nav-link disabled">Add Member</a>
+							<a href="library-search-members.php" class="nav-item nav-link disabled">Search Members</a>
 							<a class="nav-item nav-link active">Add Book</a>
+							<a href="library-search-books.php" class="nav-item nav-link disabled">Search Books</a>
+							<a href="library-borrow-books.php" class="nav-item nav-link disabled">Book Borrows</a>
 							<a href="library-overview.php" class="nav-item nav-link disabled">Overview</a>
 							<a href="library-reports.php" class="nav-item nav-link disabled">Reports</a>
 						</div>
@@ -86,7 +90,7 @@ if(isset($_POST["edit"])){
 											</div>
 										</div>
 									</div>
-
+								
 								</div>
 								<div class="form-group row">
 									<div class="col-sm-10">
@@ -95,10 +99,10 @@ if(isset($_POST["edit"])){
 								</div>
 							</form>
 
-
-	  }
-
- <?php } ?>
+	  
+	  }                        
+        
+ <?php } ?>       
 
 					  </div>
 					</div>

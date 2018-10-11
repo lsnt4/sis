@@ -1,12 +1,20 @@
 <?php
 include_once 'common_functions.php';
 include_once 'ClassStaff.php';
-include_once 'ResourceManager.php';
-$session = new SessionManager();
-$resourceLoad = new Resource;
-$resources = $resourceLoad->loadAllResources();
-
 include_once 'assets/fpdf/fpdf.php';
+include_once 'database_credentials.php';
+include_once 'course-class.php';
+
+
+
+$session = new SessionManager();
+
+$courseM = new CourseManager;
+
+$courses = $courseM->loadAllCourses();
+
+
+
 
 class PDF extends FPDF {
 	function Footer(){
@@ -20,7 +28,7 @@ class PDF extends FPDF {
 
 $pdf = new PDF('P','mm','Letter');
 $pdf->AliasNbPages();
-$pdf->SetTitle("Success Internation School - Resource Complete Report");
+$pdf->SetTitle("Success Internation School -Course Enrollment Details");
 $pdf->AddPage();
 
 $pdf->SetFont('Arial','',12);
@@ -30,7 +38,7 @@ $pdf->SetFont('Arial','B',14);
 $pdf->Cell(115 ,15,' SUCCESS INTERNATIONAL SCHOOL',0,0);
 $pdf->SetFont('Arial','B',10);
 $pdf->Cell(15,15,'Report: ',0,0);
-$pdf->Cell(50,15,'Complete Resource Log',0,1);
+$pdf->Cell(50,15,'Course Report',0,1);
 
 $pdf->Cell(195 ,5,'',0,1);
 
@@ -58,28 +66,26 @@ $pdf->Cell(0 ,15,'______________________________________________________________
 
 $pdf->SetFont('Arial','B',9);
 $pdf->Cell(5, 5,'#',0,0);
-$pdf->Cell(5, 5,'ID',0,0);
-$pdf->Cell(38, 5,'Resource Name',0,0);
-$pdf->Cell(32, 5,'Resource Version',0,0);
-$pdf->Cell(20, 5,'Category',0,0);
-$pdf->Cell(45, 5,'Supplier Name',0,0);
-$pdf->Cell(20, 5,'Purchased',0,0);
-$pdf->Cell(10, 5,'Qty',0,0);
-$pdf->Cell(30, 5,'Status',0,1);
+$pdf->Cell(15, 5,'ID',0,0);
+$pdf->Cell(40, 5,'Course Name',0,0);
+$pdf->Cell(20, 5,'Grade',0,0);
+$pdf->Cell(20, 5,'Hall No',0,0);
+$pdf->Cell(30, 5,'Start Time',0,0);
+$pdf->Cell(30, 5,'End Time',0,0);
+$pdf->Cell(30, 5,'Day',0,1);
 
-$resource_count = 1;
-foreach ($resources as $resource) {
-	// var_dump($resource);
+$course_count = 1;
+foreach ($courses as $course) {
 	$pdf->SetFont('Arial','',9);
-	$pdf->Cell(5, 5, $resource_count++, 0, 0);
-	$pdf->Cell(5, 5, $resource['resID'], 0, 0);
-	$pdf->Cell(38, 5, $resource['resName'], 0, 0);
-	$pdf->Cell(32, 5, $resource['resVersion'], 0, 0);
-	$pdf->Cell(20, 5, $resource['resCategory'], 0, 0);
-	$pdf->Cell(45, 5, $resource['resSupplier'], 0, 0);
-	$pdf->Cell(20, 5, $resource['dateofp'], 0, 0);
-	$pdf->Cell(10, 5, $resource['resQty'], 0, 0);
-	$pdf->Cell(30, 5, ($resource['resStatus'] == 1)?'Available':'Not Available', 0, 1);
+	$pdf->Cell(5, 5, $course_count++, 0, 0);
+	$pdf->Cell(15, 5, $course['cid'], 0, 0);
+	$pdf->Cell(40, 5, $course['name'], 0, 0);
+	$pdf->Cell(20, 5, $course['grade'], 0, 0);
+	$pdf->Cell(20, 5, $course['hall_no'], 0, 0);
+	$pdf->Cell(30, 5, $course['time_start'], 0, 0);
+	$pdf->Cell(30, 5, $course['time_end'], 0, 0);
+	$pdf->Cell(30, 5, $course['day'], 0, 1);
+//	$pdf->Cell(30, 5, ();
 }
 
 $pdf->Close();

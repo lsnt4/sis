@@ -25,7 +25,7 @@ $pdf->AddPage();
 
 $pdf->SetFont('Arial','',12);
 $pdf->SetFillColor(230,230,230);
-$pdf->Cell(15 ,15,'SIS',1,0,'C', TRUE);
+$pdf->Cell(15 ,15, $pdf->Image('assets/images/sis-logo-md.png', 10, 9.5, 16, 16), 0, 0, 'C', false);
 $pdf->SetFont('Arial','B',14);
 $pdf->Cell(115 ,15,' SUCCESS INTERNATIONAL SCHOOL',0,0);
 $pdf->SetFont('Arial','B',10);

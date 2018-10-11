@@ -1,7 +1,18 @@
 <?php include_once 'staff-header.php'; ?>
+<script>
+    function checkGrade(elem){
+
+        if (elem.value >= 13) {
+            elem.value = 13;
+        }
+    }
+</script>
+
     <div class="col-md-10">
         <nav>
             <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                <a href="student-add.php" class="nav-item nav-link disabled"> Add Student </a>
+                <a href="student-search.php" class="nav-item nav-link disabled"> Search Student </a>
                 <a class="nav-item nav-link active">Reports</a>
             </div>
         </nav>
@@ -12,15 +23,11 @@
                         <div class="card bg-light mb-3">
                             <div class="card-header">Student History</div>
                             <div class="card-body">
-                                <p class="card-text">View Students who have attended to school during a specific period.</p>
-                                <form action="....." method="get">
+                                <p class="card-text">View Students according to their Grade</p>
+                                <form action="student-reports-grade.php" method="get">
                                     <div class="form-group">
-                                        <small class="form-text text-muted">Start Date</small>
-                                        <input type="date" name="startdate" class="form-control">
-                                    </div>
-                                    <div class="form-group">
-                                        <small class="form-text text-muted">End Date</small>
-                                        <input type="date" name="enddate" class="form-control">
+                                        <small class="form-text text-muted">Grade</small>
+                                        <input type="number" name="studentGrade" class="form-control" oninput="checkGrade(this)">
                                     </div>
                                     <button class="btn btn-dark btn-block" type="submit">View Report</button>
                                 </form>
@@ -32,7 +39,7 @@
                             <div class="card-header">Student report</div>
                             <div class="card-body">
                                 <p class="card-text">View student detials in a specific grade.</p>
-                                <form action="...." method="get">
+                                <form action="student-reports-all.php">
                                     <button class="btn btn-dark btn-block" type="submit">View Report</button>
                                 </form>
                             </div>

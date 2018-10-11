@@ -209,16 +209,16 @@
 									<div class="card-body">
 										<div class="row">
 											<div class="col-md-3 mb-3">
-												<a href="Finance_Add_Incomes.php" class="btn btn-lg btn-dark btn-block">Add Incomes</a>
+												<a href="Finance_Income_Dashboard.php" class="btn btn-lg btn-dark btn-block">Manage Incomes</a>
 											</div>
 											<div class="col-md-3 mb-3">
-												<a href="Finance_Verify_Incomes.php" class="btn btn-lg btn-dark btn-block">Verify Incomes</a>
+												<a href="Finance_Expense_Dashboard.php" class="btn btn-lg btn-dark btn-block">Manage Expense</a>
 											</div>
 											<div class="col-md-3 mb-3">
-												<a href="Finance_Closed_Incomes.php" class="btn btn-lg btn-dark btn-block">Closed Incomes</a>
+												<a href="Finance_Payroll_Dashboard.php" class="btn btn-lg btn-dark btn-block">Manage Payroll</a>
 											</div>
 											<div class="col-md-3 mb-3">
-												<a href="Finance_Reports.php" class="btn btn-lg btn-dark btn-block">Reports</a>
+												<a href="Finance_Leave_Dashboard.php" class="btn btn-lg btn-dark btn-block">Manage Leave</a>
 											</div>
 										</div>
 									</div>

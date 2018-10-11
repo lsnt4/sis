@@ -270,7 +270,7 @@
 									<div class="col-sm-10">
 										<div class="form-row">
                                         	<div class="col-md-3">
-												<select id="paidby_cat" name="paidby_cat" class="form-control" onchange="paidCatogory(this);progress();">
+												<select id="paidby_cat" name="paidby_cat" class="form-control" onchange="paidCatogory(this);">
 													<option value="Selected">Please Select</option>
                                                     <option value="student">Student</option>
                                                     <option value="staff">Staff</option>
@@ -282,7 +282,7 @@
                                                 <select id="paidby_staff" name="staff" class="form-control message-hide">
 													<option value="Selected">Please Select a Staff</option>
                                                     <?php
-                                                     require_once "DB_Connection.php";
+                                                     
 													 $sql_staff = "select userid,fname,lname from users";
 													 $result_staff = $conn->query($sql_staff);
 													 if($result_staff->num_rows>0){

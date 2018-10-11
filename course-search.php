@@ -4,7 +4,7 @@
     $db = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 		if($db->connect_error)
 			{
-				die("Falie to connect Databass  :" . $db->connect_error);
+				die("Failed to connect Database  :" . $db->connect_error);
 			}
 
 			if(isset($_POST["delete"]))
@@ -26,8 +26,7 @@
 							<a href="course-add.php" class="nav-item nav-link disabled">Add</a>
 							<a class="nav-item nav-link active">Search</a>
 							<a href="course-schedule.php" class="nav-item nav-link disabled">Schedule</a>
-							<a href="course-overview.php" class="nav-item nav-link disabled">Overview</a>
-							<a href="course-reports.php" class="nav-item nav-link disabled">Reports</a>
+							<a href="course-report.php" class="nav-item nav-link disabled">Reports</a>
 						</div>
 					</nav>
 					<div class="tab-content">
@@ -71,13 +70,9 @@
 															else {
 																		$sql = "SELECT * FROM courses";
 															}
-
-																		$result = $db->query($sql);
-
-																		while($row = $result->fetch_assoc()){
-
-
-																	?>
+	                                   $result = $db->query($sql);
+                                    while($row = $result->fetch_assoc()){
+                                      	?>
 
 												<tbody>
 

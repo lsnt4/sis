@@ -27,7 +27,7 @@
 
         //$userid = substr(number_format(time() * rand(), 0, '',''),0,6);
 
-        $sql_user = "INSERT INTO students VALUES ( $sid, '$fname', '$lname', '$email', $grade, '$mobile_no', '$dob', '$gender', '$reg_date', '$password')";
+        $sql_user = "INSERT INTO students VALUES ( '$sid', '$fname', '$lname', '$email', '$mobile_no', $grade, '$dob', '$gender', '$reg_date', '$password','pending')";
         if ($dbconn->query($sql_user)) {
             return true;
         } else {
@@ -51,13 +51,20 @@
         header('Location: student-add.php');
     }
 ?>
+<script>
+    function checkGrade(elem){
+
+        if (elem.value >= 13) {
+            elem.value = 13;
+        }
+    }
+</script>
 
 				<div class="col-md-10">
 					<nav>
 						<div class="nav nav-tabs" id="nav-tab" role="tablist">
 							<a href="student-add.php" class="nav-item nav-link active"> Add Students </a>
 							<a href="student-search.php" class="nav-item nav-link disabled"> Search Students </a>
-							<a href="student-attendance.php" class="nav-item nav-link disabled"> Mark Attendance </a>
 							<a href="student-reports.php" class="nav-item nav-link disabled">Reports</a>
 						</div>
 					</nav>
@@ -79,10 +86,10 @@
 									<div class="col-sm-10">
 										<div class="form-row">
 											<div class="col-md-3">
-												<input type="text" class="form-control" name="fname" placeholder="First name" required>
+												<input type="text" class="form-control" name="fname" placeholder="First name"onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || (event.charCode == 32)" required>
 											</div>
 											<div class="col-md-3">
-												<input type="text" class="form-control" name="lname" placeholder="Last name" required>
+												<input type="text" class="form-control" name="lname" placeholder="Last name" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || (event.charCode == 32)" required>
 											</div>
 										</div>
 									</div>
@@ -112,7 +119,7 @@
 									<div class="col-sm-10">
 										<div class="form-row">
 											<div class="col-md-6">
-                                                <input type="number" min="1" max="13" class="form-control" name="grade" placeholder="Grade" required>
+                                                <input type="number" class="form-control" name="grade" placeholder="Grade" oninput="checkGrade(this)" required>
 											</div>
 										</div>
 									</div>

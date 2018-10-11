@@ -41,7 +41,7 @@ if(isset($_POST["add"])){
 							<a href="exam-add.php" class="nav-item nav-link active">Add</a>
 							<a href="exam-search.php" class="nav-item nav-link disabled">Search</a>
 							<a href="exam-schedule.php" class="nav-item nav-link disabled">Schedule</a>
-							<a href="exam-reports.php" class="nav-item nav-link disabled">Reports</a>
+							<a href="exam-report.php" class="nav-item nav-link disabled">Reports</a>
 						</div>
 					</nav>
 					<div class="tab-content">

@@ -6,73 +6,29 @@
 	  	      
 	
 	if(isset($_POST["add"])){
-		$dept_task_other = "";
-		$pay_method_others = "";
-		$paid_by_stu = "";
-		$paid_by_staff = "";
-		$paid_by_others = "";
 		
 		
-		$deparment_name = $_POST["department"];
-		$dept_task = $_POST["description"];
-		$dept_task_other = $_POST["other_desc"];
-		$pay_method = $_POST["payment"];
-		$pay_method_others = $_POST["other_pay"];
-		$amount =  $_POST["amount"];
-		$paid_by_cat = $_POST["paidby_cat"];
-		$paid_by_stu = $_POST["student"];
-		$paid_by_staff = $_POST["staff"];
-		$paid_by_others = $_POST["others"];
+		$type = $_POST["type"];
+		$days = $_POST["days"];
+		$reason = $_POST["reason"];
 		$added_by = $session->get_session('userid');
 		date_default_timezone_set('Asia/Colombo');
 		$added_date = date("Y-m-d h:i:s",time());
 		$status = "pending";
 		
-		{
-				if($dept_task == "Others")
-					$final_dept_task = ucwords(strtolower($dept_task_other));
-				else
-					$final_dept_task = $dept_task;
-		}
+
 		
-		{
-			if($pay_method == "Others")
-				$final_pay_method = ucwords(strtolower($pay_method_others));
-			else
-				$final_pay_method = $pay_method;
-		}
-		
-		{
-			if($paid_by_cat == "student")
-				$final_paid_by = $paid_by_stu;
-			else if($paid_by_cat == "staff")
-				$final_paid_by = $paid_by_staff;
-			else
-				$final_paid_by = ucwords(strtolower($paid_by_others));
-		}
-		
-		$sql_check = "select * from incomes where catogory='$deparment_name' and description='$final_dept_task' and payment_method='$final_pay_method' and amount='$amount' and paid_by='$final_paid_by'";
-		$result_check = $conn->query($sql_check);
-		
-		if($result_check->num_rows>0){
-			echo "<script> alert(' The record you inserted already available in database!.. Try a new record!..') </script>";
-			set_error_msg("<strong>Failed!</strong> Already available in the Database!... Try new record to insert!...");
-			header("Location: Finance_Add_Incomes.php");
-			
-		}
-		else{
-			reset_error_msg();
-			$sql_insert = "insert into incomes (catogory,description,payment_method,amount,paid_by,added_by,added_date,status) values"
-						  ." ('$deparment_name','$final_dept_task','$final_pay_method','$amount','$final_paid_by','$added_by','$added_date','$status')";
+			$sql_insert = "insert into leave_request (userid,l_type,days,reason,added_date,status) values"
+						  ." ('$added_by','$type','$days','$reason','$added_date','$status')";
 						  if($conn->query($sql_insert) == true){
-							  		set_success_msg("<strong>Success!</strong> New income has been successfully inserted!");
-									header("Location: Finance_Add_Incomes.php");
+							  		set_success_msg("<strong>Success!</strong> New Leave Request has been successfully inserted!");
+									header("Location: leave-apply.php");
 							  }
 						  else{
 								  set_error_msg("<strong>Oops!</strong> Something went wrong!...!");
-								  header("Location: Finance_Add_Incomes.php");
+								  header("Location: leave-apply.php");
 						  }
-		}
+		
 	}
 	 
 
@@ -98,7 +54,7 @@
 					</nav>
 					<div class="tab-content">
 						<div class="tab-pane mt-4 show active">
-							<form method="post" name="AddIncome" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" onsubmit="return(incomeValidation());">
+							<form method="post" name="AddIncome" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" onsubmit="return confirm('WARNING!\n\n1. Accidentally applying leave cannot backup from the system.\n2. There is no way to undo this action.\n\nDo you still really want to apply a leave?');">
                                 <div class="form-group row">
 									<div class="col-sm-7">
                                     	<div id="income_id_alert" class="message-hide" role="alert">
@@ -134,7 +90,7 @@
 									<div class="col-sm-10">
 										<div class="form-row">
 											<div class="col-md-3">
-												<input id="amount" min="0.5" type="number" class="form-control" name="days" placeholder="No. of Days">
+												<input id="amount" min="1" type="number" class="form-control" name="days" placeholder="No. of Days">
 											</div>
 										</div>
 									</div>

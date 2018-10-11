@@ -28,7 +28,7 @@
         } else {
             set_error_msg( "Email address in invalid");
         }
-        header("location:student-update.php");
+        header("location:student-search.php");
     }
 
 if(isset($_POST["update"])) {
@@ -64,12 +64,11 @@ if(isset($_POST["update"])) {
                         <div class="col-sm-10">
                             <div class="form-row">
                                 <div class="col-md-3">
-                                    <input type="text" class="form-control" value="<?php echo $row["fname"]; ?>"
+                                    <input type="text" class="form-control" value="<?php echo $row["fname"]; ?>" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || (event.charCode == 32)"
                                            name="fname" placeholder="First name" required>
                                 </div>
                                 <div class="col-md-3">
-                                    <input type="text" class="form-control" value="<?php echo $row["lname"]; ?>"
-                                           name="lname" placeholder="Last name" required>
+                                    <input type="text" class="form-control" value="<?php echo $row["lname"]; ?>" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || (event.charCode == 32)" name="lname" placeholder="Last name" required>
                                 </div>
                             </div>
                         </div>

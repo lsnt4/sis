@@ -91,7 +91,7 @@
 					</nav>
 					<div class="tab-content">
 						<div class="tab-pane mt-4 show active">
-							<form method="post" action="Finance_Edit_Standards.php">
+							<form method="post" action="Finance_Edit_Standards.php" onsubmit="return confirm('WARNING!\n\n1. Accidentally updation of records cannot backup from the system.\n2. There is no way to undo this action.\n\nDo you still really want to update the Payroll Standards?');">
                             	<div class="form-group row">
 									<label class="col-sm-2 col-form-label"> Company EPF </label>
 									<div class="col-sm-10">

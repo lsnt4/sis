@@ -1,8 +1,7 @@
 <?php
     include_once 'staff-header.php';
-    include_once 'database_credentials.php';
 
-            $dbconn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+            $dbconn = new mysqli('localhost', 'root', '', 'itpprojectdb');
             if($dbconn->connect_error) {
                 die("Database connection error: " . $dbconn->connect_error);
             } else {
@@ -19,7 +18,7 @@
              $searchq = $_POST['search'];
              $searchq = preg_replace("#[^0-9a-z]#i","","$searchq");
 
-             $query = mysql_query("SELECT * FROM students WHERE firstname LIKE'%$searchq' or lastname LIKE '%$searchq'") or die("Could not search");
+             $query = mysql_query("SELECT * FROM students WHERE fname LIKE '%$searchq' or lname LIKE '%$searchq'") or die("Could not search");
              $count = mysql_num_rows($query);
              if($count == 0){
                  $output = 'There was no search results!';
@@ -41,7 +40,6 @@
 						<div class="nav nav-tabs" id="nav-tab" role="tablist">
 							<a href="student-add.php" class="nav-item nav-link disabled"> Add Student </a>
 							<a href="student-search.php" class="nav-item nav-link active"> Search Student </a>
-							<a href="student-attendance.php" class="nav-item nav-link disabled">Mark Attendance</a>
 							<a href="student-reports.php" class="nav-item nav-link disabled">Reports</a>
 						</div>
 					</nav>
@@ -52,9 +50,9 @@
 									<div class="col-md-12">
                                         <form method="post" action="student-search.php" >
 										    <div class="input-group mb-3">
-                                                <input name="student_name" value="<?php echo (isset($_POST['fname'])) ? $_POST['fname'] : '' ; ?>" type="text" class="form-control" placeholder="Student ID" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                                                <input name="student_name" value="<?php echo (isset($_POST['fname'])) ? $_POST['fname'] : '' ; ?>" type="text" class="form-control" placeholder="Student Name" aria-label="Recipient's username" aria-describedby="basic-addon2">
 											    <div class="input-group-append">
-												<button class="btn btn-dark" type="button">Search</button>
+												<button class="btn btn-dark" type="submit">Search</button>
 											</div>
 										</div>
                                         </form>
@@ -83,7 +81,7 @@
 										} else {
 											$sql_get = "select * from students";
 										}
-
+                                            
                                             $result_get = $dbconn->query($sql_get);
                                             while($row_get = $result_get->fetch_assoc()){
                                         ?>

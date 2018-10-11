@@ -159,22 +159,7 @@
 	
 	}
 	*/
-	function openWin(user) {
-    window.open("Finance_Staff_Bank_Account_Identification.php?user="+user,"_blank","resizable=0,top=200,left=500,height=300,width=500,status=yes,toolbar=no,menubar=no,location=no"); 
-  }
-	function openWindow(month,year,user) {
-    window.open("Finance_Attendance_Identification.php?month="+month+"&year="+year+"&user="+user,"_blank","resizable=0,top=200,left=500,height=500,width=400,status=yes,toolbar=no,menubar=no,location=no"); 
-  }
-  
-function openWinAccount(acc_id){
-myWin = window.open("Finance_Bank_Account_Identification.php?acc_id="+acc_id, "myWindow", 'resizable=0,top=200,left=500,width=500,height=300,status=yes,toolbar=no,menubar=no,location=no');
-}
-  
-function openWinStaff(user){
-myWin = window.open("Finance_Staff_Identification.php?user="+user, "myWindow", 'resizable=0,top=200,left=500,width=500,height=400,status=yes,toolbar=no,menubar=no,location=no');
-}
-+
-
+	
 function paidCatogory(selectObj){
 	var idx = selectObj.selectedIndex; 
     var which = selectObj.options[idx].value;
@@ -200,6 +185,24 @@ function paidCatogory(selectObj){
 		document.getElementById("paidby_others").className = "form-control message-hide";
 		}
 	}
+
+	function openWin(user) {
+    window.open("Finance_Staff_Bank_Account_Identification.php?user="+user,"_blank","resizable=0,top=200,left=500,height=300,width=500,status=yes,toolbar=no,menubar=no,location=no"); 
+  }
+	function openWindow(month,year,user) {
+    window.open("Finance_Attendance_Identification.php?month="+month+"&year="+year+"&user="+user,"_blank","resizable=0,top=200,left=500,height=500,width=400,status=yes,toolbar=no,menubar=no,location=no"); 
+  }
+  
+function openWinAccount(acc_id){
+myWin = window.open("Finance_Bank_Account_Identification.php?acc_id="+acc_id, "myWindow", 'resizable=0,top=200,left=500,width=500,height=300,status=yes,toolbar=no,menubar=no,location=no');
+}
+  
+function openWinStaff(user){
+myWin = window.open("Finance_Staff_Identification.php?user="+user, "myWindow", 'resizable=0,top=200,left=500,width=500,height=400,status=yes,toolbar=no,menubar=no,location=no');
+}
+
+
+
 	
 function incomeValidation(){
 	
